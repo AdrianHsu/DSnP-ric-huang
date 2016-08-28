@@ -23,25 +23,30 @@ Table::read(const string& csvFile)
   
     if(str == "\n")
       break;
-    else if(str == "") {
+    else if(str == "") { // prevent case: 3^M^M
+      // however, problem will occured when "^M at the end"
       Row row(0);
-       _rows.push_back(row);
+      _rows.push_back(row);
       i++;
       continue;
+      
     }
+    // you don’t need to handle syntax errors in reading .csv file 
+    // (e.g. missing ^M at the end) or parsing commands.
 
     vector<int> vec;
     stringstream ss(str);
     
     while( getline(ss, str, ',') ) {
 
-      if(str == "") {
+      if(str == "") { //prevent case: ^M,3^M
         num = -100;
       } else {
         num = atoi(str.c_str());
       }
       vec.push_back(num);
     }
+    // prevent case: 3,^M ...etc
     if(str == "") {
       num = -100;
       vec.push_back(num);
@@ -57,6 +62,11 @@ Table::read(const string& csvFile)
     i++;
   }
 
+  _rows.pop_back(); // solve "^M at the end", 
+  // since "missing ^M at the end" special case will not happened
+  
+  // cout << _rows.size() << endl;
+  
   return true; // TODO
 }
 
