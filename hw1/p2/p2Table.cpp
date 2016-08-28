@@ -20,12 +20,11 @@ Table::read(const string& csvFile)
   int num = 0;
 
   while( getline(fs, str, '\r') ) {
-    
-    if(str == "")
+   
+    if(str == "\n" || str == "")
       break;
 
     vector<int> vec;
-    cout << "str=" << str << endl;
     stringstream ss(str);
     
     while( getline(ss, str, ',') ) {
@@ -35,25 +34,25 @@ Table::read(const string& csvFile)
       } else {
         num = atoi(str.c_str());
       }
-      cout << num << endl;
+      vec.push_back(num);
     }
     if(str == "") {
       num = -100;
-      cout << num << endl;
+      vec.push_back(num);
     }
       
-    // Row row(vec.size());
-    // _rows.push_back(row);
+    Row row(vec.size());
+    _rows.push_back(row);
     
-    // for(int j = 0; j < vec.size(); j++) {
-    //  _rows[i][j] = vec[j];
-      //cout << "_rows " << i << "," << j << " = " << _rows[i][j] << endl;  
-    // }
+    for(int j = 0; j < vec.size(); j++) {
+      _rows[i][j] = vec[j];
+      cout << "_rows " << i << "," << j << " = " << _rows[i][j] << endl;  
+    }
     i++;
   }
- 
-  cout << "done!" << endl;
-  
+
+  // cout << "done!" << endl;
+
   return true; // TODO
 }
 
