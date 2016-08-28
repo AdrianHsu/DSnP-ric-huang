@@ -16,16 +16,16 @@ private:
    int  *_data;
 };
 
-class Table
-{
-public:
-   const vector<Row>& operator[] (size_t i) const;
-   vector<Row>& operator[] (size_t i);
+class Table 
+{ 
+public: 
+    const Row& operator[] (size_t i) const; 
+    Row& operator[] (size_t i); 
+    
+    bool read(const string&); 
 
-   bool read(const string&);
-
-private:
-   vector<Row>  _rows;
-};
+private: 
+    vector _rows; 
+}; 
 
 #endif // P2_TABLE_H
