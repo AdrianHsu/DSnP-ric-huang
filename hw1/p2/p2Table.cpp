@@ -20,9 +20,15 @@ Table::read(const string& csvFile)
   int num = 0;
 
   while( getline(fs, str, '\r') ) {
-   
-    if(str == "\n" || str == "")
+  
+    if(str == "\n")
       break;
+    else if(str == "") {
+      Row row(0);
+       _rows.push_back(row);
+      i++;
+      continue;
+    }
 
     vector<int> vec;
     stringstream ss(str);
@@ -50,8 +56,6 @@ Table::read(const string& csvFile)
     }
     i++;
   }
-
-  // cout << "done!" << endl;
 
   return true; // TODO
 }
