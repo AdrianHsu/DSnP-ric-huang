@@ -57,7 +57,7 @@ Table::read(const string& csvFile)
     
     for(int j = 0; j < vec.size(); j++) {
       _rows[i][j] = vec[j];
-      cout << "_rows " << i << "," << j << " = " << _rows[i][j] << endl;  
+      // cout << "_rows " << i << "," << j << " = " << _rows[i][j] << endl;  
     }
     i++;
   }
@@ -68,5 +68,109 @@ Table::read(const string& csvFile)
   // cout << _rows.size() << endl;
   
   return true; // TODO
+}
+
+void
+Table::print()
+{
+  for(int i = 0; i < _rows.size(); i++) {
+  
+    for(int j = 0; j < _rows[i].get_NUM_COL(); j++) {
+
+      if(_rows[i][j] != -100)
+        cout << setw(4) << right << _rows[i][j];
+      else
+        cout << "    ";
+    }
+    cout << endl;
+  }
+}
+int
+Table::sum(int j)
+{
+  int sum = 0;
+  for(int i = 0; i < _rows.size(); i++) {
+ 
+    if(_rows[i].get_NUM_COL() > j) {
+      
+      if(_rows[i][j] != -100)
+        sum += _rows[i][j];
+    }
+  }
+  
+  return sum;
+}
+void
+Table::ave(int j)
+{
+  //double num = (double)_rows.size();
+  double num = 0;
+  for(int i = 0; i < _rows.size(); i++) {
+    if(_rows[i][j] != -100)
+      num++;
+  }
+  
+  double sum = (double)Table::sum(j);
+  
+  cout << "The average of data in column #" << j <<" is " << fixed << setprecision(1) << (sum/num)  << "." << endl;
+
+}
+void
+Table::max(int j)
+{
+
+  int max = -99;
+  for(int i = 0; i < _rows.size(); i++) {
+  
+    if(_rows[i].get_NUM_COL() > j) {
+    
+      if(_rows[i][j] > max && _rows[i][j] != -100)
+        max = _rows[i][j];
+    }
+  }
+
+  cout << "The maximum of data in column #" << j << " is " << max << "." << endl;
+}
+
+void
+Table::min(int j)
+{
+
+  int min = 100;
+  for(int i = 0; i < _rows.size(); i++) {
+  
+    if(_rows[i].get_NUM_COL() > j) {
+    
+      if(_rows[i][j] < min && _rows[i][j] != -100)
+        min = _rows[i][j];
+    }
+  }
+
+  cout << "The minimum of data in column #" << j << " is " << min << "." << endl;
+}
+void
+Table::count(int j)
+{
+  int count = 0;
+  int num[200] = {0};// -99 to 100
+  // if num = -99, -99 - (-99) = 0
+  // if num = 100, 100 - (-99) = 199
+
+  for(int i = 0; i < _rows.size(); i++) {
+  
+    if(_rows[i].get_NUM_COL() > j) {
+    
+      int val = _rows[i][j];
+      if(val == -100)
+        continue;
+      if(num[val + 99]) {
+        // do nothing
+      } else {
+        num[val + 99] = 1;
+        count++;
+      }
+    }
+  }
+  cout << "The distinct count of data in column #" << j << " is " << count << "." << endl;
 }
 
