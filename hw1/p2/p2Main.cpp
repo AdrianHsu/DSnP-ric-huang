@@ -53,6 +53,7 @@ int main()
       for(int i = 0; i < col_total; i++) {
         char _str[5]; //-99 to 100
         scanf("%s", _str);
+        // it's possible to get empty row. i.e. ADD - -
         if (strcmp(_str, "-") == 0) arr[i] = -100;
         else arr[i] = atoi(_str);
       }
