@@ -75,7 +75,7 @@ Table::print()
 {
   for(int i = 0; i < _rows.size(); i++) {
   
-    for(int j = 0; j < _rows[i].get_NUM_COL(); j++) {
+    for(int j = 0; j < getColTotal(); j++) {
 
       if(_rows[i][j] != -100)
         cout << setw(4) << right << _rows[i][j];
@@ -91,7 +91,7 @@ Table::sum(int j)
   int sum = 0;
   for(int i = 0; i < _rows.size(); i++) {
  
-    if(_rows[i].get_NUM_COL() > j) {
+    if(getColTotal() > j) {
       
       if(_rows[i][j] != -100)
         sum += _rows[i][j];
@@ -122,7 +122,7 @@ Table::max(int j)
   int max = -99;
   for(int i = 0; i < _rows.size(); i++) {
   
-    if(_rows[i].get_NUM_COL() > j) {
+    if(getColTotal() > j) {
     
       if(_rows[i][j] > max && _rows[i][j] != -100)
         max = _rows[i][j];
@@ -139,7 +139,7 @@ Table::min(int j)
   int min = 100;
   for(int i = 0; i < _rows.size(); i++) {
   
-    if(_rows[i].get_NUM_COL() > j) {
+    if(getColTotal() > j) {
     
       if(_rows[i][j] < min && _rows[i][j] != -100)
         min = _rows[i][j];
@@ -158,7 +158,7 @@ Table::count(int j)
 
   for(int i = 0; i < _rows.size(); i++) {
   
-    if(_rows[i].get_NUM_COL() > j) {
+    if(getColTotal() > j) {
     
       int val = _rows[i][j];
       if(val == -100)
@@ -173,4 +173,13 @@ Table::count(int j)
   }
   cout << "The distinct count of data in column #" << j << " is " << count << "." << endl;
 }
+void
+Table::add(int arr[])
+{
+  
+  Row row( getColTotal() );
+  for(int i = 0; i < getColTotal(); i++)
+    row[i] = arr[i];
 
+  _rows.push_back(row);
+}

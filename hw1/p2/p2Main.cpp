@@ -31,26 +31,32 @@ int main()
     }
 
     int col_num;
-    scanf("%u", &col_num);
     if(strcmp(str, "SUM") == 0) {
+      scanf("%u", &col_num);
       cout << "The summation of data in column #" << col_num << " is " << table.sum(col_num)  << "." << endl;
     } else if(strcmp(str, "AVE") == 0) {
+      scanf("%u", &col_num);
       table.ave(col_num);
     } else if(strcmp(str, "MAX") == 0){
+      scanf("%u", &col_num);
       table.max(col_num);
     } else if(strcmp(str, "MIN") == 0){
+      scanf("%u", &col_num);
       table.min(col_num);
     } else if(strcmp(str, "COUNT") == 0){
+      scanf("%u", &col_num);
       table.count(col_num);
     } else if(strcmp(str, "ADD") == 0){
       
       int col_total = table.getColTotal();
       int arr[col_total];
-      arr[0] = col_num;
-      for(int i = 1; i < col_total; i++) {
-        scanf("%u", &arr[i]);
+      for(int i = 0; i < col_total; i++) {
+        char _str[5]; //-99 to 100
+        scanf("%s", _str);
+        if (strcmp(_str, "-") == 0) arr[i] = -100;
+        else arr[i] = atoi(_str);
       }
-      //table.add(arr);
+      table.add(arr);
     }
 
     
