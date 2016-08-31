@@ -25,7 +25,8 @@ Table::read(const string& csvFile)
       break;
     else if(str == "") { // prevent case: 3^M^M
       // however, problem will occured when "^M at the end"
-      Row row(0);
+      Row row(1);
+      row[0] = -100;
       _rows.push_back(row);
       i++;
       continue;
