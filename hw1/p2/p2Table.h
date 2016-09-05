@@ -47,7 +47,7 @@ public:
     // the number of columns in every row is the same
     int getColTotal(){
       if (_rows.empty()) return 0;
-      else return _rows[1].get_NUM_COL();}
+      else return _rows[0].get_NUM_COL();}
 
 private: 
     vector<Row> _rows; 
