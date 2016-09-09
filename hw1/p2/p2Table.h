@@ -29,11 +29,18 @@ private:
 class Table 
 { 
 public: 
+    
+    Table(){};
+    ~Table(){ 
+      if(!_rows.empty())
+        _rows.clear(); 
+    };
+
     const Row& operator[] (size_t i) const; 
     Row& operator[] (size_t i); 
     
     bool read(const string&); 
-    
+        
     void print();
 
     int sum(int i);

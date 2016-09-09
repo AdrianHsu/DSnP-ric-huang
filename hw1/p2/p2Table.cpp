@@ -26,7 +26,7 @@ Table::read(const string& csvFile)
     else if(str == "") { // prevent case: 3^M^M
       // however, problem will occured when "^M at the end"
       Row row(1);
-      row[0] = -100;
+      row[0] = INT_MAX;
       _rows.push_back(row);
       i++;
       continue;
@@ -41,7 +41,7 @@ Table::read(const string& csvFile)
     while( getline(ss, str, ',') ) {
 
       if(str == "") { //prevent case: ^M,3^M
-        num = -100;
+        num = INT_MAX;
       } else {
         num = atoi(str.c_str());
       }
@@ -49,7 +49,7 @@ Table::read(const string& csvFile)
     }
     // prevent case: 3,^M ...etc
     if(str == "") {
-      num = -100;
+      num = INT_MAX;
       vec.push_back(num);
     }
       
@@ -78,7 +78,7 @@ Table::print()
   
     for(int j = 0; j < getColTotal(); j++) {
 
-      if(_rows[i][j] != -100)
+      if(_rows[i][j] != INT_MAX)
         cout << setw(4) << right << _rows[i][j];
       else
         cout << "    ";
@@ -94,7 +94,7 @@ Table::sum(int j)
  
     if(getColTotal() > j) {
       
-      if(_rows[i][j] != -100)
+      if(_rows[i][j] != INT_MAX)
         sum += _rows[i][j];
     }
   }
@@ -107,7 +107,7 @@ Table::ave(int j)
   //double num = (double)_rows.size();
   double num = 0;
   for(int i = 0; i < _rows.size(); i++) {
-    if(_rows[i][j] != -100)
+    if(_rows[i][j] != INT_MAX)
       num++;
   }
   
@@ -125,7 +125,7 @@ Table::max(int j)
   
     if(getColTotal() > j) {
     
-      if(_rows[i][j] > max && _rows[i][j] != -100)
+      if(_rows[i][j] > max && _rows[i][j] != INT_MAX)
         max = _rows[i][j];
     }
   }
@@ -142,7 +142,7 @@ Table::min(int j)
   
     if(getColTotal() > j) {
     
-      if(_rows[i][j] < min && _rows[i][j] != -100)
+      if(_rows[i][j] < min && _rows[i][j] != INT_MAX)
         min = _rows[i][j];
     }
   }
@@ -162,7 +162,7 @@ Table::count(int j)
     if(getColTotal() > j) {
     
       int val = _rows[i][j];
-      if(val == -100)
+      if(val == INT_MAX)
         continue;
       if(num[val + 99]) {
         // do nothing

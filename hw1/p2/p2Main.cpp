@@ -54,7 +54,7 @@ int main()
         char _str[5]; //-99 to 100
         scanf("%s", _str);
         // it's possible to get empty row. i.e. ADD - -
-        if (strcmp(_str, "-") == 0) arr[i] = -100;
+        if (strcmp(_str, "-") == 0) arr[i] = INT_MAX;
         else arr[i] = atoi(_str);
       }
       table.add(arr);
