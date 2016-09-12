@@ -2,7 +2,8 @@
 #define P2_TABLE_H
 
 #include <vector>
-#include <string>
+#include <cstring>
+#include <climits>
 
 #include <fstream>
 #include <iostream>

@@ -8,7 +8,7 @@ bool
 Table::read(const string& csvFile)
 {
   fstream fs;
-  fs.open(csvFile, ios::in);
+  fs.open(csvFile.c_str(), ios::in);
   
   if(!fs) {
    return false; 
