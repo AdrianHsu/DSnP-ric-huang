@@ -89,6 +89,7 @@ Table::print()
 int
 Table::sum(int j)
 {
+
   int sum = 0;
   for(int i = 0; i < _rows.size(); i++) {
  
@@ -104,6 +105,7 @@ Table::sum(int j)
 void
 Table::ave(int j)
 {
+
   //double num = (double)_rows.size();
   double num = 0;
   for(int i = 0; i < _rows.size(); i++) {
@@ -119,8 +121,8 @@ Table::ave(int j)
 void
 Table::max(int j)
 {
-
-  int max = -99;
+  
+  int max = -INT_MAX;
   for(int i = 0; i < _rows.size(); i++) {
   
     if(getColTotal() > j) {
@@ -129,15 +131,16 @@ Table::max(int j)
         max = _rows[i][j];
     }
   }
-
-  cout << "The maximum of data in column #" << j << " is " << max << "." << endl;
+  if(max == -INT_MAX)
+    cout << "The maximum of data in column #" << j << " is " << "nan" << "." << endl;
+  else
+    cout << "The maximum of data in column #" << j << " is " << max << "." << endl;
 }
 
 void
 Table::min(int j)
 {
-
-  int min = 100;
+  int min = INT_MAX;
   for(int i = 0; i < _rows.size(); i++) {
   
     if(getColTotal() > j) {
@@ -146,8 +149,10 @@ Table::min(int j)
         min = _rows[i][j];
     }
   }
-
-  cout << "The minimum of data in column #" << j << " is " << min << "." << endl;
+  if(min == INT_MAX) 
+    cout << "The minimum of data in column #" << j << " is " << "nan" << "." << endl;
+  else
+    cout << "The minimum of data in column #" << j << " is " << min << "." << endl;
 }
 void
 Table::count(int j)
