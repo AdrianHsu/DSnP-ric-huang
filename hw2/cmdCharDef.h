@@ -62,9 +62,9 @@ enum ParseChar
    TAB_KEY          = int('\t'),  // tab('\t') or Ctrl-i
    NEWLINE_KEY      = int('\n'),  // enter('\n') or ctrl-m
    ESC_KEY          = 27,         // Not printable; used for combo keys
-   INSERT_KEY       = 6,          // ctrl-f, by AH 
-   HOME_KEY         = 7,          // ctrl-g, by AH
-   END_KEY          = 8,          // ctrl-h, by AH
+   INSERT_KEY       = 29,          // ctrl-5, by AH 
+   HOME_KEY         = 30,          // ctrl-6, by AH
+   END_KEY          = 31,          // ctrl-7, by AH
 
    // -- The following simple/combo keys are platform-dependent
    //    You should test to check the returned codes of these key presses

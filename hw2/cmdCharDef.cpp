@@ -85,9 +85,9 @@ getChar(istream& istr)
       case INPUT_END_KEY:   // Ctrl-d
       case TAB_KEY:         // tab('\t') or Ctrl-i
       case NEWLINE_KEY:     // enter('\n') or ctrl-m
-      case INSERT_KEY:      // Ctrl-f by AH
-      case HOME_KEY:      // Ctrl-g by AH
-      case END_KEY:      // Ctrl-h by AH
+      case INSERT_KEY:      // Ctrl-5 by AH
+      case HOME_KEY:      // Ctrl-6 by AH
+      case END_KEY:      // Ctrl-7 by AH
         return returnCh(ch);
 
       // TODO... Check and change if necessary!!!!!!
