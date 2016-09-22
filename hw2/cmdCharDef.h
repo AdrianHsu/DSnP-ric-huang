@@ -62,6 +62,9 @@ enum ParseChar
    TAB_KEY          = int('\t'),  // tab('\t') or Ctrl-i
    NEWLINE_KEY      = int('\n'),  // enter('\n') or ctrl-m
    ESC_KEY          = 27,         // Not printable; used for combo keys
+   INSERT_KEY       = 6,          // ctrl-f, by AH 
+   HOME_KEY         = 7,          // ctrl-g, by AH
+   END_KEY          = 8,          // ctrl-h, by AH
 
    // -- The following simple/combo keys are platform-dependent
    //    You should test to check the returned codes of these key presses
@@ -76,7 +79,7 @@ enum ParseChar
    // [Intermediate keys for combo keys]
    // -- Intermediate keys are the common parts of combo keys
    // 
-   BACK_SPACE_KEY   = 127,
+   BACK_SPACE_KEY   = 127, // press "delete" button only
    
    //
    // -- Arrow keys: 27 -> 91 -> {UP=65, DOWN=66, RIGHT=67, LEFT=68}
@@ -92,20 +95,18 @@ enum ParseChar
    //
    // -- MOD keys: 27 -> 91 -> {49-54} -> 126
    //    MOD_KEY = { INSERT, DELETE, HOME, END, PgUp, PgDown }
-   //
+
+
    MOD_KEY_FLAG     = 1 << 9,
    MOD_KEY_INT      = 91,
-   HOME_KEY         = 49 + MOD_KEY_FLAG,
-   INSERT_KEY       = 50 + MOD_KEY_FLAG,
-   DELETE_KEY       = 51 + MOD_KEY_FLAG,
-   END_KEY          = 52 + MOD_KEY_FLAG,
-   PG_UP_KEY        = 53 + MOD_KEY_FLAG,
-   PG_DOWN_KEY      = 54 + MOD_KEY_FLAG,
+   DELETE_KEY       = 51 + MOD_KEY_FLAG, // fn + delete
+   PG_UP_KEY        = 53 + MOD_KEY_FLAG, // fn + up
+   PG_DOWN_KEY      = 54 + MOD_KEY_FLAG, // fn + down
    MOD_KEY_BEGIN    = HOME_KEY,
    MOD_KEY_END      = PG_DOWN_KEY,
    MOD_KEY_DUMMY    = 126,
 
-   //
+
    // [For undefined keys]
    UNDEFINED_KEY  = INT_MAX,
 
