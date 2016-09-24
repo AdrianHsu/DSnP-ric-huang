@@ -52,6 +52,7 @@ private:
    void readCmdInt(istream&);
    void printPrompt() const { cout << "cmd> "; }
    bool moveBufPtr(char* const);
+   bool backDeleteChar();
    bool deleteChar();
    void insertChar(char, int = 1);
    void deleteLine();

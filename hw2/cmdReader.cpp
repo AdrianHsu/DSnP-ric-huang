@@ -46,7 +46,7 @@ CmdParser::readCmdInt(istream& istr)
          case HOME_KEY       : moveBufPtr(_readBuf); break;
          case LINE_END_KEY   :
          case END_KEY        : moveBufPtr(_readBufEnd); break;
-         case BACK_SPACE_KEY : /* TODO */ break;
+         case BACK_SPACE_KEY : if(moveBufPtr(_readBufPtr - 1)) deleteChar(); /* TODO */ break;
          case DELETE_KEY     : deleteChar(); break;
          case NEWLINE_KEY    : addHistory();
                                cout << char(NEWLINE_KEY);
@@ -90,6 +90,7 @@ CmdParser::moveBufPtr(char* const ptr)
       mybeep();
       return false;
    }
+
    if(_readBufPtr - 1 == ptr)
       cout << '\b';
    else if(_readBufPtr + 1 == ptr)
@@ -134,10 +135,42 @@ CmdParser::moveBufPtr(char* const ptr)
 // cmd> This is he command
 //              ^
 //
+
+
 bool
 CmdParser::deleteChar()
 {
    // TODO...
+   if(_readBuf == _readBufEnd) {
+      mybeep();
+      return false;
+   }
+   if(_readBufPtr == _readBufEnd) {
+      mybeep();
+      return false;
+   }
+   
+   char* _tmpPtr = _readBufPtr;
+   while(_tmpPtr < _readBufEnd) {
+      *_tmpPtr = *(_tmpPtr + 1);
+      _tmpPtr++;
+   }
+   _readBufEnd--;
+   *_tmpPtr = 0;
+
+   char* _printPtr = _readBufPtr;
+   while(_printPtr < _readBufEnd) {
+      cout << *_printPtr;
+      _printPtr++;
+   }
+   cout << " ";
+   while(_printPtr > _readBufPtr) {
+      cout << '\b';
+      _printPtr--;
+   }
+   cout << '\b';
+   *_readBufEnd = 0; 
+   
    return true;
 }
 
@@ -203,7 +236,33 @@ CmdParser::insertChar(char ch, int repeat)
 void
 CmdParser::deleteLine()
 {
-   // TODO...
+   // TODO... 
+   
+   if(_readBuf == _readBufEnd)
+      return;
+   
+   while(_readBufPtr < _readBufEnd) {
+      cout << *_readBufPtr;
+      _readBufPtr++;
+   }
+   while(_readBuf < _readBufPtr) {
+      _readBufPtr--;
+      cout << '\b';
+      cout << " ";
+      cout << '\b';
+   }
+
+   char* _deletePtr = _readBufEnd;
+   char* _movePtr = _readBufEnd;
+   while(_movePtr > _readBuf) {
+      _deletePtr = _movePtr;
+      _movePtr--;
+      *_deletePtr = 0;
+   }
+   *_movePtr = 0;
+   _readBufPtr = _readBufEnd = _readBuf;
+   *_readBufEnd = 0;
+    
 }
 
 
