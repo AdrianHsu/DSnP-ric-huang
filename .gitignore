@@ -2,5 +2,6 @@
 *.pdf
 *.tgz
 *.swp
+tags
 *.o
 *.o.*
