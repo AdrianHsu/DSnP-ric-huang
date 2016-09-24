@@ -271,7 +271,7 @@ CmdParser::deleteLine()
 //
 // Need to consider:
 // If moving up... (i.e. index < _historyIdx)
-// 1. If already at top (i.e. _historyIdx == 0), beep and do nothing.
+// 1. If already at top (i.e. _historyIdx == 0, oldest), beep and do nothing.
 // 2. If at bottom, temporarily record _readBuf to history.
 //    (Do not remove spaces, and set _tempCmdStored to "true")
 // 3. If index < 0, let index = 0.
@@ -288,6 +288,53 @@ void
 CmdParser::moveToHistory(int index)
 {
    // TODO...
+   if(index == _historyIdx) return;
+
+   bool pop = false;
+   if(index < _historyIdx) {
+      
+      if(_historyIdx == 0) {
+         mybeep();
+         return;
+      }
+      if(index < 0) index = 0;
+      
+      if(_historyIdx == _history.size()) {
+         _tempCmdStored = true;
+         string tmp = (string)_readBuf;
+         _history.push_back(tmp);
+      }
+
+   } else {
+      if(index == _history.size() - 1) {
+         pop = true;
+      }
+      if(_historyIdx == _history.size()) {
+          
+         mybeep();
+         return;
+      }
+      if(index >= _history.size())
+         index = _history.size() - 1;
+      
+   }
+   _historyIdx = index;
+   
+   deleteLine();
+
+   int len = _history[index].size();
+   strcpy(_readBuf, _history[index].c_str());
+   char* _tmpPtr = _readBuf;
+   _readBufPtr = _tmpPtr;
+   for(int i = 0; i < len; i++) {
+      cout << *_tmpPtr;
+      _tmpPtr++;
+   }
+   _readBufPtr = _readBufEnd = _tmpPtr;
+   if(pop) {
+      _history.pop_back();
+      _tempCmdStored = false;
+   }
 }
 
 
@@ -307,9 +354,31 @@ void
 CmdParser::addHistory()
 {
    // TODO...
+   string history = "";
+   if(_tempCmdStored) {
+      _tempCmdStored = false;
+      history = _readBuf;
+      if(history.size() != 0)
+         _history.back() = history;
+      else
+         _history.pop_back();
+   } else {
+      char* _spaceFrontPtr = _readBuf;
+      char* _spaceBackPtr = _readBufEnd;
+      while(*_spaceFrontPtr == ' ') {
+         _spaceFrontPtr++;
+      }
+      while(*_spaceBackPtr == ' ') {
+         _spaceBackPtr--;
+      }
+      while(_spaceFrontPtr < _spaceBackPtr) {
+         history += *_spaceFrontPtr;
+         _spaceFrontPtr++;
+      }
+      if(history.size() != 0)_history.push_back(history);
+   }
+   _historyIdx = _history.size();
 }
-
-
 // 1. Replace current line with _history[_historyIdx] on the screen
 // 2. Set _readBufPtr and _readBufEnd to end of line
 //

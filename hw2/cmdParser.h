@@ -75,7 +75,7 @@ private:
    int              _historyIdx;     // (1) Position to insert history string
                                      //     i.e. _historyIdx = _history.size()
                                      // (2) When up/down/pgUp/pgDn is pressed,
-                                     //     position to history to retrieve
+                                     //     position of history to retrieve
    bool      _tempCmdStored;         // When up/pgUp is pressed, current line
                                      // will be stored in _history and
                                      // _tempCmdStored will be true.
