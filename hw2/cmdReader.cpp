@@ -290,7 +290,7 @@ CmdParser::moveToHistory(int index)
    // TODO...
    if(index == _historyIdx) return;
 
-   bool pop = false;
+   string tmp = "";
    if(index < _historyIdx) {
       
       if(_historyIdx == 0) {
@@ -301,29 +301,59 @@ CmdParser::moveToHistory(int index)
       
       if(_historyIdx == _history.size()) {
          _tempCmdStored = true;
-         string tmp = (string)_readBuf;
-         _history.push_back(tmp);
+         string tmp1 = (string)_readBuf;
+         _history.push_back(tmp1);
       }
-
-   } else {
-      if(index == _history.size() - 1) {
-         pop = true;
-      }
-      if(_historyIdx == _history.size()) {
-          
-         mybeep();
-         return;
-      }
-      if(index >= _history.size())
-         index = _history.size() - 1;
       
+      tmp = _history[index];
+   } else {
+      if(index - _historyIdx == 1) {
+         if(index < _history.size() - 1)
+            tmp = _history[index];
+         else if(index == _history.size() - 1) {
+            if(_tempCmdStored) {
+               _tempCmdStored = false;
+               tmp = _history[index];
+               _history.pop_back();
+            } else {
+               cout << "IMPOSSIBLE" << endl;
+            }
+         } else { // index > _history.size() - 1, _historyIdx > _history.size() - 2
+            //cout << "IMPOSSIBLE" << endl;
+            mybeep();
+            return;
+         }
+      } else {
+         if(index < _history.size() - 1)
+            tmp = _history[index];
+         else if(index == _history.size() - 1) {
+            if(_tempCmdStored) {
+               _tempCmdStored = false;
+               tmp = _history[index];
+               _history.pop_back();
+            } else {
+               cout << "IMPOSSIBLE" << endl;
+            } 
+         } else {
+           index = _history.size() - 1; 
+            if(_tempCmdStored) {
+               _tempCmdStored = false;
+               tmp = _history[index];
+               _history.pop_back();
+            } else {
+               //cout << "IMPOSSIBLE!" << endl;
+               mybeep();
+               return;
+            } 
+         }
+      }
    }
    _historyIdx = index;
    
    deleteLine();
 
-   int len = _history[index].size();
-   strcpy(_readBuf, _history[index].c_str());
+   int len = tmp.size();
+   strcpy(_readBuf, tmp.c_str());
    char* _tmpPtr = _readBuf;
    _readBufPtr = _tmpPtr;
    for(int i = 0; i < len; i++) {
@@ -331,10 +361,6 @@ CmdParser::moveToHistory(int index)
       _tmpPtr++;
    }
    _readBufPtr = _readBufEnd = _tmpPtr;
-   if(pop) {
-      _history.pop_back();
-      _tempCmdStored = false;
-   }
 }
 
 
