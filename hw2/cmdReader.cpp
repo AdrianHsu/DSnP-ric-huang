@@ -108,7 +108,6 @@ CmdParser::moveBufPtr(char* const ptr)
          cout << *_cursorPtr;
          _cursorPtr++;
       }
-
    }
 
    _readBufPtr = ptr;
