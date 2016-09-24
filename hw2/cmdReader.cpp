@@ -94,7 +94,23 @@ CmdParser::moveBufPtr(char* const ptr)
       cout << '\b';
    else if(_readBufPtr + 1 == ptr)
       cout << *_readBufPtr;
+   else if(_readBuf == ptr){
    
+      char* _cursorPtr = _readBufPtr;
+      while(_cursorPtr > _readBuf) {
+         cout << '\b';
+         _cursorPtr--;
+      }
+   } else if(_readBufEnd == ptr) {
+  
+      char* _cursorPtr = _readBufPtr;
+      while(_cursorPtr < _readBufEnd) {
+         cout << *_cursorPtr;
+         _cursorPtr++;
+      }
+
+   }
+
    _readBufPtr = ptr;
    return true;
 }
