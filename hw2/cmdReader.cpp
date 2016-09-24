@@ -53,11 +53,11 @@ CmdParser::readCmdInt(istream& istr)
                                resetBufAndPrintPrompt(); break;
          case ARROW_UP_KEY   : moveToHistory(_historyIdx - 1); break;
          case ARROW_DOWN_KEY : moveToHistory(_historyIdx + 1); break;
-         case ARROW_RIGHT_KEY: /* TODO */ break;
-         case ARROW_LEFT_KEY : /* TODO */ break;
+         case ARROW_RIGHT_KEY: moveBufPtr(_readBufPtr + 1);/* TODO */ break;
+         case ARROW_LEFT_KEY : moveBufPtr(_readBufPtr - 1);/* TODO */ break;
          case PG_UP_KEY      : moveToHistory(_historyIdx - PG_OFFSET); break;
          case PG_DOWN_KEY    : moveToHistory(_historyIdx + PG_OFFSET); break;
-         case TAB_KEY        : /* TODO */ break;
+         case TAB_KEY        : insertChar(' ', 3); break;
          case INSERT_KEY     : // not yet supported; fall through to UNDEFINE
          case UNDEFINED_KEY:   mybeep(); break;
          default:  // printable character
@@ -86,6 +86,16 @@ bool
 CmdParser::moveBufPtr(char* const ptr)
 {
    // TODO...
+   if(_readBuf > ptr || _readBufEnd < ptr) {
+      mybeep();
+      return false;
+   }
+   if(_readBufPtr - 1 == ptr)
+      cout << '\b';
+   else if(_readBufPtr + 1 == ptr)
+      cout << *_readBufPtr;
+   
+   _readBufPtr = ptr;
    return true;
 }
 
@@ -133,8 +143,31 @@ CmdParser::deleteChar()
 //
 void
 CmdParser::insertChar(char ch, int repeat)
-{
+{ 
    // TODO...
+   char* _tmpPtr = _readBufEnd;
+   _readBufEnd += repeat;
+
+   while(_tmpPtr != _readBufPtr) {
+      *(_tmpPtr + repeat) = *_tmpPtr;
+      _tmpPtr--;
+   }
+   *(_tmpPtr + repeat) = *_tmpPtr;
+   
+   for(int i = 0; i < repeat; i++) {
+      *_readBufPtr = ch;
+      _readBufPtr++;
+   }
+   char* _printPtr = _tmpPtr;
+   while(_printPtr < _readBufEnd) {
+      cout << *_printPtr;
+      _printPtr++;
+   }
+   while(_printPtr > _readBufPtr) {
+      cout << '\b';
+      _printPtr--;
+   }
+   
    assert(repeat >= 1);
 }
 

@@ -216,7 +216,7 @@ returnCh(int ch)
 //      case ARROW_KEY_BEGIN: return ParseChar(TA_ARROW_KEY_BEGIN);
 //      case ARROW_KEY_END  : return ParseChar(TA_ARROW_KEY_END);
       case MOD_KEY_FLAG   : return ParseChar(TA_MOD_KEY_FLAG);
-// comment out because MOD_KEY_INT == ARROW_KEY_INT
+// comment out because MOD_KEY_INT == ARROW_KEY_INT //AH: ????????????????
 // Uncomment it out if yours are different
 //      case MOD_KEY_INT    : return ParseChar(TA_MOD_KEY_INT);
       case HOME_KEY       : return ParseChar(TA_HOME_KEY);
