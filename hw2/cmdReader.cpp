@@ -307,33 +307,21 @@ CmdParser::moveToHistory(int index)
       
       tmp = _history[index];
    } else {
-      if(index - _historyIdx == 1) {
-         if(index < _history.size() - 1)
+     
+      if(index < _history.size() - 1)
+         tmp = _history[index];
+      else if(index == _history.size() - 1) {
+         if(_tempCmdStored) {
+            _tempCmdStored = false;
             tmp = _history[index];
-         else if(index == _history.size() - 1) {
-            if(_tempCmdStored) {
-               _tempCmdStored = false;
-               tmp = _history[index];
-               _history.pop_back();
-            } else {
-               cout << "IMPOSSIBLE" << endl;
-            }
-         } else { // index > _history.size() - 1, _historyIdx > _history.size() - 2
-            //cout << "IMPOSSIBLE" << endl;
-            mybeep();
-            return;
+            _history.pop_back();
+         } else {
+            cout << "IMPOSSIBLE" << endl;
          }
       } else {
-         if(index < _history.size() - 1)
-            tmp = _history[index];
-         else if(index == _history.size() - 1) {
-            if(_tempCmdStored) {
-               _tempCmdStored = false;
-               tmp = _history[index];
-               _history.pop_back();
-            } else {
-               cout << "IMPOSSIBLE" << endl;
-            } 
+         if(index - _historyIdx == 1) {
+            mybeep();
+            return;
          } else {
            index = _history.size() - 1; 
             if(_tempCmdStored) {
