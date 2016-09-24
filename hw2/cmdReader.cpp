@@ -355,26 +355,28 @@ CmdParser::addHistory()
 {
    // TODO...
    string history = "";
+
+   char* _spaceFrontPtr = _readBuf;
+   char* _spaceBackPtr = _readBufEnd;
+   while(*_spaceFrontPtr == ' ') {
+      _spaceFrontPtr++;
+   }
+   _spaceBackPtr--;
+   while(*_spaceBackPtr == ' ') {
+      _spaceBackPtr--;
+   }
+   _spaceBackPtr++;
+   while(_spaceFrontPtr < _spaceBackPtr) {
+      history += *_spaceFrontPtr;
+      _spaceFrontPtr++;
+   }
    if(_tempCmdStored) {
       _tempCmdStored = false;
-      history = _readBuf;
       if(history.size() != 0)
          _history.back() = history;
       else
          _history.pop_back();
    } else {
-      char* _spaceFrontPtr = _readBuf;
-      char* _spaceBackPtr = _readBufEnd;
-      while(*_spaceFrontPtr == ' ') {
-         _spaceFrontPtr++;
-      }
-      while(*_spaceBackPtr == ' ') {
-         _spaceBackPtr--;
-      }
-      while(_spaceFrontPtr < _spaceBackPtr) {
-         history += *_spaceFrontPtr;
-         _spaceFrontPtr++;
-      }
       if(history.size() != 0)_history.push_back(history);
    }
    _historyIdx = _history.size();
