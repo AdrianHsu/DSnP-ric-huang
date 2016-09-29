@@ -307,7 +307,11 @@ CmdParser::moveToHistory(int index)
       
       tmp = _history[index];
    } else {
-     
+    
+      if(_history.size() == 0) {
+         mybeep();
+         return;
+      }   
       if(index < _history.size() - 1)
          tmp = _history[index];
       else if(index == _history.size() - 1) {
