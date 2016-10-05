@@ -39,6 +39,54 @@ ifstream& operator >> (ifstream& ifs, DBTable& t)
 {
    // TODO: to read in data from csv file and store them in a table
    // - You can assume all the data of the table are in a single line.
+   
+
+   string str;
+   int num = 0;
+
+   while( getline(ifs, str, '\r') ) {
+
+      if(str == "\n")
+         break;
+      else if(str == "") { // prevent case: 3^M^M
+         // however, problem will occured when "^M at the end"
+         
+         DBRow row;
+         row.addData(INT_MAX);
+         t.addRow(row);
+         
+         continue;
+
+      }
+      // you don’t need to handle syntax errors in reading .csv file 
+      // (e.g. missing ^M at the end) or parsing commands.
+
+      vector<int> vec;
+      stringstream ss(str);
+
+      while( getline(ss, str, ',') ) {
+
+         if(str == "") { //prevent case: ^M,3^M
+            num = INT_MAX;
+         } else {
+            num = atoi(str.c_str());
+         }
+         vec.push_back(num);
+      }
+      // prevent case: 3,^M ...etc
+      if(str == "") {
+         num = INT_MAX;
+         vec.push_back(num);
+      }
+
+      DBRow row(vec);
+      t.addRow(row);
+   }
+   
+   if(t.nRows() != 0)
+      t.delRow(t.nRows() - 1); // solve "^M at the end", 
+   // since "missing ^M at the end" special case will not happened
+
    return ifs;
 }
 
@@ -81,6 +129,7 @@ void
 DBTable::delRow(int c)
 {
    // TODO: delete row #c. Note #0 is the first row.
+   _table.erase(_table.begin() + c); 
 }
 
 void
@@ -143,6 +192,14 @@ DBTable::printCol(size_t c) const
    // TODO: to print out a column.
    // - Data are seperated by a space. No trailing space at the end.
    // - Null cells are printed as '.'
+   size_t size = _table[c].size();
+   size_t i = 0;
+   for(i = 0; i < size; ++i) {
+      printData(cout, _table[c][i]);
+      cout << " ";
+   }
+   printData(cout, _table[c][i]);
+   cout << endl;
 }
 
 void

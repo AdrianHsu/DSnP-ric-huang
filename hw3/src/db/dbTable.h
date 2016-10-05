@@ -13,6 +13,7 @@
 #include <vector>
 #include <cmath>
 #include <climits>
+#include <sstream>
 
 using namespace std;
 
@@ -25,7 +26,7 @@ public:
    void reset() { vector<int> tmp; tmp.swap(_data); }
    int& operator [] (size_t i) { return _data[i]; }
    const int& operator [] (size_t i) const { return _data[i]; }
-   void addData(int i) { /* TODO */  }
+   void addData(int i) { _data.push_back(i); /* TODO */  }
    void removeCell(size_t c);
    size_t size() const { return _data.size(); }
    bool empty() const { return _data.empty(); }
@@ -58,7 +59,12 @@ public:
    operator void* () const { return _table.empty()? NULL: (void*)this; }
    //number of rows/columns
    size_t nRows() const { return _table.size(); }
-   size_t nCols() const { /* TODO */ return 0; }
+   size_t nCols() const { 
+      
+      if(_table.size() != 0) return _table[0].size();
+      else return 0; 
+      /* TODO */
+   }
    // "getXXX" functions
    int getData(size_t r, size_t c) const { return _table[r][c]; }
    float getMax(size_t c) const;

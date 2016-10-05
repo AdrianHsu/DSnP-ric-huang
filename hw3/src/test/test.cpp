@@ -47,6 +47,8 @@ main(int argc, char** argv)
 
    // TODO
    // Insert what you want to test here by calling DBTable's member functions
+   dbtbl.printSummary();
+   dbtbl.printCol(0);
 
    return 0;
 }
