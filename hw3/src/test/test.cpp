@@ -43,12 +43,42 @@ main(int argc, char** argv)
    cout << "========================" << endl;
    cout << " Print table " << endl;
    cout << "========================" << endl;
-   cout << dbtbl << endl;
+
 
    // TODO
    // Insert what you want to test here by calling DBTable's member functions
-   dbtbl.printSummary();
-   dbtbl.printCol(0);
+   // dbtbl.printSummary();
+   // cout << dbtbl << endl;
+   // cout << dbtbl[dbtbl.nRows() - 1] << endl;   
+   // cout << dbtbl.getMax(dbtbl.nCols() - 1) << endl;
+   // cout << dbtbl.getMin(dbtbl.nCols() - 1) << endl;
+   // cout << dbtbl.getSum(dbtbl.nCols() - 1) << endl;
+   // cout << dbtbl.getCount(dbtbl.nCols() - 1) << endl;
+   // cout << dbtbl.getAve(dbtbl.nCols() - 1) << endl;
+   // DBSort s;
+   // dbtbl.sort(s);
+   // dbtbl.printCol(dbtbl.nCols() - 1);
+   // cout << endl;
+   // dbtbl.delRow(dbtbl.nRows() - 1);
+   // dbtbl.printSummary();
+   // cout << dbtbl << endl;
+   // dbtbl.delCol(dbtbl.nCols() - 1);
+   // dbtbl.printSummary();
+   // cout << dbtbl << endl;
+   // vector<int> add;
+   // add.push_back(3);
+   // add.push_back(-1);
+   // add.push_back(-2);
+   // dbtbl.addCol(add);
+   // dbtbl.printSummary();
+   // cout << dbtbl << endl;
+   
+   // vector<int> _add;
+   // _add.push_back(-1);
+   // _add.push_back(-2);
+   // dbtbl.addRow(_add);
+   // dbtbl.printSummary();
+   // cout << dbtbl << endl;
 
    return 0;
 }

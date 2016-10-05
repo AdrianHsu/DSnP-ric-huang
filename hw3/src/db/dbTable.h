@@ -50,7 +50,12 @@ public:
    void reset();
    // access functions for row/column
    const DBRow& operator [] (size_t i) const { return _table[i]; }
-   void addRow(const DBRow& r) { _table.push_back(r); }
+   void addRow(const DBRow& r) { 
+      if(r.size() != nCols()){
+         cerr << "error" << endl;
+      }
+      _table.push_back(r); 
+   }
    void addCol(const vector<int>& d);
    void delRow(int c);
    void delCol(int c);
