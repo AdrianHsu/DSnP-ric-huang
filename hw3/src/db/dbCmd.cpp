@@ -305,20 +305,20 @@ DBPrintCmd::exec(const string& option)
    string opt = t[0];
    int index = -1;
    int index2 = -1;
-   if(myStrNCmp(opt, "-Table", 2) == 0) {
+   if(myStrNCmp("-Table", opt, 2) == 0) {
       if(t.size() == 2) return CmdExec::errorOption(CMD_OPT_EXTRA, t[t.size() - 1]);
       else cout << dbtbl;
 
-   } else if(myStrNCmp(opt, "-Summary", 2) == 0) {
+   } else if(myStrNCmp("-Summary", opt, 2) == 0) {
       if(t.size() == 2) return CmdExec::errorOption(CMD_OPT_EXTRA, t[t.size() - 1]);
       else dbtbl.printSummary();
 
-   } else if(myStrNCmp(opt, "-Row", 2) == 0) {
+   } else if(myStrNCmp("-Row", opt, 2) == 0) {
       if(t.size() == 1) return CmdExec::errorOption(CMD_OPT_MISSING, t[t.size() - 1]);
 
       if (checkRowIdx(t[1], index))   cout << dbtbl[index];
       else  return CMD_EXEC_ERROR;
-   } else if(myStrNCmp(opt, "-Column", 2) == 0) {
+   } else if(myStrNCmp("-Column", opt, 2) == 0) {
       if(t.size() == 1) return CmdExec::errorOption(CMD_OPT_MISSING, t[t.size() - 1]);
 
       if (checkColIdx(t[1], index)) dbtbl.printCol(index);
