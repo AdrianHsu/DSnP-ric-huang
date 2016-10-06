@@ -36,7 +36,7 @@ int
 main(int argc, char** argv)
 {
    ifstream dof;
-   string tok = "??";
+   string tok = "?";
    //myStrGetTok("DBSort 3 1 8 3", tok, 6, ' ');
    //cout << "AHTOKKKK" << tok << endl; // "3"
    //cout << myStrNCmp("HELp", "HELPp", 3); // -1

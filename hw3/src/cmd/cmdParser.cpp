@@ -31,11 +31,23 @@ CmdParser::openDofile(const string& dof)
    // TODO...
    //_dofile is "dofiles/do1"
    cout << "AHopenDofile" << endl;
-   _dofile = new ifstream(dof.c_str());
-   if(!_dofile)
-      return false;
-    
+   if(_dofileStack.size() >= 1024) return false;
 
+   _dofile = new ifstream(dof.c_str());
+   
+   if(!_dofile->is_open()) {
+     
+      delete _dofile;
+      if(_dofileStack.size() != 0)
+         _dofile = _dofileStack.top();
+      else {
+         _dofile = 0;
+         cerr << "AHerror: openDofile" << endl;
+      }
+      return false;
+   }
+
+   _dofileStack.push(_dofile);
    return true;
 }
 
@@ -45,7 +57,16 @@ CmdParser::closeDofile()
 {
    assert(_dofile != 0);
    // TODO...
+   if(_dofileStack.size() == 0)
+      cerr << "AHerror: closeDofile" << endl;
+   
+   _dofileStack.pop();
    delete _dofile;
+   
+   if(_dofileStack.size() == 0)
+      _dofile = 0;
+   else
+      _dofile = _dofileStack.top();
 }
 
 // Return false if registration fails
@@ -104,6 +125,11 @@ void
 CmdParser::printHelps() const
 {
    // TODO...
+   CmdMap::const_iterator it;
+   for(it = _cmdMap.begin(); it != _cmdMap.end(); it++){
+      it->second->help();
+   }
+   cout << endl;
 }
 
 void
@@ -147,10 +173,26 @@ CmdParser::parseCmd(string& option)
 
    // TODO...
    assert(str[0] != 0 && str[0] != ' ');
-   cout << "AH??:" << str << endl;
+   //str == current command + options
+   string cmd = "";
+   myStrGetTok(str, cmd);
+
+   // str token is now "HELpp"
+   CmdExec* e;
+   e = getCmd(cmd);
+   if(e == NULL) {
+      cerr << "Illegal command!! (" << cmd << ")";
+      return e;
+   }
    
-   cout << "AH?:" << option << endl;
-   return NULL;
+   size_t i;
+   for(i = cmd.size(); i < str.size(); i++) {
+      if(str[i] != ' ')   break;
+   }
+
+   option = str.substr(i);
+
+   return e;
 }
 
 // This function is called by pressing 'Tab'.
@@ -218,6 +260,8 @@ CmdParser::listCmd(const string& str)
 {
    // TODO...
    cout << "AHlistCmd" << endl;
+   
+
 }
 
 // cmd is a copy of the original input
@@ -236,6 +280,15 @@ CmdParser::getCmd(string cmd)
 {
    CmdExec* e = 0;
    // TODO...
+   CmdMap::const_iterator it;
+   for(it = _cmdMap.begin(); it != _cmdMap.end(); it++) {
+      string key = it->first;
+      string optcmd = (it->second)->getOptCmd();
+      if(myStrNCmp( key+optcmd , cmd, key.size() ) == 0) {
+         e = it->second;
+         break;
+      }
+   }
    return e;
 }
 
