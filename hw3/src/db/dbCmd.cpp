@@ -81,6 +81,8 @@ DBAppendCmd::exec(const string& option)
 {
    // TODO...
    // check option
+   
+
 
    return CMD_EXEC_DONE;
 }
@@ -281,14 +283,63 @@ DBMinCmd::help() const
 //    DBPrint < (int rowIdx) (int colIdx)
 //            | -Row (int rowIdx) | -Column (colIdx) | -Table | -Summary>
 //----------------------------------------------------------------------
-CmdExecStatus
+   CmdExecStatus
 DBPrintCmd::exec(const string& option)
 {  
    // TODO...
+   if (!dbtbl) {
+      cerr << "Error: Table is not yet created!!" << endl;
+      return CMD_EXEC_ERROR;
+   }
 
+   vector<string> t; //tokens
+   if(!CmdExec::lexOptions(option, t))
+      return CMD_EXEC_ERROR;
+
+   if(t.size() > 2) 
+      return CmdExec::errorOption(CMD_OPT_EXTRA, t[t.size() - 1]);
+   else if(t.size() == 0)
+      return CmdExec::errorOption(CMD_OPT_MISSING, "");
+
+   
+   string opt = t[0];
+   int index = -1;
+   int index2 = -1;
+   if(myStrNCmp(opt, "-Table", 2) == 0) {
+      if(t.size() == 2) return CmdExec::errorOption(CMD_OPT_EXTRA, t[t.size() - 1]);
+      else cout << dbtbl;
+
+   } else if(myStrNCmp(opt, "-Summary", 2) == 0) {
+      if(t.size() == 2) return CmdExec::errorOption(CMD_OPT_EXTRA, t[t.size() - 1]);
+      else dbtbl.printSummary();
+
+   } else if(myStrNCmp(opt, "-Row", 2) == 0) {
+      if(t.size() == 1) return CmdExec::errorOption(CMD_OPT_MISSING, t[t.size() - 1]);
+
+      if (checkRowIdx(t[1], index))   cout << dbtbl[index];
+      else  return CMD_EXEC_ERROR;
+   } else if(myStrNCmp(opt, "-Column", 2) == 0) {
+      if(t.size() == 1) return CmdExec::errorOption(CMD_OPT_MISSING, t[t.size() - 1]);
+
+      if (checkColIdx(t[1], index)) dbtbl.printCol(index);
+      else  return CMD_EXEC_ERROR;
+   } else {
+
+      if (!myStr2Int(t[0], index))   return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
+      if(checkRowIdx(t[0], index)) {
+
+         if (t.size() == 1) return CmdExec::errorOption(CMD_OPT_MISSING, t[0]);
+         if (!myStr2Int(t[1], index2))   return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+         if (checkColIdx(t[1], index2)){
+            int data = dbtbl.getData(index, index2);
+            if(data == INT_MAX)  cout << "null\n";
+            else  cout << data << endl;
+
+         }  else return CMD_EXEC_ERROR;
+      } else return CMD_EXEC_ERROR;
+   }
    return CMD_EXEC_DONE;
 }
-
 void
 DBPrintCmd::usage(ostream& os) const
 {
