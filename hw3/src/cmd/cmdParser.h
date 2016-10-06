@@ -132,13 +132,17 @@ private:
    void resetBufAndPrintPrompt() {
         _readBufPtr = _readBufEnd = _readBuf;
         *_readBufPtr = 0;
+        cout << "AHresetBufAndPrintPrompt" << endl;
         printPrompt();
    }
    ParseChar getChar(istream&) const;
    bool readCmd(istream&);
    CmdExec* parseCmd(string&);
    void listCmd(const string&);
-   void printPrompt() const { cout << _prompt; }
+   void printPrompt() const { 
+      cout << "AHprintPrompt" << endl;
+      cout << _prompt; 
+   }
 
    // Helper functions
    bool moveBufPtr(char* const);

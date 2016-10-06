@@ -36,6 +36,27 @@ int
 main(int argc, char** argv)
 {
    ifstream dof;
+   string tok = "??";
+   //myStrGetTok("DBSort 3 1 8 3", tok, 6, ' ');
+   //cout << "AHTOKKKK" << tok << endl; // "3"
+   //cout << myStrNCmp("HELp", "HELPp", 3); // -1
+   //cout << myStrNCmp("HELp", "Hel", 3); // 0
+   //cout << myStrNCmp("DBSort", "dbsO", 3); // 0
+   
+   //CmdExec* e;
+   //string token = "";
+   //string option = "-Row";
+   //e->lexSingleOption(option, token, true);
+   //cout << "token=" << token << endl; //-Row
+
+   //string option = "";
+   //e->lexSingleOption(option, token, false);
+   //cout << "token=" << token << endl; //Error: Missing option!!
+   
+   //vector<string> token;
+   //string option = "3 1 8 3";
+   //e->lexOptions(option, token, 3);
+   //cout << "token=" << token[3] << endl;//error
 
    if (argc == 3) {  // -file <doFile>
       if (myStrNCmp("-File", argv[1], 2) == 0) {

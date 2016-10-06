@@ -47,8 +47,8 @@ main(int argc, char** argv)
 
    // TODO
    // Insert what you want to test here by calling DBTable's member functions
-   // dbtbl.printSummary();
-   // cout << dbtbl << endl;
+   dbtbl.printSummary();
+   cout << dbtbl << endl;
    // cout << dbtbl[dbtbl.nRows() - 1] << endl;   
    // cout << dbtbl.getMax(dbtbl.nCols() - 1) << endl;
    // cout << dbtbl.getMin(dbtbl.nCols() - 1) << endl;

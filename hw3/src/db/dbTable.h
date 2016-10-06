@@ -51,9 +51,10 @@ public:
    // access functions for row/column
    const DBRow& operator [] (size_t i) const { return _table[i]; }
    void addRow(const DBRow& r) { 
-      if(r.size() != nCols()){
-         cerr << "error" << endl;
-      }
+
+      //if(r.size() != nCols() && nCols() != 0){
+      //   cerr << "error1" << endl;
+      //}
       _table.push_back(r); 
    }
    void addCol(const vector<int>& d);

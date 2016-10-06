@@ -36,11 +36,11 @@ ostream& operator << (ostream& os, const DBTable& t)
 {
    // TODO: to print out a table
    // - Data are seperated by setw(6) and aligned right.
-   // - Null cells should be left blank (printed as ' ').
+   // - Null cells are printed as '.'
    for(int i = 0; i < t.nRows(); i++) { 
       for(int j = 0; j < t.nCols(); j++) {
          if(t[i][j] == INT_MAX)
-            os << setw(6) << right;
+            os << setw(6) << right << ".";
          else
             os << setw(6) << right << t[i][j];
       }
@@ -112,7 +112,7 @@ DBRow::removeCell(size_t c)
    if(c < size())
       _data.erase(_data.begin() + c); 
    else
-      cerr << "error" << endl;
+      cerr << "error2" << endl;
       
 }
 
@@ -150,7 +150,7 @@ DBTable::addCol(const vector<int>& d)
    for(size_t i = 0; i < d.size(); i++) {
       
       if(d.size() != nRows()) {
-         cerr << "error" << endl;
+         cerr << "error3" << endl;
       }
       _table[i].addData(d[i]);
    }
@@ -163,7 +163,7 @@ DBTable::delRow(int c)
    if(!_table[c].empty())
       _table.erase(_table.begin() + c); 
    else
-      cerr << "error" << endl;
+      cerr << "error4" << endl;
 }
 
 void
