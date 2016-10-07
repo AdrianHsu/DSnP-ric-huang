@@ -107,6 +107,7 @@ CmdParser::execOneCmd()
       newCmd = readCmd(*_dofile);
    else
       newCmd = readCmd(cin);
+   cout << "newCmd=" << newCmd << endl; 
 
    // execute the command
    if (newCmd) {
@@ -144,12 +145,6 @@ CmdParser::printHistory(int nPrint) const
       nPrint = s;
    for (int i = s - nPrint; i < s; ++i)
       cout << "   " << i << ": " << _history[i] << endl;
-}
-
-bool
-CmdParser::readCmd(istream& is) 
-{
-   return true; //??
 }
 
 //
