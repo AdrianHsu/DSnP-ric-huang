@@ -107,7 +107,6 @@ CmdParser::execOneCmd()
       newCmd = readCmd(*_dofile);
    else
       newCmd = readCmd(cin);
-   cout << "newCmd=" << newCmd << endl; 
 
    // execute the command
    if (newCmd) {
