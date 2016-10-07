@@ -29,6 +29,7 @@ ostream& operator << (ostream& os, const DBRow& r)
       DBTable::printData(os, r[i]);
       if(i != size - 1) os << ' ';
    }
+   os << endl;
    return os;
 }
 
@@ -46,7 +47,7 @@ ostream& operator << (ostream& os, const DBTable& t)
       }
       os << endl;
    }
-   
+   os << endl;
    return os;
 }
 
