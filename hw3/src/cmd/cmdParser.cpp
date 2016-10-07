@@ -30,7 +30,6 @@ CmdParser::openDofile(const string& dof)
 {
    // TODO...
    //_dofile is "dofiles/do1"
-   cout << "AHopenDofile" << endl;
    if(_dofileStack.size() >= 1024) return false;
 
    _dofile = new ifstream(dof.c_str());
@@ -42,7 +41,6 @@ CmdParser::openDofile(const string& dof)
          _dofile = _dofileStack.top();
       else {
          _dofile = 0;
-         cerr << "AHerror: openDofile" << endl;
       }
       return false;
    }
@@ -57,9 +55,9 @@ CmdParser::closeDofile()
 {
    assert(_dofile != 0);
    // TODO...
-   if(_dofileStack.size() == 0)
-      cerr << "AHerror: closeDofile" << endl;
-   
+   //if(_dofileStack.size() == 0)
+   //   return;
+
    _dofileStack.pop();
    delete _dofile;
    
@@ -166,7 +164,6 @@ CmdParser::printHistory(int nPrint) const
 CmdExec*
 CmdParser::parseCmd(string& option)
 {
-   cout << "AHparseCmd" << endl;
    assert(_tempCmdStored == false);
    assert(!_history.empty());
    string str = _history.back();
@@ -259,7 +256,6 @@ void
 CmdParser::listCmd(const string& str)
 {
    // TODO...
-   cout << "AHlistCmd" << endl;
    
 
 }
@@ -304,7 +300,6 @@ bool
 CmdExec::lexSingleOption
 (const string& option, string& token, bool optional) const
 {
-   cout << "AHlexSingleOption" << endl;
    size_t n = myStrGetTok(option, token);
    if (!optional) {
       if (token.size() == 0) {
@@ -326,7 +321,6 @@ bool
 CmdExec::lexOptions
 (const string& option, vector<string>& tokens, size_t nOpts) const
 {
-   cout << "AHlexOptions" << endl;
    string token;
    size_t n = myStrGetTok(option, token);
    while (token.size()) {
@@ -349,7 +343,6 @@ CmdExec::lexOptions
 CmdExecStatus
 CmdExec::errorOption(CmdOptionError err, const string& opt) const
 {
-   cout << "AHerrorOption" << endl;
    switch (err) {
       case CMD_OPT_MISSING:
          cerr << "Error: Missing option";

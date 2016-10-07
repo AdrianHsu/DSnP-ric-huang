@@ -81,8 +81,76 @@ DBAppendCmd::exec(const string& option)
 {
    // TODO...
    // check option
-   
+   if (!dbtbl) {
+      cerr << "Error: Table is not yet created!!" << endl;
+      return CMD_EXEC_ERROR;
+   }
 
+   vector<string> t; //tokens
+   if(!CmdExec::lexOptions(option, t))
+      return CMD_EXEC_ERROR;
+   if(t.size() == 0) return CmdExec::errorOption(CMD_OPT_MISSING, "");
+   
+   string opt = t[0];
+   if(myStrNCmp("-Row", opt, 2) == 0) {
+      if(t.size() == 1) return CmdExec::errorOption(CMD_OPT_MISSING, t[t.size() - 1]);
+      if(t.size() == 2 && t[1] == "-") {
+         DBRow row;
+         for(size_t i = 0; i < dbtbl.nCols(); i++)
+            row.addData(INT_MAX);
+         dbtbl.addRow(row);
+      } else {
+         DBRow row;
+         size_t optnum = t.size() - 1;
+         size_t nCol = dbtbl.nCols();
+         size_t i = 1;
+         int num = INT_MAX;
+         for( ; i <= optnum; i++ ) {
+            
+            if(i > nCol) break;
+            if(myStr2Int(t[i], num)) {
+               row.addData(num);
+            } else if(t[i] == "-") {
+               row.addData(INT_MAX);
+            } else return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[i]);
+               
+         }
+         if(optnum < nCol) {
+            for( ; i < nCol; i++ )
+               row.addData(INT_MAX);
+         }
+         dbtbl.addRow(row);
+      }
+   } else if(myStrNCmp("-Column", opt, 2) == 0) {
+      if(t.size() == 1) return CmdExec::errorOption(CMD_OPT_MISSING, t[t.size() - 1]);
+      if(t.size() == 2 && t[1] == "-") {
+         vector<int> col;
+         for(size_t i = 0; i < dbtbl.nRows(); i++)
+            col.push_back(INT_MAX);
+         dbtbl.addCol(col);
+      } else {
+         vector<int> col;
+         size_t optnum = t.size() - 1;
+         size_t nRow = dbtbl.nRows();
+         size_t i = 1;
+         int num = INT_MAX;
+         for( ; i <= optnum; i++ ) {
+            
+            if(i > nRow) break;
+            if(myStr2Int(t[i], num)) {
+               col.push_back(num);
+            } else if(t[i] == "-") {
+               col.push_back(INT_MAX);
+            } else return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[i]);
+               
+         }
+         if(optnum < nRow) {
+            for( ; i < nRow; i++ )
+               col.push_back(INT_MAX);
+         }
+         dbtbl.addCol(col);
+      }
+   } else return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
 
    return CMD_EXEC_DONE;
 }

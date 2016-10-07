@@ -163,7 +163,6 @@ DofileCmd::exec(const string& option)
 {     
    // check option 
    string token;
-   cout << "AHexec" << endl;
    if (!CmdExec::lexSingleOption(option, token, false))
       return CMD_EXEC_ERROR;
    if (!cmdMgr->openDofile(token)){
