@@ -47,6 +47,7 @@ CmdParser::openDofile(const string& dof)
 
    _dofileStack.push(_dofile);
    return true;
+
 }
 
 // Must make sure _dofile != 0
@@ -60,7 +61,7 @@ CmdParser::closeDofile()
 
    _dofileStack.pop();
    delete _dofile;
-   
+
    if(_dofileStack.size() == 0)
       _dofile = 0;
    else
