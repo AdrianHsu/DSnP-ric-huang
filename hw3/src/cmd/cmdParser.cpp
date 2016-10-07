@@ -145,6 +145,11 @@ CmdParser::printHistory(int nPrint) const
       cout << "   " << i << ": " << _history[i] << endl;
 }
 
+bool
+CmdParser::readCmd(istream& is) 
+{
+   return true; //??
+}
 
 //
 // Parse the command from _history.back();

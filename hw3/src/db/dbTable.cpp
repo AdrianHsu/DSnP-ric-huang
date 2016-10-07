@@ -24,7 +24,7 @@ ostream& operator << (ostream& os, const DBRow& r)
    // TODO: to print out a row.
    // - Data are seperated by a space. No trailing space at the end.
    // - Null cells are printed as '.'
-   int i = 0, size = r.size();
+   size_t i = 0, size = r.size();
    for( ; i < size; i++ ){
       DBTable::printData(os, r[i]);
       if(i != size - 1) os << ' ';
@@ -38,8 +38,8 @@ ostream& operator << (ostream& os, const DBTable& t)
    // TODO: to print out a table
    // - Data are seperated by setw(6) and aligned right.
    // - Null cells are printed as '.'
-   for(int i = 0; i < t.nRows(); i++) { 
-      for(int j = 0; j < t.nCols(); j++) {
+   for(size_t i = 0; i < t.nRows(); i++) { 
+      for(size_t j = 0; j < t.nCols(); j++) {
          if(t[i][j] == INT_MAX)
             os << setw(6) << right << ".";
          else
