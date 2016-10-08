@@ -116,7 +116,7 @@ DBAppendCmd::exec(const string& option)
                
          }
          if(optnum < nCol) {
-            for( ; i < nCol; i++ )
+            for( ; i <= nCol; i++ )
                row.addData(INT_MAX);
          }
          dbtbl.addRow(row);
@@ -145,7 +145,7 @@ DBAppendCmd::exec(const string& option)
                
          }
          if(optnum < nRow) {
-            for( ; i < nRow; i++ )
+            for( ; i <= nRow; i++ )
                col.push_back(INT_MAX);
          }
          dbtbl.addCol(col);
