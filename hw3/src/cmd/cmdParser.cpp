@@ -289,28 +289,21 @@ CmdParser::listCmd(const string& str)
    }
    int len = _readBufPtr - _myPtr;
    // *_myPtr is now the first char with no space before it
-   char* _myReadBuf = _myPtr;
-   char* _mySpacePtr = _myReadBuf; //token last char occured to space
    // s is now str with no space before, up to _readBufPtr position
    s = str.substr(_space, _space + len);
    string token = "";
    myStrGetTok(s, token);
 
-   while(*_mySpacePtr != ' ') {
-      _mySpacePtr++;
-      if(_mySpacePtr == _readBufPtr){ 
+   while(*_myPtr != ' ') {
+      _myPtr++;
+      if(_myPtr == _readBufPtr){ 
          break;
       }
    }
-   string tok = "";
-   while(_myPtr != _mySpacePtr) {
-      tok += *_myPtr;
-      _myPtr++;
-   }
-   if(_mySpacePtr != _readBufPtr) {
+   if(_myPtr != _readBufPtr) {
       for(CmdMap::const_iterator it = _cmdMap.begin(); it != _cmdMap.end(); it++) {
          string _cur_cmd = it->first + it->second->getOptCmd();
-         if(myStrNCmp(_cur_cmd, tok, it->first.size()) == 0){
+         if(myStrNCmp(_cur_cmd, token, it->first.size()) == 0){
             cout << endl;
             getCmd(_cur_cmd)->usage(cout);
             reprintCmd();
