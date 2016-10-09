@@ -256,7 +256,43 @@ void
 CmdParser::listCmd(const string& str)
 {
    // TODO...
+   char* _spacePtr = _readBuf;
+   bool _case_one = false;
+   if(_spacePtr == _readBufPtr) {
+      _case_one = true;
+   }else {
+      while( *_spacePtr == ' ') {
+         _spacePtr++;
+         if(_spacePtr == _readBufPtr) {
+            _case_one = true;
+            break;
+         }
+      }
+   }
+   if(_case_one) {
+      
+      cout << endl;
+      size_t count = 0;
+      for(CmdMap::const_iterator it = _cmdMap.begin(); it != _cmdMap.end(); it++){
+         cout << setw(12) << left << it->first + it->second->getOptCmd();
+         count++;
+         if (count == 5){
+            count = 0;
+            cout << endl;
+         }
+      }
+      reprintCmd();
+      return;
+   }
    
+   int _space = 0;
+   while(str[_space] == ' ')
+      _space++;
+
+   string s = str.substr(_space, str.size() - 1);
+   // s with no space before first char
+   
+
 
 }
 
