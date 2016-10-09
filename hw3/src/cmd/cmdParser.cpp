@@ -256,14 +256,17 @@ void
 CmdParser::listCmd(const string& str)
 {
    // TODO...
-   char* _spacePtr = _readBuf;
    bool _case_one = false;
-   if(_spacePtr == _readBufPtr) {
+   char* _myPtr = _readBuf;
+   string s = "";
+   size_t _space = 0;
+   if(_myPtr == _readBufPtr) {
       _case_one = true;
    }else {
-      while( *_spacePtr == ' ') {
-         _spacePtr++;
-         if(_spacePtr == _readBufPtr) {
+      while( *_myPtr == ' ') {
+         _myPtr++;
+         _space++;
+         if(_myPtr == _readBufPtr) {
             _case_one = true;
             break;
          }
@@ -284,16 +287,67 @@ CmdParser::listCmd(const string& str)
       reprintCmd();
       return;
    }
-   
-   int _space = 0;
-   while(str[_space] == ' ')
-      _space++;
+   int len = _readBufPtr - _myPtr;
+   // *_myPtr is now the first char with no space before it
+   char* _myReadBuf = _myPtr;
+   char* _mySpacePtr = _myReadBuf; //token last char occured to space
+   // s is now str with no space before, up to _readBufPtr position
+   s = str.substr(_space, _space + len);
+   string token = "";
+   myStrGetTok(s, token);
 
-   string s = str.substr(_space, str.size() - 1);
-   // s with no space before first char
-   
-
-
+   while(*_mySpacePtr != ' ') {
+      _mySpacePtr++;
+      if(_mySpacePtr == _readBufPtr){ 
+         break;
+      }
+   }
+   string tok = "";
+   while(_myPtr != _mySpacePtr) {
+      tok += *_myPtr;
+      _myPtr++;
+   }
+   if(_mySpacePtr != _readBufPtr) {
+      for(CmdMap::const_iterator it = _cmdMap.begin(); it != _cmdMap.end(); it++) {
+         string _cur_cmd = it->first + it->second->getOptCmd();
+         if(myStrNCmp(_cur_cmd, tok, it->first.size()) == 0){
+            cout << endl;
+            getCmd(_cur_cmd)->usage(cout);
+            reprintCmd();
+            return;
+         }
+      }
+      mybeep();
+      return;
+   }
+   else { 
+      vector<string> multi_vec;
+      for(CmdMap::const_iterator it = _cmdMap.begin() ; it != _cmdMap.end(); it++) {
+         string _cur_cmd = it->first + it->second->getOptCmd();
+         if(_cur_cmd.size() < token.size()) continue;
+         if((myStrNCmp(_cur_cmd, token, token.size()) == 0)) {
+            multi_vec.push_back(_cur_cmd);
+         }
+      }
+      if(multi_vec.size() == 0) {
+         mybeep();
+         return;
+      } else if(multi_vec.size() == 1) {
+         for (size_t i = token.size(); i < multi_vec[0].size(); ++i) {
+            insertChar(multi_vec[0][i]);
+         } insertChar(' ');
+      } else {
+         cout << endl;
+         for(size_t i = 0; i < multi_vec.size(); i++){
+            cout << setw(12) << left << multi_vec[i];
+            if (i == 5){
+               cout << endl;
+            }
+         }
+         reprintCmd();
+         return;
+      }
+   }
 }
 
 // cmd is a copy of the original input
