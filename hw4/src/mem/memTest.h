@@ -60,9 +60,8 @@ public:
          for(size_t i = 0; i < n; i++) {
             MemTestObj* t = new MemTestObj;
             _objList.push_back(t);
-
          }
-      } catch( bad_alloc& e) {
+      } catch( bad_alloc& e ) {
          //cerr << "error" << endl;
       }
    }
@@ -73,9 +72,8 @@ public:
          for(size_t i = 0; i < n; i++) {
             MemTestObj* t = new MemTestObj[s];
             _arrList.push_back(t);
-
          }
-      } catch( bad_alloc& e) {
+      } catch( bad_alloc& e ) {
          //cerr << "error" << endl;
       }
    }

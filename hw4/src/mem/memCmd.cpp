@@ -260,11 +260,11 @@ MTDeleteCmd::exec(const string& option)
          return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
       size_t numRandId = (size_t)arg1;
       if(t.size() == 2) { 
-         mtest.deleteObj(numRandId);
+         mtest.deleteObj(rnGen(numRandId));
       } else if(t.size() == 3){ 
          if(myStrNCmp("-Array", t[2], 2) != 0)
             return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
-         mtest.deleteArr(numRandId);
+         mtest.deleteArr(rnGen(numRandId));
       } else {
          if(myStrNCmp("-Array", t[2], 2) != 0) {
             return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
