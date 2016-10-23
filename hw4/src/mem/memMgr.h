@@ -332,17 +332,19 @@ private:
    //    to find a recycle list whose "_arrSize" == "n"
       MemRecycleList<T>* list = &_recycleList[m]; 
 
-      if(list == 0) return 0; // error...
+      //if(list == 0) return 0; // error...
       if(n == m) return list;
 
       while(list->getNextList() != 0) {
-         m = list->getArrSize(); //since first list is maybe not size <= 256, thus cannot use original m
+         m = list->getArrSize(); 
          if(n != m)
             list = list->getNextList();
          else {
             return list;
          }
-      } 
+      }
+      if(list->getArrSize() == n) return list;
+
       // If not found, create a new MemRecycleList with _arrSize = n
       //    and add to the last MemRecycleList
       // So, should never return NULL
