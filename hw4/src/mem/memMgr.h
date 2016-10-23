@@ -47,11 +47,11 @@ private:                                                                    \
 //
 // To promote 't' to the nearest multiple of SIZE_T; 
 // e.g. Let SIZE_T = 8;  toSizeT(7) = 8, toSizeT(12) = 16
-#define toSizeT(t)      0  // TODO
+#define toSizeT(t)   t + (SIZE_T - (t % SIZE_T)) // TODO
 //
 // To demote 't' to the nearest multiple of SIZE_T
 // e.g. Let SIZE_T = 8;  downtoSizeT(9) = 8, downtoSizeT(100) = 96
-#define downtoSizeT(t)  0  // TODO
+#define downtoSizeT(t)  t - (t % SIZE_T)  // TODO
 
 // R_SIZE is the size of the recycle list
 #define R_SIZE 256
@@ -82,13 +82,19 @@ class MemBlock
 
    // Member functions
    void reset() { _ptr = _begin; }
+   bool getMem(size_t t, T*& ret) {
+      // TODO
    // 1. Get (at least) 't' bytes memory from current block
    //    Promote 't' to a multiple of SIZE_T
    // 2. Update "_ptr" accordingly
    // 3. The return memory address is stored in "ret"
    // 4. Return false if not enough memory
-   bool getMem(size_t t, T*& ret) {
-      // TODO
+      t = toSizeT(t);
+      if(getRemainSize() < t) return false;
+      
+      ret = (T*)_ptr;
+      _ptr += t;
+
       return true;
    }
    size_t getRemainSize() const { return size_t(_end - _ptr); }
@@ -119,19 +125,38 @@ class MemRecycleList
    size_t getArrSize() const { return _arrSize; }
    MemRecycleList<T>* getNextList() const { return _nextList; }
    void setNextList(MemRecycleList<T>* l) { _nextList = l; }
-   // pop out the first element in the recycle list
+   // pop out the first element in the recycle list, and return it
    T* popFront() {
       // TODO
-      return 0;
+      if(_first == 0) {
+         //cerr << "error popFront()" << endl;
+         return _first;
+      }
+      T* _tmpFirst = _first;
+      _first = getNext(_first);
+
+      return _tmpFirst;
    }
    // push the element 'p' to the beginning of the recycle list
    void  pushFront(T* p) {
       // TODO
+      if(p == 0) {
+         cerr << "error pushFront()" << endl;
+         return;
+      }
+      
+      size_t next = (size_t) _first;// get _firsts its own SIZE_T bytes
+      *(size_t*)p = next;
+      _first = p;
    }
    // Release the memory occupied by the recycle list(s)
    // DO NOT release the memory occupied by MemMgr/MemBlock
    void reset() {
       // TODO
+      if(getNextList() != 0)
+         delete _nextList; // _nextList's destructor will call its reset(), thus clear all of them 
+      
+      _first = 0;
    }
 
    // Helper functions
@@ -139,7 +164,15 @@ class MemRecycleList
    // Iterate to the next element after 'p' in the recycle list
    T* getNext(T* p) const {
       // TODO
-      return 0;
+
+      //Since 'p' is an element in the recycle list, 
+      //the first SIZE_T bytes of p contain the address of the next element.
+      //To get the "content" of the first SIZE_T bytes, 
+      //you need to convert p to _______ so that you can read the value of the first SIZE_T bytes.
+      //After you get the value of the first SIZE_T bytes, just cast it to _____ and return.
+      if(p == 0) return 0;
+      size_t next = *(size_t*)p; // only require firse SIZE_T bytes, thus cast into size_t
+      return (T*)next;
    }
    //
    // count the number of elements in the recycle list
@@ -175,7 +208,7 @@ public:
    ~MemMgr() { reset(); delete _activeBlock; }
 
    // 1. Remove the memory of all but the firstly allocated MemBlocks
-   //    That is, the last MemBlock searchd from _activeBlock.
+   //    That is, the last MemBlock searched from _activeBlock.
    //    reset its _ptr = _begin (by calling MemBlock::reset())
    // 2. reset _recycleList[]
    // 3. 'b' is the new _blockSize; "b = 0" means _blockSize does not change
