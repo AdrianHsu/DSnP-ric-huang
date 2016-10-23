@@ -149,9 +149,10 @@ class MemRecycleList
    // DO NOT release the memory occupied by MemMgr/MemBlock
    void reset() {
       // TODO
-      if(getNextList() != 0)
+      if(getNextList() != 0) {
          delete _nextList; // _nextList's destructor will call its reset(), thus clear all of them 
-      
+         setNextList(0);
+      }
       _first = 0;
    }
 
@@ -167,6 +168,7 @@ class MemRecycleList
       //you need to convert p to _______ so that you can read the value of the first SIZE_T bytes.
       //After you get the value of the first SIZE_T bytes, just cast it to _____ and return.
       if(p == 0) return 0;
+
       size_t next = *(size_t*)p; // only require firse SIZE_T bytes, thus cast into size_t
       return (T*)next;
    }
@@ -215,12 +217,12 @@ public:
       
       // 1. Remove the memory of all but the firstly allocated MemBlocks
       //    That is, the last MemBlock searched from _activeBlock.
-      //    reset its _ptr = _begin (by calling MemBlock::reset())
       while(_activeBlock->getNextBlock() != 0) {
          MemBlock<T>*  tmp = _activeBlock;
          _activeBlock = _activeBlock->_nextBlock;
          delete tmp;
       }
+      //    reset its _ptr = _begin (by calling MemBlock::reset())
       _activeBlock->reset();
       // 2. reset _recycleList[]
       for(size_t i = 0; i < R_SIZE; i ++) {
@@ -329,16 +331,12 @@ private:
    // Go through _recycleList[m], its _nextList, and _nextList->_nextList, etc,
    //    to find a recycle list whose "_arrSize" == "n"
       MemRecycleList<T>* list = &_recycleList[m]; 
-      bool found = false;
 
       if(list == 0) return 0; // error...
       if(n == m) return list;
 
       while(list->getNextList() != 0) {
          m = list->getArrSize(); //since first list is maybe not size <= 256, thus cannot use original m
-         #ifdef MEM_DEBUG
-            cout << "list->getArrSize(): " << m << endl;
-         #endif // MEM_DEBUG
          if(n != m)
             list = list->getNextList();
          else {
@@ -380,15 +378,17 @@ private:
       //        the _recycleList[]
       size_t n = getArraySize(t);
       MemRecycleList<T>* list = getMemRecycleList(n);
-      ret = list->popFront();
-      #ifdef MEM_DEBUG
-         cout << "Recycled from _recycleList[" << n << "]..." << ret << endl;
-      #endif // MEM_DEBUG
       //    => 'n' is the size of array
-      //    => "ret" is the return address
-      
-      // If no match from recycle list...
+      if (list->_first != 0) {
+         ret = list->popFront();
+         #ifdef MEM_DEBUG
+         cout << "Recycled from _recycleList[" << arrSize
+              << "]..." << ret << endl;
+         #endif // MEM_DEBUG
+         return ret;
+      }
       if(ret == 0) {
+         // If no match from recycle list...
          // 4. Get the memory from _activeBlock
          if(!_activeBlock->getMem(t, ret)) {
 
@@ -396,21 +396,24 @@ private:
             //    Note: recycle to the as biggest array index as possible
             //    Note: rn is the array size
             size_t recycle = _activeBlock->getRemainSize();
+
             if (recycle >= S) {
-               size_t rn = getArraySize(recycle);
                _activeBlock->getMem(recycle, ret);
+               size_t rn = getArraySize(recycle);
+               list = getMemRecycleList(rn);
+
 #ifdef MEM_DEBUG
                cout << "Recycling " << ret << " to _recycleList[" << rn << "]\n";
 #endif // MEM_DEBUG
-               getMemRecycleList(rn)->pushFront(ret);                
+               list->pushFront(ret); //recycling
             }
             //    ==> allocate a new memory block, and print out ---
             _activeBlock = new MemBlock<T>(_activeBlock, _blockSize);
             #ifdef MEM_DEBUG
             cout << "New MemBlock... " << _activeBlock << endl;
             #endif // MEM_DEBUG
-            // get new memory block
-            _activeBlock->getMem(t, ret);
+            
+            _activeBlock->getMem(t, ret); // get new memory block
          }
 
          // 6. At the end, print out the acquired memory address

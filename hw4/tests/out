@@ -150,3 +150,14 @@ mtest> mtp
 * Number of blocks      : 1
 * Free mem in last block: 120
 * Recycle list          : 
+
+=========================================
+=             class MemTest             =
+=========================================
+Object list ---
+
+Array list ---
+
+
+mtest> q -f
+
