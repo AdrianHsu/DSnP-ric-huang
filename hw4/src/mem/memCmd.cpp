@@ -80,8 +80,68 @@ MTNewCmd::exec(const string& option)
 {
    // TODO
    // check option   
-   
 
+   vector<string> t; //tokens
+   if(!CmdExec::lexOptions(option, t))
+      return CMD_EXEC_ERROR;
+   if(t.size() == 0) return CmdExec::errorOption(CMD_OPT_MISSING, "");
+
+   if(t.size() == 1) {
+      int num;
+      if(myStr2Int(t[0], num)) {
+         if(num <= 0)
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
+         mtest.newObjs((size_t)num);    
+      } else {
+         return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
+      }
+   } else if(t.size() > 3) {
+      return CmdExec::errorOption(CMD_OPT_EXTRA, t[t.size() - 1]);
+      
+   } else if(t.size() == 2) {
+      int arg1 = 0, arg2 = 0;
+      bool arg1IsInt = myStr2Int(t[0], arg1);
+      bool arg2IsInt = myStr2Int(t[1], arg2);
+      if(arg1IsInt && arg2IsInt) {
+         if(arg1 <= 0)
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
+         else 
+            return CmdExec::errorOption(CMD_OPT_EXTRA, t[1]);
+         
+      } else if (!arg1IsInt && arg2IsInt) {
+         if(myStrNCmp("-Array", t[0], 2) == 0) {
+            if(arg2 <= 0)
+               return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+            else
+               return CmdExec::errorOption(CMD_OPT_MISSING, "");
+         } else {
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
+         }
+      } else if (arg1IsInt && !arg2IsInt) {
+         if(arg1 <= 0)
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
+         else {
+            if(myStrNCmp("-Array", t[1], 2) == 0) {
+               return CmdExec::errorOption(CMD_OPT_MISSING, t[1]);
+            } else {
+               return CmdExec::errorOption(CMD_OPT_EXTRA, t[1]);
+            }
+         }
+      } else {
+         if(myStrNCmp("-Array", t[0], 2) == 0) {
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+         } else {
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
+         }
+      }
+       
+   } else {
+      // t.size() == 2 or 3; however 2 must return error
+      int num = 0;
+      int arr = 0;
+      bool numIsSet = false;
+      
+   }
    return CMD_EXEC_DONE;
 }
 
