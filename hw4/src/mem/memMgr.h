@@ -47,7 +47,7 @@ private:                                                                    \
 //
 // To promote 't' to the nearest multiple of SIZE_T; 
 // e.g. Let SIZE_T = 8;  toSizeT(7) = 8, toSizeT(12) = 16
-#define toSizeT(t)   (t % SIZE_T == 0) ? t : SIZE_T + ( SIZE_T * (t / SIZE_T) )  // TODO
+#define toSizeT(t)   (t % SIZE_T == 0) ? t : SIZE_T +  SIZE_T * (t / SIZE_T)  // TODO
 //
 // To demote 't' to the nearest multiple of SIZE_T
 // e.g. Let SIZE_T = 8;  downtoSizeT(9) = 8, downtoSizeT(100) = 96
@@ -228,7 +228,6 @@ public:
       }
       // 3. 'b' is the new _blockSize; "b = 0" means _blockSize does not change
       //    if (b != _blockSize) reallocate the memory for the first MemBlock
-      cout << "b = " << b << ", blockSize = " << _blockSize << endl;
 
       if (b != 0 && b != _blockSize){
          delete _activeBlock;
