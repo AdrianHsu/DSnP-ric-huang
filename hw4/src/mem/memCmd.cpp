@@ -215,6 +215,59 @@ MTDeleteCmd::exec(const string& option)
    if(!CmdExec::lexOptions(option, t))
       return CMD_EXEC_ERROR;
    if(t.size() == 0) return CmdExec::errorOption(CMD_OPT_MISSING, "");
+   
+   if(myStrNCmp("-Array", t[0], 2) == 0) {
+      if(t.size() == 1)
+         return CmdExec::errorOption(CMD_OPT_MISSING, "");
+      
+      if(myStrNCmp("-Index", t[1], 2) == 0) {
+         if (t.size() == 2)
+            return CmdExec::errorOption(CMD_OPT_MISSING, t[1]);
+         
+         int arg2 = 0;
+         if (myStr2Int(t[2], arg2)) {
+            if(arg2 <= 0)
+               return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+            if(t.size() > 3)
+               return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[3]);// not extra but illegal(...weird)
+            // t.size() == 3
+            size_t arrId = (size_t)arg2;
+            if (arrId >= mtest.getArrListSize()) {
+               cerr << "Size of array list (" << mtest.getArrListSize()
+                  << ") is <= " << arrId << "!!\n";
+               return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+            }
+            mtest.deleteArr(arrId);
+            return CMD_EXEC_DONE;
+         } else {
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+         }
+      } else if(myStrNCmp("-Random", t[1], 2) == 0) {
+         if (t.size() == 2)
+            return CmdExec::errorOption(CMD_OPT_MISSING, t[1]);
+         int arg2 = 0;
+         if (myStr2Int(t[2], arg2)) {
+            if(arg2 <= 0)
+               return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+            if(t.size() > 3)
+               return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[3]);// not extra but illegal(...weird)
+            // t.size() == 3
+            size_t numRandId = (size_t)arg2;
+            size_t arrSize = mtest.getArrListSize();
+            if (arrSize == 0) {
+               cout << "Size of array list is 0!!\n";
+               return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+            }
+            for (size_t i = 0; i < numRandId; ++i)
+               mtest.deleteArr(rnGen(arrSize));
+            return CMD_EXEC_DONE;
+         } else {
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+         }
+      } else {
+         return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+      }
+   }
    if(myStrNCmp("-Index", t[0], 2) == 0) {
       if(t.size() == 1)
          return CmdExec::errorOption(CMD_OPT_MISSING, t[0]);

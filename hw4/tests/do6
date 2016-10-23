@@ -1,0 +1,38 @@
+mtn 30 -a 4879
+mtn 80 -a 2059
+mtn 10 -a 10
+mtn 32 -a 266
+mtn 54 -a 522
+mtn 76 -a 778
+mtn 98 -a 1034
+mtn 200 -a 3476
+mtd -r 3000 -a
+mtn 218 -a 2324
+mtn 170 -a 404
+mtn 64 -a 532
+mtn 192 -a 660
+mtn 2 -a 1172
+mtn 130 -a 1300
+mtn 24 -a 1428
+mtd -r 300 -a
+mtn 86 -a 788
+mtn 214 -a 916
+mtn 108 -a 1044
+mtn -r 1000
+mtn -r 1000 -a
+mtn 623 -a 256
+mtn 623 -a 1024
+mtn 24 -a 1428
+mtn 30 -a 3 
+mtn 30 -a 3
+mtn 123
+mtd 55 -r
+mtn 20000
+mtd -i 0
+mtd -i 20000
+mtd -i 0
+mtd -a -r 1234
+mtd -r 12345
+mtn 1234
+mtp
+q -f
