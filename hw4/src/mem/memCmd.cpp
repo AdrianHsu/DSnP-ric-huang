@@ -88,7 +88,7 @@ MTNewCmd::exec(const string& option)
 
    if(t.size() == 1) {
       int num;
-      if(myStr2Int(t[0], num)) {
+      if(myStr2Int(t[0], num)) { //suppose num <= INT_MAX
          if(num <= 0)
             return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
          mtest.newObjs((size_t)num);    
@@ -137,10 +137,53 @@ MTNewCmd::exec(const string& option)
        
    } else {
       // t.size() == 2 or 3; however 2 must return error
-      int num = 0;
-      int arr = 0;
-      bool numIsSet = false;
-      
+      size_t num = 0;
+      size_t arr = 0;
+      int arg0 = 0, arg1 = 0, arg2 = 0;
+      if(!myStr2Int(t[0], arg0)) {
+         if(myStrNCmp("-Array", t[0], 2) != 0) {
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
+         } else {
+            if(!myStr2Int(t[1], arg1)) {
+               return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+            } else {
+               if(arg1 <= 0)
+                  return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+               else {
+                  arr = (size_t)arg1;
+                  if(!myStr2Int(t[2], arg2))
+                     return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+                  else {
+                     if(arg2 <= 0) 
+                        return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+                     else
+                        num = (size_t)arg2;
+                  }
+               }
+            }
+         }
+      } else {
+         if(arg0 <= 0)
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
+         else {
+            num = (size_t)arg0;
+            if(myStrNCmp("-Array", t[1], 2) != 0)
+               return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+            else {
+               if(!myStr2Int(t[2], arg2))
+                  return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+               else {
+                  if(arg2 <= 0)
+                     return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+                  else
+                     arr = (size_t)arg2;
+               }
+            }
+         }
+      }
+      if(num == 0 || arr == 0)
+         cerr << "ERROR: MTNewCmd" << endl;
+      mtest.newArrs(num, arr);
    }
    return CMD_EXEC_DONE;
 }
@@ -166,7 +209,72 @@ CmdExecStatus
 MTDeleteCmd::exec(const string& option)
 {
    // TODO
-
+   vector<string> t; //tokens
+   if(!CmdExec::lexOptions(option, t))
+      return CMD_EXEC_ERROR;
+   if(t.size() == 0) return CmdExec::errorOption(CMD_OPT_MISSING, "");
+   if(myStrNCmp("-Index", t[0], 2) == 0) {
+      if(t.size() == 1)
+         return CmdExec::errorOption(CMD_OPT_MISSING, t[0]);
+      int arg1 = 0;
+      if(!myStr2Int(t[1], arg1))
+         return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+      if(arg1 <= 0)
+         return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+      
+      if(t.size() == 2) { 
+         size_t objId = (size_t)arg1;
+         if(objId >= mtest.getObjListSize()) {
+            cerr << "Size of object list (" << mtest.getObjListSize()
+               << ") is <= " << objId << "!!\n";
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+         }
+         mtest.deleteObj(objId);
+      } else if(t.size() == 3){
+         if(myStrNCmp("-Array", t[2], 2) != 0) {
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+         } else {
+            size_t arrId = (size_t)arg1;
+            if (arrId >= mtest.getArrListSize()) {
+               cerr << "Size of array list (" << mtest.getArrListSize()
+                  << ") is <= " << arrId << "!!\n";
+               return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+            }
+            mtest.deleteArr(arrId);
+         }
+      } else { // must be error
+         // weird but don't need to check objListSize & arrListSize, according to ref
+         if(myStrNCmp("-Array", t[2], 2) != 0) {
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+         } else {
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[3]);//weird but identical to ref
+         }
+      }
+   } else if(myStrNCmp("-Random", t[0], 2) == 0) { 
+      if(t.size() == 1)
+         return CmdExec::errorOption(CMD_OPT_MISSING, t[0]);
+      int arg1 = 0;
+      if(!myStr2Int(t[1], arg1))
+         return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+      if(arg1 <= 0)
+         return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
+      size_t numRandId = (size_t)arg1;
+      if(t.size() == 2) { 
+         mtest.deleteObj(numRandId);
+      } else if(t.size() == 3){ 
+         if(myStrNCmp("-Array", t[2], 2) != 0)
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+         mtest.deleteArr(numRandId);
+      } else {
+         if(myStrNCmp("-Array", t[2], 2) != 0) {
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
+         } else {
+            return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[3]);//weird but identical to ref
+         }
+      }
+   } else 
+      return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
+   
    return CMD_EXEC_DONE;
 }
 
