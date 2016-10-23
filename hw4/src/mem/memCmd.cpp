@@ -79,6 +79,8 @@ CmdExecStatus
 MTNewCmd::exec(const string& option)
 {
    // TODO
+   // check option   
+   
 
    return CMD_EXEC_DONE;
 }

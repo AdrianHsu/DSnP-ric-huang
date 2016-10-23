@@ -92,8 +92,8 @@ class MemBlock
       t = toSizeT(t);
       if(getRemainSize() < t) return false;
       
-      ret = (T*)_ptr;
-      _ptr += t;
+      ret = (T*)_ptr; // return current (not yet changed) _ptr address' begin, casted into T*
+      _ptr += t; // after ret was set, we can change _ptr's position finally
 
       return true;
    }
@@ -145,8 +145,8 @@ class MemRecycleList
          return;
       }
       
-      size_t next = (size_t) _first;// get _firsts its own SIZE_T bytes
-      *(size_t*)p = next;
+      size_t next = (size_t) _first;// get _first its own SIZE_T bytes
+      *(size_t*)p = next;// "(size_t)p" is not equal to "*(size_t*)p"
       _first = p;
    }
    // Release the memory occupied by the recycle list(s)
@@ -201,7 +201,8 @@ class MemMgr
 public:
    MemMgr(size_t b = 65536) : _blockSize(b) {
       assert(b % SIZE_T == 0);
-      _activeBlock = new MemBlock<T>(0, _blockSize);
+      // _blockSize is SIZE_T * n, thus no need to alter it in MemBlock contructor
+      _activeBlock = new MemBlock<T>(0, _blockSize); 
       for (int i = 0; i < R_SIZE; ++i)
          _recycleList[i]._arrSize = i;
    }
