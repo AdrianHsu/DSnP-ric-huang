@@ -255,7 +255,7 @@ MTDeleteCmd::exec(const string& option)
             size_t numRandId = (size_t)arg2;
             size_t arrSize = mtest.getArrListSize();
             if (arrSize == 0) {
-               cout << "Size of array list is 0!!\n";
+               cerr << "Size of array list is 0!!\n";
                return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
             }
             for (size_t i = 0; i < numRandId; ++i)
@@ -317,7 +317,7 @@ MTDeleteCmd::exec(const string& option)
       if(t.size() == 2) { 
          size_t objSize = mtest.getObjListSize();
          if (objSize == 0) {
-            cout << "Size of object list is 0!!\n";
+            cerr << "Size of object list is 0!!\n";
             return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
          }
          for (size_t i = 0; i < numRandId; ++i)
@@ -327,7 +327,7 @@ MTDeleteCmd::exec(const string& option)
             return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
          size_t arrSize = mtest.getArrListSize();
          if (arrSize == 0) {
-            cout << "Size of array list is 0!!\n";
+            cerr << "Size of array list is 0!!\n";
             return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[2]);
          }
          for (size_t i = 0; i < numRandId; ++i)
