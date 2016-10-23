@@ -4,7 +4,7 @@
   Synopsis     [ Define memory test commands ]
   Author       [ Chung-Yang (Ric) Huang ]
   Copyright    [ Copyleft(c) 2007-present LaDs(III), GIEE, NTU, Taiwan ]
-****************************************************************************/
+ ****************************************************************************/
 #include <iostream>
 #include <iomanip>
 #include "memCmd.h"
@@ -16,14 +16,14 @@ using namespace std;
 
 extern MemTest mtest;  // defined in memTest.cpp
 
-bool
+   bool
 initMemCmd()
 {
    if (!(cmdMgr->regCmd("MTReset", 3, new MTResetCmd) &&
-         cmdMgr->regCmd("MTNew", 3, new MTNewCmd) &&
-         cmdMgr->regCmd("MTDelete", 3, new MTDeleteCmd) &&
-         cmdMgr->regCmd("MTPrint", 3, new MTPrintCmd)
-      )) {
+            cmdMgr->regCmd("MTNew", 3, new MTNewCmd) &&
+            cmdMgr->regCmd("MTDelete", 3, new MTDeleteCmd) &&
+            cmdMgr->regCmd("MTPrint", 3, new MTPrintCmd)
+        )) {
       cerr << "Registering \"mem\" commands fails... exiting" << endl;
       return false;
    }
@@ -34,7 +34,7 @@ initMemCmd()
 //----------------------------------------------------------------------
 //    MTReset [(size_t blockSize)]
 //----------------------------------------------------------------------
-CmdExecStatus
+   CmdExecStatus
 MTResetCmd::exec(const string& option)
 {
    // check option
@@ -43,17 +43,17 @@ MTResetCmd::exec(const string& option)
       return CMD_EXEC_ERROR;
    if (token.size()) {
       int b;
-     
+
       if (!myStr2Int(token, b) || b < int(toSizeT(sizeof(MemTestObj)))) {
 
          cerr << "Illegal block size (" << token << ")!!" << endl;
          return CmdExec::errorOption(CMD_OPT_ILLEGAL, token);
       }
-      #ifdef MEM_MGR_H
+#ifdef MEM_MGR_H
       mtest.reset(toSizeT(b));
-      #else
+#else
       mtest.reset();
-      #endif // MEM_MGR_H
+#endif // MEM_MGR_H
    }
    else
       mtest.reset();
@@ -70,14 +70,14 @@ void
 MTResetCmd::help() const
 {  
    cout << setw(15) << left << "MTReset: " 
-        << "(memory test) reset memory manager" << endl;
+      << "(memory test) reset memory manager" << endl;
 }
 
 
 //----------------------------------------------------------------------
 //    MTNew <(size_t numObjects)> [-Array (size_t arraySize)]
 //----------------------------------------------------------------------
-CmdExecStatus
+   CmdExecStatus
 MTNewCmd::exec(const string& option)
 {
    // TODO
@@ -99,7 +99,7 @@ MTNewCmd::exec(const string& option)
       }
    } else if(t.size() > 3) {
       return CmdExec::errorOption(CMD_OPT_EXTRA, t[t.size() - 1]);
-      
+
    } else if(t.size() == 2) {
       int arg1 = 0, arg2 = 0;
       bool arg1IsInt = myStr2Int(t[0], arg1);
@@ -109,7 +109,7 @@ MTNewCmd::exec(const string& option)
             return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
          else 
             return CmdExec::errorOption(CMD_OPT_EXTRA, t[1]);
-         
+
       } else if (!arg1IsInt && arg2IsInt) {
          if(myStrNCmp("-Array", t[0], 2) == 0) {
             if(arg2 <= 0)
@@ -136,7 +136,7 @@ MTNewCmd::exec(const string& option)
             return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
          }
       }
-       
+
    } else {
       // t.size() == 2 or 3; however 2 must return error
       size_t num = 0;
@@ -200,14 +200,14 @@ void
 MTNewCmd::help() const
 {  
    cout << setw(15) << left << "MTNew: " 
-        << "(memory test) new objects" << endl;
+      << "(memory test) new objects" << endl;
 }
 
 
 //----------------------------------------------------------------------
 //    MTDelete <-Index (size_t objId) | -Random (size_t numRandId)> [-Array]
 //----------------------------------------------------------------------
-CmdExecStatus
+   CmdExecStatus
 MTDeleteCmd::exec(const string& option)
 {
    // TODO
@@ -215,15 +215,15 @@ MTDeleteCmd::exec(const string& option)
    if(!CmdExec::lexOptions(option, t))
       return CMD_EXEC_ERROR;
    if(t.size() == 0) return CmdExec::errorOption(CMD_OPT_MISSING, "");
-   
+
    if(myStrNCmp("-Array", t[0], 2) == 0) {
       if(t.size() == 1)
          return CmdExec::errorOption(CMD_OPT_MISSING, "");
-      
+
       if(myStrNCmp("-Index", t[1], 2) == 0) {
          if (t.size() == 2)
             return CmdExec::errorOption(CMD_OPT_MISSING, t[1]);
-         
+
          int arg2 = 0;
          if (myStr2Int(t[2], arg2)) {
             if(arg2 <= 0)
@@ -276,7 +276,7 @@ MTDeleteCmd::exec(const string& option)
          return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
       if(arg1 < 0)
          return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
-      
+
       if(t.size() == 2) { 
          size_t objId = (size_t)arg1;
          if(objId >= mtest.getObjListSize()) {
@@ -341,7 +341,7 @@ MTDeleteCmd::exec(const string& option)
       }
    } else 
       return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[0]);
-   
+
    return CMD_EXEC_DONE;
 }
 
@@ -356,14 +356,14 @@ void
 MTDeleteCmd::help() const
 {  
    cout << setw(15) << left << "MTDelete: " 
-        << "(memory test) delete objects" << endl;
+      << "(memory test) delete objects" << endl;
 }
 
 
 //----------------------------------------------------------------------
 //    MTPrint
 //----------------------------------------------------------------------
-CmdExecStatus
+   CmdExecStatus
 MTPrintCmd::exec(const string& option)
 {
    // check option
@@ -384,7 +384,7 @@ void
 MTPrintCmd::help() const
 {  
    cout << setw(15) << left << "MTPrint: " 
-        << "(memory test) print memory manager info" << endl;
+      << "(memory test) print memory manager info" << endl;
 }
 
 

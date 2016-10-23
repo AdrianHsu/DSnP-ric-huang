@@ -4,7 +4,7 @@
   Synopsis     [ Define memory test classes ]
   Author       [ Chung-Yang (Ric) Huang ]
   Copyright    [ Copyleft(c) 2007-present LaDs(III), GIEE, NTU, Taiwan ]
-****************************************************************************/
+ ****************************************************************************/
 #ifndef MEM_TEST_H
 #define MEM_TEST_H
 
@@ -22,16 +22,16 @@ using namespace std;
 //
 class MemTestObj
 {
-friend class MemTest;
+   friend class MemTest;
 #ifdef MEM_MGR_H
    USE_MEM_MGR(MemTestObj);
 #endif // MEM_MGR_H
 
-public:
+   public:
    MemTestObj() {}
    ~MemTestObj() {}
 
-private:
+   private:
    // sizeof(memTestObj) = 51 --> 52
    int   _dataI[12];
    char  _dataC[3];
@@ -40,87 +40,87 @@ private:
 
 class MemTest
 {
-public:
-   MemTest() { _objList.reserve(1024); _arrList.reserve(1024); }
-   ~MemTest() {}
+   public:
+      MemTest() { _objList.reserve(1024); _arrList.reserve(1024); }
+      ~MemTest() {}
 
-   void reset(size_t b = 0) {
-      _objList.clear(); _arrList.clear();
-      #ifdef MEM_MGR_H
-      MemTestObj::memReset(b);
-      #endif // MEM_MGR_H
-   }
-   size_t getObjListSize() const { return _objList.size(); }
-   size_t getArrListSize() const { return _arrList.size(); }
+      void reset(size_t b = 0) {
+         _objList.clear(); _arrList.clear();
+#ifdef MEM_MGR_H
+         MemTestObj::memReset(b);
+#endif // MEM_MGR_H
+      }
+      size_t getObjListSize() const { return _objList.size(); }
+      size_t getArrListSize() const { return _arrList.size(); }
 
-   // Allocate "n" number of MemTestObj elements
-   void newObjs(size_t n) {
-      // TODO
-      try {
-         for(size_t i = 0; i < n; i++) {
-            MemTestObj* t = new MemTestObj;
-            _objList.push_back(t);
+      // Allocate "n" number of MemTestObj elements
+      void newObjs(size_t n) {
+         // TODO
+         try {
+            for(size_t i = 0; i < n; i++) {
+               MemTestObj* t = new MemTestObj;
+               _objList.push_back(t);
+            }
+         } catch( bad_alloc& e ) {
+            //cerr << "error" << endl;
          }
-      } catch( bad_alloc& e ) {
-         //cerr << "error" << endl;
       }
-   }
-   // Allocate "n" number of MemTestObj arrays with size "s"
-   void newArrs(size_t n, size_t s) {
-      // TODO
-      try {
-         for(size_t i = 0; i < n; i++) {
-            MemTestObj* t = new MemTestObj[s];
-            _arrList.push_back(t);
+      // Allocate "n" number of MemTestObj arrays with size "s"
+      void newArrs(size_t n, size_t s) {
+         // TODO
+         try {
+            for(size_t i = 0; i < n; i++) {
+               MemTestObj* t = new MemTestObj[s];
+               _arrList.push_back(t);
+            }
+         } catch( bad_alloc& e ) {
+            //cerr << "error" << endl;
          }
-      } catch( bad_alloc& e ) {
-         //cerr << "error" << endl;
       }
-   }
-   // Delete the object with position idx in _objList[]
-   void deleteObj(size_t idx) {
-      assert(idx < _objList.size());
-      // TODO
-      if (_objList[ idx ]) {
-         delete _objList[ idx ];
-         _objList[ idx ] = 0;
+      // Delete the object with position idx in _objList[]
+      void deleteObj(size_t idx) {
+         assert(idx < _objList.size());
+         // TODO
+         if (_objList[ idx ]) {
+            delete _objList[ idx ];
+            _objList[ idx ] = 0;
+         }
       }
-   }
-   // Delete the array with position idx in _arrList[]
-   void deleteArr(size_t idx) {
-      assert(idx < _arrList.size());
-      // TODO
-      if (_arrList[ idx ]) {
-         delete[] _arrList[ idx ];
-         _arrList[ idx ] = 0;
+      // Delete the array with position idx in _arrList[]
+      void deleteArr(size_t idx) {
+         assert(idx < _arrList.size());
+         // TODO
+         if (_arrList[ idx ]) {
+            delete[] _arrList[ idx ];
+            _arrList[ idx ] = 0;
+         }
       }
-   }
 
-   void print() const {
-      #ifdef MEM_MGR_H
-      MemTestObj::memPrint();
-      #endif // MEM_MGR_H
-      cout << "=========================================" << endl
-           << "=             class MemTest             =" << endl
-           << "=========================================" << endl
-           << "Object list ---" << endl;
-      size_t i = 0;
-      while (i < _objList.size()) {
-         cout << (_objList[i]? 'o' : 'x');
-         if (++i % 50 == 0) cout << endl;
+      void print() const {
+#ifdef MEM_MGR_H
+         MemTestObj::memPrint();
+#endif // MEM_MGR_H
+         cout << "=========================================" << endl
+            << "=             class MemTest             =" << endl
+            << "=========================================" << endl
+            << "Object list ---" << endl;
+         size_t i = 0;
+         while (i < _objList.size()) {
+            cout << (_objList[i]? 'o' : 'x');
+            if (++i % 50 == 0) cout << endl;
+         }
+         cout << endl << "Array list ---" << endl;
+         i = 0;
+         while (i < _arrList.size()) {
+            cout << (_arrList[i]? 'o' : 'x');
+            if (++i % 50 == 0) cout << endl;
+         }
+         cout << endl;
       }
-      cout << endl << "Array list ---" << endl;
-      i = 0;
-      while (i < _arrList.size()) {
-         cout << (_arrList[i]? 'o' : 'x');
-         if (++i % 50 == 0) cout << endl;
-      }
-      cout << endl;
-   }
 
-private:
-   vector<MemTestObj*>   _objList;
-   vector<MemTestObj*>   _arrList;
+   private:
+      vector<MemTestObj*>   _objList;
+      vector<MemTestObj*>   _arrList;
 };
 
 #endif // MEM_TEST_H
