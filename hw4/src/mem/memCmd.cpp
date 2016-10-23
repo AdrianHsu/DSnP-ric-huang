@@ -221,7 +221,7 @@ MTDeleteCmd::exec(const string& option)
       int arg1 = 0;
       if(!myStr2Int(t[1], arg1))
          return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
-      if(arg1 <= 0)
+      if(arg1 < 0)
          return CmdExec::errorOption(CMD_OPT_ILLEGAL, t[1]);
       
       if(t.size() == 2) { 
