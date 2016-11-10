@@ -1,0 +1,103 @@
+adt> adta -s jordan
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = jorda   
+
+adt> adta -s jordano
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = jorda   [  1] = jorda   
+
+adt> adta -s jorda
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   
+
+adt> adta -s jordan
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+
+
+adt> adta -s jordana
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+[  4] = jorda   
+
+adt> adtd -s jordani
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+
+
+adt> adtd -s jord
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+
+
+adt> adta -r 30
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+[  4] = gpcbg   [  5] = xibqb   [  6] = zmpwu   [  7] = bvxze   
+[  8] = mvjij   [  9] = wjehw   [ 10] = oolqq   [ 11] = snzue   
+[ 12] = atrqq   [ 13] = lsmis   [ 14] = ruoad   [ 15] = xwmbe   
+[ 16] = jqsvh   [ 17] = invhi   [ 18] = zibrz   [ 19] = scsel   
+[ 20] = kwgyw   [ 21] = jvtwx   [ 22] = xfnpa   [ 23] = vyoqg   
+[ 24] = wqpyh   [ 25] = oqjhv   [ 26] = vrrbp   [ 27] = oklhg   
+[ 28] = jemxu   [ 29] = nstci   [ 30] = zyypx   [ 31] = geoql   
+[ 32] = jlcbm   [ 33] = spxew   
+
+adt> adtd -front 5
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = xibqb   [  1] = zmpwu   [  2] = bvxze   [  3] = mvjij   
+[  4] = wjehw   [  5] = oolqq   [  6] = snzue   [  7] = atrqq   
+[  8] = lsmis   [  9] = ruoad   [ 10] = xwmbe   [ 11] = jqsvh   
+[ 12] = invhi   [ 13] = zibrz   [ 14] = scsel   [ 15] = kwgyw   
+[ 16] = jvtwx   [ 17] = xfnpa   [ 18] = vyoqg   [ 19] = wqpyh   
+[ 20] = oqjhv   [ 21] = vrrbp   [ 22] = oklhg   [ 23] = jemxu   
+[ 24] = nstci   [ 25] = zyypx   [ 26] = geoql   [ 27] = jlcbm   
+[ 28] = spxew   
+
+adt> adtd -back 5
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = xibqb   [  1] = zmpwu   [  2] = bvxze   [  3] = mvjij   
+[  4] = wjehw   [  5] = oolqq   [  6] = snzue   [  7] = atrqq   
+[  8] = lsmis   [  9] = ruoad   [ 10] = xwmbe   [ 11] = jqsvh   
+[ 12] = invhi   [ 13] = zibrz   [ 14] = scsel   [ 15] = kwgyw   
+[ 16] = jvtwx   [ 17] = xfnpa   [ 18] = vyoqg   [ 19] = wqpyh   
+[ 20] = oqjhv   [ 21] = vrrbp   [ 22] = oklhg   [ 23] = jemxu   
+
+
+adt> adtd -r 5
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = zmpwu   [  1] = bvxze   [  2] = wjehw   [  3] = oolqq   
+[  4] = snzue   [  5] = atrqq   [  6] = lsmis   [  7] = xwmbe   
+[  8] = jqsvh   [  9] = zibrz   [ 10] = scsel   [ 11] = kwgyw   
+[ 12] = xfnpa   [ 13] = vyoqg   [ 14] = wqpyh   [ 15] = oqjhv   
+[ 16] = vrrbp   [ 17] = oklhg   [ 18] = jemxu   
+
+adt> adtd -all
+
+adt> adtp
+=== ADT (dlist) ===
+
+
+adt> q -f
+

@@ -72,6 +72,7 @@ public:
 
    void clear() { }
 
+   // AH: can change this function. e.g. reset _isSorted value
    // This is done. DO NOT change this one.
    void sort() const { if (!empty()) ::sort(_data, _data+_size); }
 

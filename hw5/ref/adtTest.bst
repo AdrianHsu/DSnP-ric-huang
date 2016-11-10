@@ -1,1 +1,1 @@
-adtTest-64.bst
+adtTest-mac.bst

@@ -1,0 +1,40 @@
+adt> adta -r 20
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = atrqq   [  1] = bvxze   [  2] = gpcbg   [  3] = invhi   
+[  4] = jqsvh   [  5] = jvtwx   [  6] = kwgyw   [  7] = lsmis   
+[  8] = mvjij   [  9] = oolqq   [ 10] = ruoad   [ 11] = scsel   
+[ 12] = snzue   [ 13] = vyoqg   [ 14] = wjehw   [ 15] = xfnpa   
+[ 16] = xibqb   [ 17] = xwmbe   [ 18] = zibrz   [ 19] = zmpwu   
+
+
+adt> adtd -front 3
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = invhi   [  1] = jqsvh   [  2] = jvtwx   [  3] = kwgyw   
+[  4] = lsmis   [  5] = mvjij   [  6] = oolqq   [  7] = ruoad   
+[  8] = scsel   [  9] = snzue   [ 10] = vyoqg   [ 11] = wjehw   
+[ 12] = xfnpa   [ 13] = xibqb   [ 14] = xwmbe   [ 15] = zibrz   
+[ 16] = zmpwu   
+
+adt> adtd -back 5
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = invhi   [  1] = jqsvh   [  2] = jvtwx   [  3] = kwgyw   
+[  4] = lsmis   [  5] = mvjij   [  6] = oolqq   [  7] = ruoad   
+[  8] = scsel   [  9] = snzue   [ 10] = vyoqg   [ 11] = wjehw   
+
+
+adt> adtd -rand 4
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = invhi   [  1] = jqsvh   [  2] = jvtwx   [  3] = kwgyw   
+[  4] = lsmis   [  5] = ruoad   [  6] = scsel   [  7] = snzue   
+
+
+adt> q -f
+

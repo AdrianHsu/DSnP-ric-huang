@@ -1,0 +1,40 @@
+adt> adta -r 20
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = gpcbg   [  1] = xibqb   [  2] = zmpwu   [  3] = bvxze   
+[  4] = mvjij   [  5] = wjehw   [  6] = oolqq   [  7] = snzue   
+[  8] = atrqq   [  9] = lsmis   [ 10] = ruoad   [ 11] = xwmbe   
+[ 12] = jqsvh   [ 13] = invhi   [ 14] = zibrz   [ 15] = scsel   
+[ 16] = kwgyw   [ 17] = jvtwx   [ 18] = xfnpa   [ 19] = vyoqg   
+
+
+adt> adtd -front 3
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = bvxze   [  1] = mvjij   [  2] = wjehw   [  3] = oolqq   
+[  4] = snzue   [  5] = atrqq   [  6] = lsmis   [  7] = ruoad   
+[  8] = xwmbe   [  9] = jqsvh   [ 10] = invhi   [ 11] = zibrz   
+[ 12] = scsel   [ 13] = kwgyw   [ 14] = jvtwx   [ 15] = xfnpa   
+[ 16] = vyoqg   
+
+adt> adtd -back 5
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = bvxze   [  1] = mvjij   [  2] = wjehw   [  3] = oolqq   
+[  4] = snzue   [  5] = atrqq   [  6] = lsmis   [  7] = ruoad   
+[  8] = xwmbe   [  9] = jqsvh   [ 10] = invhi   [ 11] = zibrz   
+
+
+adt> adtd -rand 4
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = bvxze   [  1] = mvjij   [  2] = wjehw   [  3] = oolqq   
+[  4] = snzue   [  5] = ruoad   [  6] = xwmbe   [  7] = jqsvh   
+
+
+adt> q -f
+

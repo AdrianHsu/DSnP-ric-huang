@@ -1,0 +1,40 @@
+adt> adta -r 20
+
+adt> adtp
+=== ADT (array) ===
+[  0] = gpcbg   [  1] = zmpwu   [  2] = wjehw   [  3] = ruoad   
+[  4] = xwmbe   [  5] = wqpyh   [  6] = oqjhv   [  7] = vrrbp   
+[  8] = oklhg   [  9] = jqdbm   [ 10] = febwf   [ 11] = tkjzz   
+[ 12] = epjei   [ 13] = hjluu   [ 14] = zkhdh   [ 15] = lnypo   
+[ 16] = lusmr   [ 17] = fmolr   [ 18] = evyse   [ 19] = deoyr   
+
+
+adt> adtd -front 3
+
+adt> adtp
+=== ADT (array) ===
+[  0] = fmolr   [  1] = zmpwu   [  2] = wjehw   [  3] = ruoad   
+[  4] = xwmbe   [  5] = wqpyh   [  6] = oqjhv   [  7] = vrrbp   
+[  8] = oklhg   [  9] = jqdbm   [ 10] = febwf   [ 11] = tkjzz   
+[ 12] = epjei   [ 13] = hjluu   [ 14] = zkhdh   [ 15] = lnypo   
+[ 16] = lusmr   
+
+adt> adtd -back 5
+
+adt> adtp
+=== ADT (array) ===
+[  0] = fmolr   [  1] = zmpwu   [  2] = wjehw   [  3] = ruoad   
+[  4] = xwmbe   [  5] = wqpyh   [  6] = oqjhv   [  7] = vrrbp   
+[  8] = oklhg   [  9] = jqdbm   [ 10] = febwf   [ 11] = tkjzz   
+
+
+adt> adtd -rand 4
+
+adt> adtp
+=== ADT (array) ===
+[  0] = fmolr   [  1] = zmpwu   [  2] = wjehw   [  3] = febwf   
+[  4] = xwmbe   [  5] = jqdbm   [  6] = oqjhv   [  7] = vrrbp   
+
+
+adt> q -f
+
