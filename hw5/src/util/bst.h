@@ -45,7 +45,7 @@ class BSTree
       BSTree() {
          _root = new BSTreeNode<T>(T());
       }
-      ~BSTree() { delete _root; }
+      ~BSTree() { clear(); delete _root; }
       class iterator { 
          friend class BSTree;
 
@@ -120,11 +120,59 @@ class BSTree
             x = x->_right;
          return x;
       }
-      BSTreeNode<T>* treeSuccessor(){ return _root; }
+      BSTreeNode<T>* treeSuccessor(BSTreeNode<T>* x) { 
+         if(x->_right != NULL)
+            return treeMinimum(x->_right);
+         BSTreeNode<T>* y(x->_p);
+         while(y != NULL && x == y->_right) {
+            x = y;
+            y = y->_p;
+         }
+         return y; 
+      }
       
-      void treeInsert(){}
-      void transPlant(){}
-      void treeDelete(){}
+      void treeInsert(BSTreeNode<T>* z) {
+         BSTreeNode<T>* y(NULL);
+         BSTreeNode<T>* x(_root);
+         while(x != NULL) {
+            y = x;
+            if(z->_key < x->_key)
+               x = x->_left;
+            else x = x->_right;
+         }
+         z->_p = y;
+         if(y == NULL)
+            _root = z;
+         else if(z->_key < y->_key)
+            y->_left = z;
+         else y->_right = z;
+      }
+      void transPlant(BSTreeNode<T>* u, BSTreeNode<T>* v){
+         if(u->_p == NULL)
+            _root = v;
+         else if(u == u->_p->_left)
+            u->_p->_left = v;
+         else u->_p->_right = v;
+         if(v != NULL)
+            v->_p = u->_p;
+      }
+      void treeDelete(BSTreeNode<T>* z) {
+         if(z->_left == NULL)
+            transPlant(z, z->_right);
+         else if(z->_right == NULL)
+            transPlant(z, z->_left);
+         else {
+            BSTreeNode<T>* y = treeMinimum(z->_right);
+            if(y->_p != z) {
+               transPlant(y, y->_right);
+               y->_right = z->_right;
+               y->_right->_p = y;
+            }
+            transPlant(z, y);
+            y->_left = z->_left;
+            y->_left->_p = y;
+         }
+      }
 
 };
 
