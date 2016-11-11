@@ -1,0 +1,103 @@
+adt> adta -s jordan
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = jorda   
+
+adt> adta -s jordano
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = jorda   [  1] = jorda   
+
+adt> adta -s jorda
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   
+
+adt> adta -s jordan
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+
+
+adt> adta -s jordana
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+[  4] = jorda   
+
+adt> adtd -s jordani
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+
+
+adt> adtd -s jord
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+
+
+adt> adta -r 30
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = atrqq   [  1] = bvxze   [  2] = geoql   [  3] = gpcbg   
+[  4] = invhi   [  5] = jemxu   [  6] = jlcbm   [  7] = jorda   
+[  8] = jorda   [  9] = jorda   [ 10] = jorda   [ 11] = jqsvh   
+[ 12] = jvtwx   [ 13] = kwgyw   [ 14] = lsmis   [ 15] = mvjij   
+[ 16] = nstci   [ 17] = oklhg   [ 18] = oolqq   [ 19] = oqjhv   
+[ 20] = ruoad   [ 21] = scsel   [ 22] = snzue   [ 23] = spxew   
+[ 24] = vrrbp   [ 25] = vyoqg   [ 26] = wjehw   [ 27] = wqpyh   
+[ 28] = xfnpa   [ 29] = xibqb   [ 30] = xwmbe   [ 31] = zibrz   
+[ 32] = zmpwu   [ 33] = zyypx   
+
+adt> adtd -front 5
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = jemxu   [  1] = jlcbm   [  2] = jorda   [  3] = jorda   
+[  4] = jorda   [  5] = jorda   [  6] = jqsvh   [  7] = jvtwx   
+[  8] = kwgyw   [  9] = lsmis   [ 10] = mvjij   [ 11] = nstci   
+[ 12] = oklhg   [ 13] = oolqq   [ 14] = oqjhv   [ 15] = ruoad   
+[ 16] = scsel   [ 17] = snzue   [ 18] = spxew   [ 19] = vrrbp   
+[ 20] = vyoqg   [ 21] = wjehw   [ 22] = wqpyh   [ 23] = xfnpa   
+[ 24] = xibqb   [ 25] = xwmbe   [ 26] = zibrz   [ 27] = zmpwu   
+[ 28] = zyypx   
+
+adt> adtd -back 5
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = jemxu   [  1] = jlcbm   [  2] = jorda   [  3] = jorda   
+[  4] = jorda   [  5] = jorda   [  6] = jqsvh   [  7] = jvtwx   
+[  8] = kwgyw   [  9] = lsmis   [ 10] = mvjij   [ 11] = nstci   
+[ 12] = oklhg   [ 13] = oolqq   [ 14] = oqjhv   [ 15] = ruoad   
+[ 16] = scsel   [ 17] = snzue   [ 18] = spxew   [ 19] = vrrbp   
+[ 20] = vyoqg   [ 21] = wjehw   [ 22] = wqpyh   [ 23] = xfnpa   
+
+
+adt> adtd -r 5
+
+adt> adtp
+=== ADT (bst) ===
+[  0] = jlcbm   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+[  4] = jqsvh   [  5] = jvtwx   [  6] = kwgyw   [  7] = mvjij   
+[  8] = nstci   [  9] = oolqq   [ 10] = oqjhv   [ 11] = ruoad   
+[ 12] = snzue   [ 13] = spxew   [ 14] = vrrbp   [ 15] = vyoqg   
+[ 16] = wjehw   [ 17] = wqpyh   [ 18] = xfnpa   
+
+adt> adtd -all
+
+adt> adtp
+=== ADT (bst) ===
+
+
+adt> q -f
+
