@@ -21,7 +21,7 @@ class Array
 {
 public:
    // TODO: decide the initial value for _isSorted
-   Array() : _data(0), _size(0), _capacity(0), _isSorted(true) {}
+   Array() : _data(0), _size(0), _capacity(0) {}
    ~Array() { delete []_data; }
 
    // DO NOT add any more data member or function for class iterator
@@ -37,99 +37,44 @@ public:
       // TODO: implement these overloaded operators
       const T& operator * () const { return (*this); }
       T& operator * () { return (*_node); }
-      iterator& operator ++ () { _node++; return (*this); }
-      iterator operator ++ (int) { iterator tmp(_node); _node++; return tmp; }
-      iterator& operator -- () { _node--; return (*this); }
-      iterator operator -- (int) { iterator tmp(_node); _node--; return tmp; }
+      iterator& operator ++ () { return (*this); }
+      iterator operator ++ (int) { return (*this); }
+      iterator& operator -- () { return (*this); }
+      iterator operator -- (int) { return (*this); }
 
-      iterator operator + (int i) const { iterator tmp(_node); tmp._node += i; return tmp; }
-      iterator& operator += (int i) { _node += i; return (*this); }
+      iterator operator + (int i) const { return (*this); }
+      iterator& operator += (int i) { return (*this); }
 
-      iterator& operator = (const iterator& i) { _node = i._node; return (*this); }
+      iterator& operator = (const iterator& i) { return (*this); }
 
-      bool operator != (const iterator& i) const { return (_node != i._node); }
-      bool operator == (const iterator& i) const { return (_node == i._node); }
+      bool operator != (const iterator& i) const { return false; }
+      bool operator == (const iterator& i) const { return false; }
 
    private:
       T*    _node;
    };
 
    // TODO: implement these functions
-   iterator begin() const { return iterator(_data); }
-   iterator end() const { return iterator(_data + _size); }
-   bool empty() const { return (_size == 0); }
-   size_t size() const { return _size; }
+   iterator begin() const { return 0; }
+   iterator end() const { return 0; }
+   bool empty() const { return false; }
+   size_t size() const { return 0; }
 
-   T& operator [] (size_t i) { return _data[i]; }
-   const T& operator [] (size_t i) const { return _data[i]; }
+   T& operator [] (size_t i) { return _data[0]; }
+   const T& operator [] (size_t i) const { return _data[0]; }
 
-   void push_back(const T& x) { 
-      
-      if (_size == _capacity) {
-         if (_size == 0) resize(1);
-         else resize(2 * _size);
-      }
-      _data[_size++] = T(x); //postfix
-      _isSorted = true;
-   }
-   void pop_front() { 
-      if(_data == 0 || _size == 0)
-         return;
-      _size--;
-      if(_size >= 2)
-         _data[0] = _data[_size];
-   }
-   void pop_back() { 
-      if(_data == 0 || _size == 0)
-         return;
-      _size--;
-   }
+   void push_back(const T& x) { }
+   void pop_front() { }
+   void pop_back() { }
 
-   bool erase(iterator pos) { 
-      if(pos == end()) return false;
-      
-      iterator next(pos);
-      next++;
-      while(next != end())
-         *(pos++) = *(next++);
-      //pos == original end(), do nothing
-      _isSorted = false;
-      _size--; 
-      return true; 
-   }
-   bool erase(const T& x) { 
-      
-      for(size_t i = 0; i < _size; i++) {
-         if(_data[i] == x) {
-            _size--;
-            for (; i < _size; i++)
-               _data[i] = _data[i + 1];
-            _isSorted = false;
-            return true;
-         }
-      }
-      
-      return false; 
-   }
+   bool erase(iterator pos) { return false; }
+   bool erase(const T& x) { return false; }
 
-   void clear() { 
-      if (_data != 0) {
-         delete[] _data;
-         _data = 0;
-      }
-      _size = 0;
-      _capacity = 0;
-      _isSorted = true;
-   }
+   void clear() { }
 
    // AH: can change this function. e.g. reset _isSorted value
    // This is done. DO NOT change this one.
-   void sort() const { 
-      if(_isSorted) return;
-      if (!empty()) 
-         ::sort(_data, _data+_size); 
-      _isSorted = true; 
-   }
+   void sort() const { if (!empty()) ::sort(_data, _data+_size); }
 
    // Nice to have, but not required in this homework...
    // void reserve(size_t n) { ... }
@@ -142,18 +87,6 @@ private:
    mutable bool  _isSorted;   // (optionally) to indicate the array is sorted
 
    // [OPTIONAL TODO] Helper functions; called by public member functions
-   void resize(size_t max) {
-      T* tmp = new T[max];
-      
-      if(_data != 0) {
-         for(size_t i = 0 ; i < _size; i++)
-            tmp[i] = T(_data[i]); //copy data
-         delete[] _data;
-      }
-      _data = tmp;
-      _capacity = max;
-      // no need to reset _size
-   }
 };
 
 #endif // ARRAY_H
