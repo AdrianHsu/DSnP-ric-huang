@@ -24,8 +24,8 @@ template <class T>
 class BSTreeNode
 {
    // TODO: design your own class!!
-   friend class BSTree<T>:
-      friend class DList<T>::iterator;
+   friend class BSTree<T>;
+   friend class BSTree<T>::iterator;
 
    BSTreeNode(const T& v, BSTreeNode<T>* p = NULL, BSTreeNode<T>* l = NULL, 
          BSTreeNode<T>* r = NULL): _key(v), _p(p), _left(l), _right(r) {}
@@ -94,15 +94,32 @@ class BSTree
       bool erase(iterator pos) { return false; }
       bool erase(const T& x) { return false; }
       void clear() { }  // delete all nodes except for the dummy node
-      //void sort() const { }
+      void sort() const { } //still required
+
+      void insert(const T& x) const { }
+      void print() const { }
 
    private:
       BSTreeNode<T>* _root;
 
       // [OPTIONAL TODO] helper functions; called by public member functions
-      BSTreeNode<T>* treeSearch(){ return _root; }
-      BSTreeNode<T>* treeMinimum(){ return _root; }
-      BSTreeNode<T>* treeMaximum(){ return _root; }
+      BSTreeNode<T>* treeSearch(BSTreeNode<T>* x, T& k) { 
+         if(x == NULL || k == x->_key)
+            return x;
+         if(k < x->_key)
+            return treeSearch(x->_left, k);
+         else return treeSearch(x->_right, k);
+      }
+      BSTreeNode<T>* treeMinimum(BSTreeNode<T>* x) { 
+         while(x->_left != NULL)
+            x = x->_left;
+         return x;
+      }
+      BSTreeNode<T>* treeMaximum(BSTreeNode<T>* x) { 
+         while(x->_right != NULL)
+            x = x->_right;
+         return x;
+      }
       BSTreeNode<T>* treeSuccessor(){ return _root; }
       
       void treeInsert(){}
