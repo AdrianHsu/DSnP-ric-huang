@@ -1,4 +1,14 @@
+adt> usage
+Period time used : 0 seconds
+Total time used  : 0 seconds
+Total memory used: 0.04297 M Bytes
+
 adt> adta -s 123
+
+adt> usage
+Period time used : 0 seconds
+Total time used  : 0 seconds
+Total memory used: 0.04297 M Bytes
 
 adt> adta -s 456
 
@@ -6,12 +16,22 @@ adt> adta -s 123
 
 adt> adta -s 001
 
+adt> usage
+Period time used : 0 seconds
+Total time used  : 0 seconds
+Total memory used: 0.04297 M Bytes
+
 adt> adtp
 === ADT (dlist) ===
 [  0] = 123   [  1] = 456   [  2] = 123   [  3] = 001   
 
 
 adt> adtd -s 123
+
+adt> usage
+Period time used : 0 seconds
+Total time used  : 0 seconds
+Total memory used: 0.04297 M Bytes
 
 adt> adtp
 === ADT (dlist) ===
@@ -44,7 +64,7 @@ adt> adtp
 adt> usage
 Period time used : 0 seconds
 Total time used  : 0 seconds
-Total memory used: 0.05078 M Bytes
+Total memory used: 0.04297 M Bytes
 
 adt> adta -s 123
 
@@ -94,7 +114,7 @@ adt> adtp
 adt> usage
 Period time used : 0 seconds
 Total time used  : 0 seconds
-Total memory used: 0.0625 M Bytes
+Total memory used: 0.04297 M Bytes
 
 adt> q -f
 

@@ -1,4 +1,14 @@
+adt> usage
+Period time used : 0 seconds
+Total time used  : 0 seconds
+Total memory used: 0.05469 M Bytes
+
 adt> adta -s 123
+
+adt> usage
+Period time used : 0 seconds
+Total time used  : 0 seconds
+Total memory used: 0.05469 M Bytes
 
 adt> adta -s 456
 
@@ -6,12 +16,22 @@ adt> adta -s 123
 
 adt> adta -s 001
 
+adt> usage
+Period time used : 0 seconds
+Total time used  : 0 seconds
+Total memory used: 0.05469 M Bytes
+
 adt> adtp
 === ADT (dlist) ===
 [  0] = 123   [  1] = 456   [  2] = 123   [  3] = 001   
 
 
 adt> adtd -s 123
+
+adt> usage
+Period time used : 0 seconds
+Total time used  : 0 seconds
+Total memory used: 0.0625 M Bytes
 
 adt> adtp
 === ADT (dlist) ===
@@ -44,7 +64,7 @@ adt> adtp
 adt> usage
 Period time used : 0 seconds
 Total time used  : 0 seconds
-Total memory used: 0.08984 M Bytes
+Total memory used: 0.0625 M Bytes
 
 adt> adta -s 123
 
@@ -58,43 +78,43 @@ adt> adts
 
 adt> adtp
 === ADT (dlist) ===
-[  0] = 001   [  1] = 123   [  2] = 123   [  3] = 456   
+[  0] = 123   [  1] = 123   [  2] = 456   [  3] = vkuux   
 
 
 adt> adtd -s 123
 
 adt> adtp
 === ADT (dlist) ===
-[  0] = 001   [  1] = 123   [  2] = 456   
+[  0] = 123   [  1] = 456   [  2] = vkuux   
 
 adt> adtd -s 001
 
 adt> adtp
 === ADT (dlist) ===
-[  0] = 123   [  1] = 456   
+[  0] = 123   [  1] = 456   [  2] = vkuux   
 
 adt> adtd -s 123
 
 adt> adtp
 === ADT (dlist) ===
-[  0] = 456   
+[  0] = 456   [  1] = vkuux   
 
 adt> adtd -s 456
 
 adt> adtp
 === ADT (dlist) ===
-
+[  0] = vkuux   
 
 adt> adtd -s 123
 
 adt> adtp
 === ADT (dlist) ===
-
+[  0] = vkuux   
 
 adt> usage
 Period time used : 0 seconds
 Total time used  : 0 seconds
-Total memory used: 0.1016 M Bytes
+Total memory used: 0.08984 M Bytes
 
 adt> q -f
 
