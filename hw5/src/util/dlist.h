@@ -162,6 +162,7 @@ private:
    mutable bool   _isSorted; // (optionally) to indicate the array is sorted
 
    // [OPTIONAL TODO] helper functions; called by public member functions
+
 };
 
 #endif // DLIST_H
