@@ -1,0 +1,14 @@
+adt> adta -r 3
+
+adt> adts
+
+adt> adta -r 5
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = gpcbg   [  1] = xibqb   [  2] = zmpwu   [  3] = bvxze   
+[  4] = mvjij   [  5] = wjehw   [  6] = oolqq   [  7] = snzue   
+
+
+adt> q -f
+
