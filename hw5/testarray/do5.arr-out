@@ -1,0 +1,17 @@
+adt> adta -r 10
+
+adt> adtp
+=== ADT (array) ===
+[  0] = gpcbg   [  1] = zmpwu   [  2] = wjehw   [  3] = ruoad   
+[  4] = xwmbe   [  5] = wqpyh   [  6] = oqjhv   [  7] = vrrbp   
+[  8] = oklhg   [  9] = jqdbm   
+
+adt> adtd -rand 5
+
+adt> adtp
+=== ADT (array) ===
+[  0] = vrrbp   [  1] = wqpyh   [  2] = jqdbm   [  3] = ruoad   
+[  4] = xwmbe   
+
+adt> q -f
+

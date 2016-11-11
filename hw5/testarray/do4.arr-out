@@ -1,0 +1,100 @@
+adt> adta -s 123
+
+adt> adta -s 456
+
+adt> adta -s 123
+
+adt> adta -s 001
+
+adt> adtp
+=== ADT (array) ===
+[  0] = 123   [  1] = 456   [  2] = 123   [  3] = 001   
+
+
+adt> adtd -s 123
+
+adt> adtp
+=== ADT (array) ===
+[  0] = 001   [  1] = 456   [  2] = 123   
+
+adt> adtd -s 001
+
+adt> adtp
+=== ADT (array) ===
+[  0] = 123   [  1] = 456   
+
+adt> adtd -s 123
+
+adt> adtp
+=== ADT (array) ===
+[  0] = 456   
+
+adt> adtd -s 456
+
+adt> adtp
+=== ADT (array) ===
+
+
+adt> adtd -s 123
+
+adt> adtp
+=== ADT (array) ===
+
+
+adt> usage
+Period time used : 0 seconds
+Total time used  : 0 seconds
+Total memory used: 0.05859 M Bytes
+
+adt> adta -s 123
+
+adt> adta -s 456
+
+adt> adta -s 123
+
+adt> adta -s 001
+
+adt> adts
+
+adt> adtp
+=== ADT (array) ===
+[  0] = 001   [  1] = 123   [  2] = 123   [  3] = 456   
+
+
+adt> adtd -s 123
+
+adt> adtp
+=== ADT (array) ===
+[  0] = 001   [  1] = 456   [  2] = 123   
+
+adt> adtd -s 001
+
+adt> adtp
+=== ADT (array) ===
+[  0] = 123   [  1] = 456   
+
+adt> adtd -s 123
+
+adt> adtp
+=== ADT (array) ===
+[  0] = 456   
+
+adt> adtd -s 456
+
+adt> adtp
+=== ADT (array) ===
+
+
+adt> adtd -s 123
+
+adt> adtp
+=== ADT (array) ===
+
+
+adt> usage
+Period time used : 0 seconds
+Total time used  : 0 seconds
+Total memory used: 0.07812 M Bytes
+
+adt> q -f
+

@@ -1,0 +1,103 @@
+adt> adta -s jordan
+
+adt> adtp
+=== ADT (array) ===
+[  0] = jorda   
+
+adt> adta -s jordano
+
+adt> adtp
+=== ADT (array) ===
+[  0] = jorda   [  1] = jorda   
+
+adt> adta -s jorda
+
+adt> adtp
+=== ADT (array) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   
+
+adt> adta -s jordan
+
+adt> adtp
+=== ADT (array) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+
+
+adt> adta -s jordana
+
+adt> adtp
+=== ADT (array) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+[  4] = jorda   
+
+adt> adtd -s jordani
+
+adt> adtp
+=== ADT (array) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+
+
+adt> adtd -s jord
+
+adt> adtp
+=== ADT (array) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+
+
+adt> adta -r 30
+
+adt> adtp
+=== ADT (array) ===
+[  0] = jorda   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+[  4] = scsel   [  5] = kwgyw   [  6] = jvtwx   [  7] = xfnpa   
+[  8] = vyoqg   [  9] = nefov   [ 10] = qkzsy   [ 11] = fdmkn   
+[ 12] = pndxd   [ 13] = jqdbm   [ 14] = febwf   [ 15] = tkjzz   
+[ 16] = epjei   [ 17] = lkund   [ 18] = iyhes   [ 19] = argrr   
+[ 20] = fuudi   [ 21] = fmolr   [ 22] = evyse   [ 23] = deoyr   
+[ 24] = shpzm   [ 25] = iador   [ 26] = vulpx   [ 27] = uvjih   
+[ 28] = bndzf   [ 29] = hdkvc   [ 30] = bnjqm   [ 31] = vznzn   
+[ 32] = euhqk   [ 33] = rddbx   
+
+adt> adtd -front 5
+
+adt> adtp
+=== ADT (array) ===
+[  0] = hdkvc   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+[  4] = scsel   [  5] = kwgyw   [  6] = jvtwx   [  7] = xfnpa   
+[  8] = vyoqg   [  9] = nefov   [ 10] = qkzsy   [ 11] = fdmkn   
+[ 12] = pndxd   [ 13] = jqdbm   [ 14] = febwf   [ 15] = tkjzz   
+[ 16] = epjei   [ 17] = lkund   [ 18] = iyhes   [ 19] = argrr   
+[ 20] = fuudi   [ 21] = fmolr   [ 22] = evyse   [ 23] = deoyr   
+[ 24] = shpzm   [ 25] = iador   [ 26] = vulpx   [ 27] = uvjih   
+[ 28] = bndzf   
+
+adt> adtd -back 5
+
+adt> adtp
+=== ADT (array) ===
+[  0] = hdkvc   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+[  4] = scsel   [  5] = kwgyw   [  6] = jvtwx   [  7] = xfnpa   
+[  8] = vyoqg   [  9] = nefov   [ 10] = qkzsy   [ 11] = fdmkn   
+[ 12] = pndxd   [ 13] = jqdbm   [ 14] = febwf   [ 15] = tkjzz   
+[ 16] = epjei   [ 17] = lkund   [ 18] = iyhes   [ 19] = argrr   
+[ 20] = fuudi   [ 21] = fmolr   [ 22] = evyse   [ 23] = deoyr   
+
+
+adt> adtd -r 5
+
+adt> adtp
+=== ADT (array) ===
+[  0] = hdkvc   [  1] = jorda   [  2] = jorda   [  3] = jorda   
+[  4] = scsel   [  5] = kwgyw   [  6] = jvtwx   [  7] = xfnpa   
+[  8] = vyoqg   [  9] = nefov   [ 10] = fuudi   [ 11] = fdmkn   
+[ 12] = pndxd   [ 13] = jqdbm   [ 14] = febwf   [ 15] = deoyr   
+[ 16] = epjei   [ 17] = lkund   [ 18] = iyhes   
+
+adt> adtd -all
+
+adt> adtp
+=== ADT (array) ===
+
+
+adt> q -f
+

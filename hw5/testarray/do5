@@ -1,0 +1,5 @@
+adta -r 10
+adtp
+adtd -rand 5
+adtp
+q -f
