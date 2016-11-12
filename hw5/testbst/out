@@ -1,31 +1,45 @@
-adt> adta -r 5
+adt> adta -r 20
 
 adt> adtp -v
 gpcbg
   bvxze
-    [0]
-    [0]
-  xibqb
-    mvjij
+    atrqq
       [0]
       [0]
-    zmpwu
-      [0]
-      [0]
-=== ADT (bst) ===
-[  0] = bvxze   [  1] = gpcbg   [  2] = mvjij   [  3] = xibqb   
-[  4] = zmpwu   
-
-adt> adtp -r -v
-gpcbg
-  bvxze
-    [0]
     [0]
   xibqb
     mvjij
-      [0]
-      [0]
+      lsmis
+        jqsvh
+          invhi
+            [0]
+            [0]
+          kwgyw
+            jvtwx
+              [0]
+              [0]
+            [0]
+        [0]
+      wjehw
+        oolqq
+          [0]
+          snzue
+            ruoad
+              [0]
+              scsel
+                [0]
+                [0]
+            vyoqg
+              [0]
+              [0]
+        xfnpa
+          [0]
+          [0]
     zmpwu
-      [0]
+      xwmbe
+        [0]
+        zibrz
+          [0]
+          [0]
       [0]
 === ADT (bst) ===

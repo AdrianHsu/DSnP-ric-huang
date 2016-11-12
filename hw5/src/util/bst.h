@@ -45,9 +45,8 @@ class BSTree
       BSTree() {
          _root = NULL;
          _size = 0;
-         _dummy = new BSTreeNode<T>(T());
       }
-      ~BSTree() { clear(); delete _dummy; }
+      ~BSTree() { clear(); }
       class iterator { 
          friend class BSTree;
 
@@ -136,36 +135,35 @@ class BSTree
          BSTreeNode<T>* _node;
       };
       
-      iterator begin() const { 
-         if(_root == 0) iterator(_dummy);
-         return iterator(treeMinimum(_root)); 
-      }
+      iterator begin() const { return iterator(treeMinimum(_root)); }
       iterator end() const { 
-         if(_root == 0) iterator(_dummy);
-         return iterator(treeMaximum(_root)->_right);
+         return iterator(treeMaximum(_root)->_right); 
       }
       bool empty() const { return (_size == 0); }
       size_t size() const {  return _size; }
       //void push_back(const T& x) { }
-      void pop_front() { erase(begin()); }
-      void pop_back() { erase(end()); }
+      void pop_front() { treeDelete(treeMinimum(_root), _size); }
+      void pop_back() { treeDelete(treeMaximum(_root), _size); }
       bool erase(iterator pos) { 
-         if(pos == 0 || pos._node == 0 || empty()) return false;
-         if(pos == end()) 
-            pos = iterator(treeMaximum(_root));
-
-         treeDelete(pos._node, _size);
-         return true;
+         if(empty()) return false;
+         BSTreeNode<T>* node = pos._node;
+         //BSTreeNode<T>* node = treeSearch(_root, pos._node->_key);
+         if(node != NULL) 
+            return treeDelete(node, _size);
+         else return false;
       }
       bool erase(const T& v) { 
          BSTreeNode<T>* node = treeSearch(_root, v);
-         return erase(node);   
+         if(node != NULL) 
+            return treeDelete(node, _size);
+         else return false;
       }
       void clear() { 
+         if(empty()) return;
          iterator i(begin());
          for( ; i != end(); i++)
-            erase(i);
-         _dummy->_p = 0;
+            pop_front();
+
          _root = 0;
       }  // delete all nodes except for the dummy node
       void sort() const { return; } //still required
@@ -180,14 +178,12 @@ class BSTree
 
    private:
       BSTreeNode<T>* _root;
-      BSTreeNode<T>* _dummy;
       size_t _size;
-
       // [OPTIONAL TODO] helper functions; called by public member functions
       void preorderTreeWalk(BSTreeNode<T>* x, size_t l) const {
          
          for (size_t i = 0; i < l; ++i)   cout << "  ";
-         if (x == NULL || x == _dummy) cout << "[0]\n";
+         if (x == NULL) cout << "[0]\n";
          else {
             cout << x->_key << endl;
             preorderTreeWalk(x->_left, l + 1);
@@ -196,31 +192,27 @@ class BSTree
       }
 
       BSTreeNode<T>* treeSearch(BSTreeNode<T>* x,const T& k) const { 
-         while(x != NULL && x != _dummy && k != x->_key) {
+         while(x != NULL && k != x->_key) {
             if(k < x->_key)
                x = x->_left;
             else x = x->_right;
          }
-         if(x == _dummy) return NULL;
-         else return x;
+         return x;
       }
       BSTreeNode<T>* treeMinimum(BSTreeNode<T>* x) const { 
-         if(x == NULL || x == _dummy) return NULL; //root not exist
-         while(x->_left != NULL) //x->_left must not be _dummy
+         if(x == NULL) return NULL; //root not exist
+         while(x->_left != NULL)
             x = x->_left;
-         
-         //if(x == _dummy) return NULL;
          return x;
       }
       BSTreeNode<T>* treeMaximum(BSTreeNode<T>* x) const {
-         if(x == NULL || x == _dummy) return NULL;
-         while(x->_right != NULL && x->_right != _dummy)
+         if(x == NULL) return NULL;
+         while(x->_right != NULL)
             x = x->_right;
-         //if(x == _dummy) return NULL;
          return x;
       }
       BSTreeNode<T>* treeSuccessor(BSTreeNode<T>* x) { 
-         if(x->_right != NULL && x->_right != _dummy) {
+         if(x->_right != NULL) {
             x = x->_right;
             //treeMinimum
             while(x->_left != NULL)
@@ -237,7 +229,7 @@ class BSTree
       BSTreeNode<T>* treePredecessor(BSTreeNode<T>* x) { 
          if(x->_left != NULL) {
             x = x->_left;
-            while(x->_right != NULL && x->_right != _dummy)
+            while(x->_right != NULL)
                x = x->_right;
             return x;
          }
@@ -252,7 +244,7 @@ class BSTree
       void treeInsert(BSTreeNode<T>*& _root, BSTreeNode<T>* z, size_t& _size) {
          BSTreeNode<T>* y(NULL);
          BSTreeNode<T>* x(_root);
-         while(x != NULL && x != _dummy) {
+         while(x != NULL) {
             y = x;
             if(z->_key < x->_key)
                x = x->_left;
@@ -265,26 +257,22 @@ class BSTree
             y->_left = z;
          else y->_right = z;
          
-         if(treeMaximum(_root) == z) {
-            z->_right = _dummy;
-            _dummy->_p = z;
-         }
          _size++;
       }
       void transPlant(BSTreeNode<T>* u, BSTreeNode<T>* v){
          if(u->_p == NULL)
             _root = v;
-         else if(u == u->_p->_right)
-            u->_p->_right = v;
-         else u->_p->_left = v;
-         if(v != NULL && v != _dummy)
+         else if(u == u->_p->_left)
+            u->_p->_left = v;
+         else u->_p->_right = v;
+         if(v != NULL)
             v->_p = u->_p;
       }
       bool treeDelete(BSTreeNode<T>* z, size_t& _size) {
-         if(z == NULL || z == _dummy) return false;
+         if(z == NULL) return false;
          if(z->_left == NULL)
             transPlant(z, z->_right);
-         else if(z->_right == NULL || z->_right == _dummy)
+         else if(z->_right == NULL)
             transPlant(z, z->_left);
          else {
             //treeMinimum
@@ -301,11 +289,7 @@ class BSTree
             y->_left = z->_left;
             y->_left->_p = y;
          }
-         //check _dummy position
-         BSTreeNode<T>* tmp(treeMaximum(_root));
-         tmp->_right = _dummy;
-         _dummy->_p = tmp;
-
+         
          _size--;
          return true;
       }
