@@ -115,35 +115,38 @@ class BSTree
             pop_front();
          _root = 0;
       }  // delete all nodes except for the dummy node
-      void sort() const { return; } //still should be declared 
+      void sort() const { return; } //still required
 
       void insert(const T& v) { 
          BSTreeNode<T>* z = new BSTreeNode<T>(v, 0, 0, 0);
          treeInsert(_root, z, _size);
       }
       void print() const { 
-        // inorderTreeWalk(_root);
-        // cout << endl;
+         preorderTreeWalk(_root, 0);
       }
 
    private:
       BSTreeNode<T>* _root;
       size_t _size;
       // [OPTIONAL TODO] helper functions; called by public member functions
-      void inorderTreeWalk(BSTreeNode<T>* x) const {
-         if(x != NULL) {
-            inorderTreeWalk(x->_left);
-            cout << x->_key << " ";
-            inorderTreeWalk(x->_right);
+      void preorderTreeWalk(BSTreeNode<T>* x, size_t l) const {
+         
+         for (size_t i = 0; i < l; ++i)   cout << "   ";
+         if (x == NULL) cout << "[0]\n";
+         else {
+            cout << x->_key << endl;
+            preorderTreeWalk(x->_left, l + 1);
+            preorderTreeWalk(x->_right, l + 1);
          }
       }
 
       BSTreeNode<T>* treeSearch(BSTreeNode<T>* x,const T& k) const { 
-         if(x == NULL || k == x->_key)
-            return x;
-         if(k < x->_key)
-            return treeSearch(x->_left, k);
-         else return treeSearch(x->_right, k);
+         while(x != NULL && k != x->_key) {
+            if(k < x->_key)
+               x = x->_left;
+            else x = x->_right;
+         }
+         return x;
       }
       BSTreeNode<T>* treeMinimum(BSTreeNode<T>* x) const { 
          while(x->_left != NULL)
@@ -156,8 +159,13 @@ class BSTree
          return x;
       }
       BSTreeNode<T>* treeSuccessor(BSTreeNode<T>* x) { 
-         if(x->_right != NULL)
-            return treeMinimum(x->_right);
+         if(x->_right != NULL) {
+            BSTreeNode<T>* y(x->_right);
+            //treeMinimum
+            while(y->_left != NULL)
+               y = y->_left;
+            return y;
+         }
          BSTreeNode<T>* y(x->_p);
          while(y != NULL && x == y->_right) {
             x = y;
@@ -166,8 +174,12 @@ class BSTree
          return y; 
       }
       BSTreeNode<T>* treePredecessor(BSTreeNode<T>* x) { 
-         if(x->_left != NULL)
-            return treeMaximum(x->_left);
+         if(x->_left != NULL) {
+            BSTreeNode<T>* y(x->_left);
+            while(y->_right != NULL)
+               y = y->_right;
+            return y;
+         }
          BSTreeNode<T>* y(x->_p);
          while(y != NULL && x == y->_left) {
             x = y;
@@ -175,6 +187,7 @@ class BSTree
          }
          return y; 
       }
+
       void treeInsert(BSTreeNode<T>* _root, BSTreeNode<T>* z, size_t& _size) {
          BSTreeNode<T>* y(NULL);
          BSTreeNode<T>* x(_root);
@@ -208,7 +221,11 @@ class BSTree
          else if(z->_right == NULL)
             transPlant(z, z->_left);
          else {
-            BSTreeNode<T>* y = treeMinimum(z->_right);
+            //treeMinimum
+            BSTreeNode<T>* y(z->_right);
+            while(y->_left != NULL)
+               y = y->_left;
+
             if(y->_p != z) {
                transPlant(y, y->_right);
                y->_right = z->_right;
