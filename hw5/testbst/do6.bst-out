@@ -1,3 +1,7 @@
+adt> adtp -v
+=== ADT (bst) ===
+
+
 adt> adta -r 5
 
 adt> adtp -v
@@ -16,57 +20,11 @@ gpcbg
 [  0] = bvxze   [  1] = gpcbg   [  2] = mvjij   [  3] = xibqb   
 [  4] = zmpwu   
 
-adt> adtp -r -v
-gpcbg
-  bvxze
-    [0]
-    [0]
-  xibqb
-    mvjij
-      [0]
-      [0]
-    zmpwu
-      [0]
-      [0]
-=== ADT (bst) ===
-[  4] = zmpwu   [  3] = xibqb   [  2] = mvjij   [  1] = gpcbg   
-[  0] = bvxze   
-
-adt> adts
+adt> adtr 3
 
 adt> adtp -v
-gpcbg
-  bvxze
-    [0]
-    [0]
-  xibqb
-    mvjij
-      [0]
-      [0]
-    zmpwu
-      [0]
-      [0]
 === ADT (bst) ===
-[  0] = bvxze   [  1] = gpcbg   [  2] = mvjij   [  3] = xibqb   
-[  4] = zmpwu   
 
-adt> adtp -r -v
-gpcbg
-  bvxze
-    [0]
-    [0]
-  xibqb
-    mvjij
-      [0]
-      [0]
-    zmpwu
-      [0]
-      [0]
-=== ADT (bst) ===
-[  4] = zmpwu   [  3] = xibqb   [  2] = mvjij   [  1] = gpcbg   
-[  0] = bvxze   
-
-adt> adtr 3
 
 adt> adta -r 10
 

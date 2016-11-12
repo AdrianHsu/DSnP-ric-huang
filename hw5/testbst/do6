@@ -1,10 +1,8 @@
+adtp -v
 adta -r 5
 adtp -v
-adtp -r -v
-adts
-adtp -v
-adtp -r -v
 adtr 3
+adtp -v
 adta -r 10
 adtp -v
 adtd -r 3
