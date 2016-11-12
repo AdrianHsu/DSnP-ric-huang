@@ -139,10 +139,16 @@ class DList
       }
 
       void clear() { 
-         for(iterator i(begin()); i != end(); i++)
-            erase(i);
+         DListNode<T>* end = _head->_prev;
+         for(; _head != end; _head = _head->_next) {
+            DListNode<T>* temp = _head;
+            _head = _head->_next;
+            delete temp;
+         }
+         _head->_prev = _head;
+         _head->_next = _head;
          _isSorted = true;
-      }  // delete all nodes except for the dummy node
+      } // delete all nodes except for the dummy node
 
       void sort() const { 
          if(_isSorted) return;
