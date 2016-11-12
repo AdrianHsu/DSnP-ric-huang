@@ -1,0 +1,17 @@
+adta -r 5
+adtp -v
+adtp -r -v
+adts
+adtp -v
+adtp -r -v
+adtr 3
+adta -r 10
+adtp -v
+adtd -r 3
+adtp -v
+adts
+adtp -v
+adtd -r 3
+adts
+adtp -v
+q -f

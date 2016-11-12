@@ -137,10 +137,7 @@ class BSTree
       
       iterator begin() const { return iterator(treeMinimum(_root)); }
       iterator end() const { 
-         if(treeMaximum(_root) != NULL)
-            return iterator(treeMaximum(_root)->_right); 
-         else
-            return NULL;
+         return iterator(treeMaximum(_root)->_right); 
       }
       bool empty() const { return (_size == 0); }
       size_t size() const {  return _size; }

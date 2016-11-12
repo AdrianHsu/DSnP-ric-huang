@@ -1,0 +1,163 @@
+adt> adta -r 5
+
+adt> adtp -v
+gpcbg
+  bvxze
+    [0]
+    [0]
+  xibqb
+    mvjij
+      [0]
+      [0]
+    zmpwu
+      [0]
+      [0]
+=== ADT (bst) ===
+[  0] = bvxze   [  1] = gpcbg   [  2] = mvjij   [  3] = xibqb   
+[  4] = zmpwu   
+
+adt> adtp -r -v
+gpcbg
+  bvxze
+    [0]
+    [0]
+  xibqb
+    mvjij
+      [0]
+      [0]
+    zmpwu
+      [0]
+      [0]
+=== ADT (bst) ===
+[  4] = zmpwu   [  3] = xibqb   [  2] = mvjij   [  1] = gpcbg   
+[  0] = bvxze   
+
+adt> adts
+
+adt> adtp -v
+gpcbg
+  bvxze
+    [0]
+    [0]
+  xibqb
+    mvjij
+      [0]
+      [0]
+    zmpwu
+      [0]
+      [0]
+=== ADT (bst) ===
+[  0] = bvxze   [  1] = gpcbg   [  2] = mvjij   [  3] = xibqb   
+[  4] = zmpwu   
+
+adt> adtp -r -v
+gpcbg
+  bvxze
+    [0]
+    [0]
+  xibqb
+    mvjij
+      [0]
+      [0]
+    zmpwu
+      [0]
+      [0]
+=== ADT (bst) ===
+[  4] = zmpwu   [  3] = xibqb   [  2] = mvjij   [  1] = gpcbg   
+[  0] = bvxze   
+
+adt> adtr 3
+
+adt> adta -r 10
+
+adt> adtp -v
+wje
+  hwo
+    atr
+      [0]
+      [0]
+    olq
+      oad
+        [0]
+        [0]
+      qsn
+        qql
+          [0]
+          [0]
+        smi
+          [0]
+          sru
+            [0]
+            [0]
+  zue
+    [0]
+    [0]
+=== ADT (bst) ===
+[  0] = atr   [  1] = hwo   [  2] = oad   [  3] = olq   
+[  4] = qql   [  5] = qsn   [  6] = smi   [  7] = sru   
+[  8] = wje   [  9] = zue   
+
+adt> adtd -r 3
+
+adt> adtp -v
+wje
+  hwo
+    atr
+      [0]
+      [0]
+    qql
+      oad
+        [0]
+        [0]
+      qsn
+        [0]
+        smi
+          [0]
+          [0]
+  [0]
+=== ADT (bst) ===
+[  0] = atr   [  1] = hwo   [  2] = oad   [  3] = qql   
+[  4] = qsn   [  5] = smi   [  6] = wje   
+
+adt> adts
+
+adt> adtp -v
+wje
+  hwo
+    atr
+      [0]
+      [0]
+    qql
+      oad
+        [0]
+        [0]
+      qsn
+        [0]
+        smi
+          [0]
+          [0]
+  [0]
+=== ADT (bst) ===
+[  0] = atr   [  1] = hwo   [  2] = oad   [  3] = qql   
+[  4] = qsn   [  5] = smi   [  6] = wje   
+
+adt> adtd -r 3
+
+adt> adts
+
+adt> adtp -v
+wje
+  qsn
+    oad
+      [0]
+      [0]
+    smi
+      [0]
+      [0]
+  [0]
+=== ADT (bst) ===
+[  0] = oad   [  1] = qsn   [  2] = smi   [  3] = wje   
+
+
+adt> q -f
+
