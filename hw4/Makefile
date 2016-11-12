@@ -13,7 +13,7 @@ EXEC     = memTest
 all:   EXEC  = memTest
 debug: EXEC  = memTest.debug
 
-all:  DEBUG_FLAG =
+all:  DEBUG_FLAG = 
 debug:DEBUG_FLAG = -DMEM_DEBUG
 
 all debug: libs main
