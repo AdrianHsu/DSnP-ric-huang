@@ -1,6 +1,47 @@
 adt> adta -r 20
 
-adt> adtp
+adt> adtp -v
+gpcbg
+  bvxze
+    atrqq
+      [0]
+      [0]
+    [0]
+  xibqb
+    mvjij
+      lsmis
+        jqsvh
+          invhi
+            [0]
+            [0]
+          kwgyw
+            jvtwx
+              [0]
+              [0]
+            [0]
+        [0]
+      wjehw
+        oolqq
+          [0]
+          snzue
+            ruoad
+              [0]
+              scsel
+                [0]
+                [0]
+            vyoqg
+              [0]
+              [0]
+        xfnpa
+          [0]
+          [0]
+    zmpwu
+      xwmbe
+        [0]
+        zibrz
+          [0]
+          [0]
+      [0]
 === ADT (bst) ===
 [  0] = atrqq   [  1] = bvxze   [  2] = gpcbg   [  3] = invhi   
 [  4] = jqsvh   [  5] = jvtwx   [  6] = kwgyw   [  7] = lsmis   
@@ -11,7 +52,42 @@ adt> adtp
 
 adt> adtd -front 3
 
-adt> adtp
+adt> adtp -v
+xibqb
+  mvjij
+    lsmis
+      jqsvh
+        invhi
+          [0]
+          [0]
+        kwgyw
+          jvtwx
+            [0]
+            [0]
+          [0]
+      [0]
+    wjehw
+      oolqq
+        [0]
+        snzue
+          ruoad
+            [0]
+            scsel
+              [0]
+              [0]
+          vyoqg
+            [0]
+            [0]
+      xfnpa
+        [0]
+        [0]
+  zmpwu
+    xwmbe
+      [0]
+      zibrz
+        [0]
+        [0]
+    [0]
 === ADT (bst) ===
 [  0] = invhi   [  1] = jqsvh   [  2] = jvtwx   [  3] = kwgyw   
 [  4] = lsmis   [  5] = mvjij   [  6] = oolqq   [  7] = ruoad   
@@ -21,7 +97,32 @@ adt> adtp
 
 adt> adtd -back 5
 
-adt> adtp
+adt> adtp -v
+mvjij
+  lsmis
+    jqsvh
+      invhi
+        [0]
+        [0]
+      kwgyw
+        jvtwx
+          [0]
+          [0]
+        [0]
+    [0]
+  wjehw
+    oolqq
+      [0]
+      snzue
+        ruoad
+          [0]
+          scsel
+            [0]
+            [0]
+        vyoqg
+          [0]
+          [0]
+    [0]
 === ADT (bst) ===
 [  0] = invhi   [  1] = jqsvh   [  2] = jvtwx   [  3] = kwgyw   
 [  4] = lsmis   [  5] = mvjij   [  6] = oolqq   [  7] = ruoad   
@@ -30,7 +131,24 @@ adt> adtp
 
 adt> adtd -rand 4
 
-adt> adtp
+adt> adtp -v
+ruoad
+  lsmis
+    jqsvh
+      invhi
+        [0]
+        [0]
+      kwgyw
+        jvtwx
+          [0]
+          [0]
+        [0]
+    [0]
+  snzue
+    scsel
+      [0]
+      [0]
+    [0]
 === ADT (bst) ===
 [  0] = invhi   [  1] = jqsvh   [  2] = jvtwx   [  3] = kwgyw   
 [  4] = lsmis   [  5] = ruoad   [  6] = scsel   [  7] = snzue   

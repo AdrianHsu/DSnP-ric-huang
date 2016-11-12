@@ -43,10 +43,10 @@ class BSTree
    // TODO: design your own class!!
    public:
       BSTree() {
-         _root = new BSTreeNode<T>(T());
+         _root = NULL;
          _size = 0;
       }
-      ~BSTree() { clear(); delete _root; }
+      ~BSTree() { clear(); }
       class iterator { 
          friend class BSTree;
 
@@ -57,21 +57,71 @@ class BSTree
          const T& operator * () const { return *(this); }
          T& operator * () { return _node->_key; }
          iterator& operator ++ () { 
-            _node = _node->_right;
-            return *(this);
+            //find successor
+            if(_node->_right != NULL) {
+               _node = _node->_right;
+               //treeMinimum
+               while(_node->_left != NULL)
+                  _node = _node->_left;
+               return *(this);
+            }
+            BSTreeNode<T>* y(_node->_p);
+            while(y != NULL && _node == y->_right) {
+               _node = y;
+               y = y->_p;
+            }
+            _node = y;
+            return *(this); 
          }
          iterator operator ++ (int) { 
             iterator tmp(_node);
-            _node = _node->_right;
+            //find successor
+            if(_node->_right != NULL) {
+               _node = _node->_right;
+               //treeMinimum
+               while(_node->_left != NULL)
+                  _node = _node->_left;
+               return *(this);
+            }
+            BSTreeNode<T>* y(_node->_p);
+            while(y != NULL && _node == y->_right) {
+               _node = y;
+               y = y->_p;
+            }
+            _node = y;
             return tmp; 
          }
          iterator& operator -- () { 
-            _node = _node->_left;
+            //find predecessor
+            if(_node->_left != NULL) {
+               _node = _node->_left;
+               while(_node->_right != NULL)
+                  _node = _node->_right;
+               return *(this);
+            }
+            BSTreeNode<T>* y(_node->_p);
+            while(y != NULL && _node == y->_left) {
+               _node = y;
+               y = y->_p;
+            }
+            _node = y;
             return *(this); 
          }
          iterator operator -- (int) { 
             iterator tmp(_node);
-            _node = _node->_left;
+            //find predecessor
+            if(_node->_left != NULL) {
+               _node = _node->_left;
+               while(_node->_right != NULL)
+                  _node = _node->_right;
+               return *(this);
+            }
+            BSTreeNode<T>* y(_node->_p);
+            while(y != NULL && _node == y->_left) {
+               _node = y;
+               y = y->_p;
+            }
+            _node = y;
             return tmp; 
          }
          iterator& operator = (const iterator& i) { 
@@ -86,7 +136,12 @@ class BSTree
       };
       
       iterator begin() const { return iterator(treeMinimum(_root)); }
-      iterator end() const { return iterator(treeMaximum(_root)); }
+      iterator end() const { 
+         if(treeMaximum(_root) != NULL)
+            return iterator(treeMaximum(_root)->_right); 
+         else
+            return NULL;
+      }
       bool empty() const { return (_size == 0); }
       size_t size() const {  return _size; }
       //void push_back(const T& x) { }
@@ -94,7 +149,8 @@ class BSTree
       void pop_back() { treeDelete(treeMaximum(_root), _size); }
       bool erase(iterator pos) { 
          if(empty()) return false;
-         BSTreeNode<T>* node = treeSearch(_root, pos._node->_key);
+         BSTreeNode<T>* node = pos._node;
+         //BSTreeNode<T>* node = treeSearch(_root, pos._node->_key);
          if(node != NULL) 
             return treeDelete(node, _size);
          else return false;
@@ -111,8 +167,6 @@ class BSTree
          for( ; i != end(); i++)
             pop_front();
 
-         if(i == end())
-            pop_front();
          _root = 0;
       }  // delete all nodes except for the dummy node
       void sort() const { return; } //still required
@@ -131,7 +185,7 @@ class BSTree
       // [OPTIONAL TODO] helper functions; called by public member functions
       void preorderTreeWalk(BSTreeNode<T>* x, size_t l) const {
          
-         for (size_t i = 0; i < l; ++i)   cout << "   ";
+         for (size_t i = 0; i < l; ++i)   cout << "  ";
          if (x == NULL) cout << "[0]\n";
          else {
             cout << x->_key << endl;
@@ -149,22 +203,24 @@ class BSTree
          return x;
       }
       BSTreeNode<T>* treeMinimum(BSTreeNode<T>* x) const { 
+         if(x == NULL) return NULL; //root not exist
          while(x->_left != NULL)
             x = x->_left;
          return x;
       }
       BSTreeNode<T>* treeMaximum(BSTreeNode<T>* x) const {
+         if(x == NULL) return NULL;
          while(x->_right != NULL)
             x = x->_right;
          return x;
       }
       BSTreeNode<T>* treeSuccessor(BSTreeNode<T>* x) { 
          if(x->_right != NULL) {
-            BSTreeNode<T>* y(x->_right);
+            x = x->_right;
             //treeMinimum
-            while(y->_left != NULL)
-               y = y->_left;
-            return y;
+            while(x->_left != NULL)
+               x = x->_left;
+            return x;
          }
          BSTreeNode<T>* y(x->_p);
          while(y != NULL && x == y->_right) {
@@ -175,10 +231,10 @@ class BSTree
       }
       BSTreeNode<T>* treePredecessor(BSTreeNode<T>* x) { 
          if(x->_left != NULL) {
-            BSTreeNode<T>* y(x->_left);
-            while(y->_right != NULL)
-               y = y->_right;
-            return y;
+            x = x->_left;
+            while(x->_right != NULL)
+               x = x->_right;
+            return x;
          }
          BSTreeNode<T>* y(x->_p);
          while(y != NULL && x == y->_left) {
@@ -188,7 +244,7 @@ class BSTree
          return y; 
       }
 
-      void treeInsert(BSTreeNode<T>* _root, BSTreeNode<T>* z, size_t& _size) {
+      void treeInsert(BSTreeNode<T>*& _root, BSTreeNode<T>* z, size_t& _size) {
          BSTreeNode<T>* y(NULL);
          BSTreeNode<T>* x(_root);
          while(x != NULL) {
@@ -216,6 +272,7 @@ class BSTree
             v->_p = u->_p;
       }
       bool treeDelete(BSTreeNode<T>* z, size_t& _size) {
+         if(z == NULL) return false;
          if(z->_left == NULL)
             transPlant(z, z->_right);
          else if(z->_right == NULL)
