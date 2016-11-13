@@ -1,9 +1,9 @@
 adt> adta -r 100000
 
 adt> usage
-Period time used : 0.02 seconds
-Total time used  : 0.02 seconds
-Total memory used: 4.734 M Bytes
+Period time used : 0.01 seconds
+Total time used  : 0.01 seconds
+Total memory used: 4.723 M Bytes
 
 adt> adtp
 === ADT (dlist) ===
@@ -25010,9 +25010,9 @@ adt> adtp
 
 
 adt> usage
-Period time used : 0.15 seconds
-Total time used  : 0.17 seconds
-Total memory used: 4.738 M Bytes
+Period time used : 0.14 seconds
+Total time used  : 0.15 seconds
+Total memory used: 4.723 M Bytes
 
 adt> adtp -r
 === ADT (dlist) ===
@@ -50019,37 +50019,37 @@ adt> adtp -r
 
 
 adt> usage
-Period time used : 0.17 seconds
-Total time used  : 0.34 seconds
-Total memory used: 4.738 M Bytes
+Period time used : 0.14 seconds
+Total time used  : 0.29 seconds
+Total memory used: 4.727 M Bytes
 
 adt> adtd -r 10000
 
 adt> usage
-Period time used : 3.82 seconds
-Total time used  : 4.16 seconds
-Total memory used: 4.742 M Bytes
+Period time used : 2.27 seconds
+Total time used  : 2.56 seconds
+Total memory used: 4.727 M Bytes
 
 adt> adts
 
 adt> usage
-Period time used : 0.14 seconds
-Total time used  : 4.3 seconds
-Total memory used: 4.742 M Bytes
+Period time used : 109 seconds
+Total time used  : 111.6 seconds
+Total memory used: 4.727 M Bytes
 
 adt> adtr 3
 
 adt> usage
 Period time used : 0 seconds
-Total time used  : 4.3 seconds
-Total memory used: 4.742 M Bytes
+Total time used  : 111.6 seconds
+Total memory used: 4.727 M Bytes
 
 adt> adta -r 50000
 
 adt> usage
 Period time used : 0.01 seconds
-Total time used  : 4.31 seconds
-Total memory used: 6.746 M Bytes
+Total time used  : 111.6 seconds
+Total memory used: 5.328 M Bytes
 
 adt> q -f
 

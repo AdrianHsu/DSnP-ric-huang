@@ -1,0 +1,50 @@
+adt> adtp
+=== ADT (dlist) ===
+
+
+adt> adta -r 5
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = gpcbg   [  1] = xibqb   [  2] = zmpwu   [  3] = bvxze   
+[  4] = mvjij   
+
+adt> adtr 3
+
+adt> adtp
+=== ADT (dlist) ===
+
+
+adt> adta -r 10
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = wje   [  1] = hwo   [  2] = olq   [  3] = qsn   
+[  4] = zue   [  5] = atr   [  6] = qql   [  7] = smi   
+[  8] = sru   [  9] = oad   
+
+adt> adtd -r 3
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = wje   [  1] = hwo   [  2] = olq   [  3] = zue   
+[  4] = atr   [  5] = qql   [  6] = sru   
+
+adt> adts
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = atr   [  1] = hwo   [  2] = olq   [  3] = qql   
+[  4] = sru   [  5] = wje   [  6] = zue   
+
+adt> adtd -r 3
+
+adt> adts
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = olq   [  1] = sru   [  2] = wje   [  3] = zue   
+
+
+adt> q -f
+

@@ -139,7 +139,7 @@ class DList
       }
 
       void clear() { 
-         DListNode<T>* end = _head->_prev;
+         DListNode<T>* end = _head;
          for(; _head != end; _head = _head->_next) {
             DListNode<T>* temp = _head;
             _head = _head->_next;
