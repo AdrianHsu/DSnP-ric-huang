@@ -145,6 +145,28 @@ parseError(CirParseError err)
    return false;
 }
 
+// Convert string "str" to unsigned integer "num". Return false if str does not appear
+// to be a number
+bool
+myStr2Uns(const string& str, unsigned& num)
+{
+   num = 0;
+   size_t i = 0;
+   //int sign = 1;
+   if (str[0] == '-')  return false;
+   bool valid = false;
+   for (; i < str.size(); ++i) {
+      if (isdigit(str[i])) {
+         num *= 10;
+         num += unsigned(str[i] - '0');
+         valid = true;
+      }
+      else return false;
+   }
+   return valid;
+}
+
+
 // if nOpts is specified (!= 0), the number of tokens must be exactly = nOpts
 // Otherwise, return false.
 //
@@ -177,20 +199,42 @@ CirMgr::lexOptions
 bool 
 CirMgr::aigerAddAnd(string& str) {
    
-   int argv[3] = {0, 0, 0}; // lhs, rhs0, rhs1
+   unsigned lit[3] = {0, 0, 0}; // lhs, rhs0, rhs1
    vector<string> tmp;
    if(!lexOptions(str, tmp, 3))
       return false;
    for(int i = 0; i < 3; i++) {
-      if(!myStr2Int(tmp[i], argv[i]))
+      if(!myStr2Uns(tmp[i], lit[i]))
          return false;
    }
    
-   assert(argv[0] > 1);
-   assert(!aiger_sign(argv[0]));
+   assert(lit[0] > 1);
+   assert(!aiger_sign(lit[0]));
 
-   CirAigGate* aig = new CirAigGate(argv[0], argv[1], argv[2]);
-   gateList[ aiger_lit2var(argv[0]) ] = aig;
+   CirAigGate* aig = new CirAigGate(lit[0], lit[1], lit[2]);
+   gateList[ aiger_lit2var(lit[0]) ] = aig;
+   return true;
+}
+bool
+CirMgr::aigerAddUndef(string& str) {
+   
+   unsigned lit[3] = {0, 0, 0}; // lhs, rhs0, rhs1
+   vector<string> tmp;
+   if(!lexOptions(str, tmp, 3))
+      return false;
+   for(int i = 0; i < 3; i++) {
+      if(!myStr2Uns(tmp[i], lit[i]))
+         return false;
+   }
+   
+   //CirGate* g1 = getGate( aiger_lit2var(lit[0]) );
+   CirGate* g2 = getGate( aiger_lit2var(lit[1]) );
+   if(g2 == 0)
+      gateList[ aiger_lit2var(lit[1]) ] = new CirUndefGate(lit[1]);
+   CirGate* g3 = getGate( aiger_lit2var(lit[2]) );
+   if(g3 == 0)
+      gateList[ aiger_lit2var(lit[2]) ] = new CirUndefGate(lit[2]);
+   
    return true;
 }
 bool
@@ -203,81 +247,45 @@ CirMgr::readCircuit(const string& fileName)
    if(!ifs.is_open())
       return false;
    
-   string str;
    // without error handling
-   if(getline(ifs, str, '\n')) {
-      vector<string> tmp;
-      if(!lexOptions(str, tmp, 6))
-         return false;
-      for(int i = 1; i <= 5; i++)
-         myStr2Int(tmp[i], miloa[i - 1]);
-   }
+   string str;
+   vector<string> cmd;
+   while(getline(ifs, str, '\n'))
+      cmd.push_back(str);
+   ifs.close(); 
+
+   vector<string> tmp;
+   if(!lexOptions(cmd[0], tmp, 6))
+      return false;
+   for(int i = 1; i <= 5; i++)
+      myStr2Uns(tmp[i], miloa[i - 1]);
+
    gateList.clear();
    gateList.resize(miloa[0] + miloa[3] + 1, 0);
    gateList[0] = new CirConstGate();
 
-
    vector<int> ins;
    for(int i = 0; i < miloa[1]; i++) {
       
-      if(!getline(ifs, str, '\n'))
-         return false;
-      int lit;
-      if(!myStr2Int(str, lit))
+      unsigned lit;
+      if(!myStr2Uns(cmd[i + 1], lit))
          return false;
       ins.push_back(aiger_lit2var(lit));
-      gateList[ aiger_lit2var(lit) ] = new CirPiGate((unsigned)lit);
+      gateList[ aiger_lit2var(lit) ] = new CirPiGate(lit);
    }
-   vector<int> outs;
+   for(int i = 0; i < miloa[4]; i++)
+      aigerAddAnd(cmd[i + miloa[1] + miloa[3] + 1]); 
+   for(int i = 0; i < miloa[4]; i++)
+      aigerAddUndef(cmd[i + miloa[1] + miloa[3] + 1]); 
+   
    for(int i = 0; i < miloa[3]; i++) {
       
-      if(!getline(ifs, str, '\n'))
+      unsigned f;
+      if(!myStr2Uns(cmd[i + miloa[1] + 1], f))
          return false;
-      int lit;
-      if(!myStr2Int(str, lit))
-         return false;
-      outs.push_back(aiger_lit2var(lit));
-      gateList[ aiger_lit2var(lit) ] = new CirPoGate((unsigned)lit);
+      gateList[ i + miloa[0] + 1 ] = new CirPoGate(i + miloa[0] + 1, f); //(id, fanin)
    }
-   for(int i = 0; i < miloa[4]; i++) {
-      
-      if(!getline(ifs, str, '\n'))
-         return false;
-      aigerAddAnd(str); 
-   }
-
-   while(getline(ifs, str, '\n')) {
-      if(str == "c") {
-         if(!getline(ifs, str, '\n'))
-            return false;
-         setComment(str);
-         continue;
-      }
-      vector<string> tmp;
-      if(!lexOptions(str, tmp, 2))
-         return false;
-      // i13 symbol
-      string ilo;
-      ilo += tmp[0][0];
-      string str_index = tmp[0].erase(0, 1);
-      int index = 0;
-      if(!myStr2Int(str_index, index))
-         return false;
-
-      if(ilo == "i") {
-         cout << "out[index] = " << outs[index] << endl;
-         CirPiGate* pi = static_cast<CirPiGate*>( getGate(ins[(unsigned) index]) );
-         pi->setName(tmp[1]);
-      }
-      if(ilo == "o") {
-         cout << "out[index] = " << outs[index] << endl;
-         CirPoGate* po = static_cast<CirPoGate*>( getGate(outs[(unsigned) index]) );
-         po->setName(tmp[1]);
-      }
-   }
-   CirPoGate* po = static_cast<CirPoGate*>( getGate(outs[1]) );
-   cout << po->getName() << endl;
-    
+   
    return true;
 }
 

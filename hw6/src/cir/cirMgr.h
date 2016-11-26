@@ -42,6 +42,7 @@ public:
    // by AH
    bool lexOptions(const string&, vector<string>&, size_t) const;
    bool aigerAddAnd(string&);
+   bool aigerAddUndef(string&);
    void setComment(string& str){ comment.clear(); comment = str; };
 
    // Member functions about circuit reporting
@@ -55,7 +56,7 @@ public:
 private:
    bool flag;
    // aag M I L O A == aag [0] [1] [2] [3] [4]
-   int miloa[5];
+   unsigned miloa[5];
    GateList gateList;
    string comment;
 };

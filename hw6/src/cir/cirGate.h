@@ -61,15 +61,16 @@ class CirPiGate : public CirGate {
 class CirPoGate : public CirGate {
 
    public:
-      CirPoGate(unsigned _lit = 0)
-         : CirGate(PO_GATE), lit(_lit), name("") {}
+      CirPoGate(unsigned _id = 0, unsigned _f = 0)
+         : CirGate(PO_GATE), id(_id), fanin(_f),name("") {}
       virtual ~CirPoGate() {}
 
       void printGate() const;
       void setName(string str) { if(name.empty()) name = str; }
       string getName() { return name; } 
    protected:
-      unsigned lit;
+      unsigned id;
+      unsigned fanin;
       string name;
       //CirGate* fanin;
 };
