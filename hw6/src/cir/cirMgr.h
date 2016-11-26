@@ -29,7 +29,10 @@ public:
 
    // Access functions
    // return '0' if "gid" corresponds to an undefined gate.
-   CirGate* getGate(unsigned gid) const { return 0; }
+   CirGate* getGate(unsigned gid) const { 
+      return 0;
+
+   }
 
    // Member functions about circuit construction
    bool readCircuit(const string&);
@@ -43,6 +46,8 @@ public:
    void writeAag(ostream&) const;
 
 private:
+   GateList poList;
+   GateList piList;
 };
 
 #endif // CIR_MGR_H

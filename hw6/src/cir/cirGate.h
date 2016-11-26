@@ -16,17 +16,6 @@
 
 using namespace std;
 
-#define aiger_false 0
-#define aiger_true 1
-
-#define aiger_sign(l) \
-  (((unsigned)(l))&1)
-
-#define aiger_var2lit(i) \
-  (((unsigned)(i)) << 1)
-
-#define aiger_lit2var(l) \
-  (((unsigned)(l)) >> 1)
 
 class CirGate;
 
@@ -41,8 +30,8 @@ class CirGate {
       virtual ~CirGate() {}
 
       // Basic access methods
-      string getTypeStr() const { return ""; }
-      unsigned getLineNo() const { return 0; }
+      string getTypeStr() const;
+      unsigned getLineNo() const;
 
       // Printing functions
       virtual void printGate() const = 0;
@@ -53,15 +42,14 @@ class CirGate {
    protected:
       GateType type;
 };
-
 class CirPiGate : public CirGate {
 
    public:
-      CirPiGate(GateType _t, unsigned _lit)
+      CirPiGate(GateType _t = PI_GATE, unsigned _lit = 0)
          : CirGate(_t), lit(_lit), name("") {}
       ~CirPiGate() {}
 
-      void printGate() const {}
+      void printGate() const;
       void setName(string str) { if(name.empty()) name = str; }
    
    protected:
@@ -72,31 +60,60 @@ class CirPiGate : public CirGate {
 class CirPoGate : public CirGate {
 
    public:
-      CirPoGate(GateType _t, unsigned _lit)
+      CirPoGate(GateType _t = PO_GATE, unsigned _lit = 0)
          : CirGate(_t), lit(_lit), name("") {}
       ~CirPoGate() {}
 
-      void printGate() const {}
+      void printGate() const;
       void setName(string str) { if(name.empty()) name = str; }
    
    protected:
       unsigned lit;
       string name;
+      CirGate* fanin;
 };
 
 class CirAigGate : public CirGate {
 
    public:
-      CirAigGate(GateType _t, unsigned _l, unsigned _r0, unsigned _r1) 
+      CirAigGate(GateType _t = AIG_GATE, 
+                  unsigned _l = 0, unsigned _r0 = 0, unsigned _r1 = 0) 
          : CirGate(_t), lhs(_l), rhs0(_r0), rhs1(_r1) {}
       ~CirAigGate() {}
 
-      void printGate() const {}
+      void printGate() const;
    
    protected:
       unsigned lhs;
       unsigned rhs0;
       unsigned rhs1;
+      GateList faninList;
       // Aig has no name
+};
+
+class CirUndefGate : public CirGate {
+
+   public:
+      CirUndefGate(GateType _t = UNDEF_GATE, unsigned _lit = 0)
+         : CirGate(_t), lit(_lit) {}
+      ~CirUndefGate() {}
+
+      void printGate() const;
+   
+   protected:
+      unsigned lit;
+};
+
+class CirConstGate : public CirGate {
+
+   public:
+      CirConstGate(GateType _t = CONST_GATE, unsigned _lit = 0)
+         : CirGate(_t), lit(_lit) {}
+      ~CirConstGate() {}
+
+      void printGate() const;
+   
+   protected:
+      unsigned lit;
 };
 #endif // CIR_GATE_H

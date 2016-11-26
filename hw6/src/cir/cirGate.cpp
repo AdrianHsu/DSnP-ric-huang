@@ -24,6 +24,20 @@ extern CirMgr *cirMgr;
 /**************************************/
 /*   class CirGate member functions   */
 /**************************************/
+string 
+CirGate::getTypeStr() const 
+{
+   string s;
+   return s;
+}
+
+unsigned
+CirGate::getLineNo() const
+{
+
+   return 0;
+}
+
 void
 CirGate::reportGate() const
 {
@@ -39,5 +53,21 @@ void
 CirGate::reportFanout(int level) const
 {
    assert (level >= 0);
+}
+
+void
+CirPiGate::printGate() const
+{
+
+}
+void
+CirPoGate::printGate() const
+{
+
+}
+void
+CirAigGate::printGate() const
+{
+
 }
 
