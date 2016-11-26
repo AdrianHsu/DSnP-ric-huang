@@ -70,4 +70,13 @@ CirAigGate::printGate() const
 {
 
 }
+void
+CirConstGate::printGate() const
+{
 
+}
+void
+CirUndefGate::printGate() const
+{
+
+}

@@ -47,7 +47,7 @@ class CirPiGate : public CirGate {
    public:
       CirPiGate(unsigned _lit = 0)
          : CirGate(PI_GATE), lit(_lit), name("") {}
-      ~CirPiGate() {}
+      virtual ~CirPiGate() {}
 
       void printGate() const;
       void setName(string str) { if(name.empty()) name = str; }
@@ -63,7 +63,7 @@ class CirPoGate : public CirGate {
    public:
       CirPoGate(unsigned _lit = 0)
          : CirGate(PO_GATE), lit(_lit), name("") {}
-      ~CirPoGate() {}
+      virtual ~CirPoGate() {}
 
       void printGate() const;
       void setName(string str) { if(name.empty()) name = str; }
@@ -79,7 +79,7 @@ class CirAigGate : public CirGate {
    public:
       CirAigGate(unsigned _l = 0, unsigned _r0 = 0, unsigned _r1 = 0) 
          : CirGate(AIG_GATE), lhs(_l), rhs0(_r0), rhs1(_r1) {}
-      ~CirAigGate() {}
+      virtual ~CirAigGate() {}
 
       void printGate() const;
    
@@ -96,7 +96,7 @@ class CirUndefGate : public CirGate {
    public:
       CirUndefGate(unsigned _lit = 0)
          : CirGate(UNDEF_GATE), lit(_lit) {}
-      ~CirUndefGate() {}
+      virtual ~CirUndefGate() {}
 
       void printGate() const;
    
@@ -107,9 +107,9 @@ class CirUndefGate : public CirGate {
 class CirConstGate : public CirGate {
 
    public:
-      CirConstGate(unsigned _lit = 0)
-         : CirGate(CONST_GATE), lit(_lit) {}
-      ~CirConstGate() {}
+      CirConstGate()
+         : CirGate(CONST_GATE), lit(0) {}
+      virtual ~CirConstGate() {}
 
       void printGate() const;
    

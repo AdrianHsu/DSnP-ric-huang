@@ -24,13 +24,16 @@ extern CirMgr *cirMgr;
 class CirMgr
 {
 public:
-   CirMgr(): flag(0){}
+   CirMgr(): flag(0) {
+      for(int i = 0; i < 5; i++) miloa[i] = 0;
+   }
    ~CirMgr() {}
 
    // Access functions
    // return '0' if "gid" corresponds to an undefined gate.
-   CirGate* getGate(unsigned gid) const { 
-      return 0;
+   CirGate* getGate(unsigned gid) const {
+      if(gid > miloa[0] + miloa[3]) return 0;
+      return gateList[gid];
    }
 
    // Member functions about circuit construction
@@ -51,9 +54,9 @@ public:
 
 private:
    bool flag;
-   GateList poList;
-   GateList piList;
-   GateList aigList;
+   // aag M I L O A == aag [0] [1] [2] [3] [4]
+   int miloa[5];
+   GateList gateList;
    string comment;
 };
 

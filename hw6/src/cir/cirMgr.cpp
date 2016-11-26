@@ -185,10 +185,12 @@ CirMgr::aigerAddAnd(string& str) {
       if(!myStr2Int(tmp[i], argv[i]))
          return false;
    }
+   
    assert(argv[0] > 1);
    assert(!aiger_sign(argv[0]));
+
    CirAigGate* aig = new CirAigGate(argv[0], argv[1], argv[2]);
-   aigList.push_back(aig);
+   gateList[ aiger_lit2var(argv[0]) ] = aig;
    return true;
 }
 bool
@@ -196,7 +198,6 @@ CirMgr::readCircuit(const string& fileName)
 {
    if(!flag)
       flag = 1; //netlist should be constructed before any operations
-   
 
    ifstream ifs(fileName);
    if(!ifs.is_open())
@@ -204,34 +205,41 @@ CirMgr::readCircuit(const string& fileName)
    
    string str;
    // without error handling
-   int argv[5] = {0, 0, 0, 0, 0}; // aag M I L O A == aag [0] [1] [2] [3] [4]
    if(getline(ifs, str, '\n')) {
       vector<string> tmp;
       if(!lexOptions(str, tmp, 6))
          return false;
       for(int i = 1; i <= 5; i++)
-         myStr2Int(tmp[i], argv[i - 1]);
+         myStr2Int(tmp[i], miloa[i - 1]);
    }
+   gateList.clear();
+   gateList.resize(miloa[0] + miloa[3] + 1, 0);
+   gateList[0] = new CirConstGate();
 
-   for(int i = 0; i < argv[1]; i++) {
+
+   vector<int> ins;
+   for(int i = 0; i < miloa[1]; i++) {
       
       if(!getline(ifs, str, '\n'))
          return false;
       int lit;
       if(!myStr2Int(str, lit))
          return false;
-      piList.push_back(new CirPiGate((unsigned)lit));
+      ins.push_back(aiger_lit2var(lit));
+      gateList[ aiger_lit2var(lit) ] = new CirPiGate((unsigned)lit);
    }
-   for(int i = 0; i < argv[3]; i++) {
+   vector<int> outs;
+   for(int i = 0; i < miloa[3]; i++) {
       
       if(!getline(ifs, str, '\n'))
          return false;
       int lit;
       if(!myStr2Int(str, lit))
          return false;
-      poList.push_back(new CirPoGate((unsigned)lit));
+      outs.push_back(aiger_lit2var(lit));
+      gateList[ aiger_lit2var(lit) ] = new CirPoGate((unsigned)lit);
    }
-   for(int i = 0; i < argv[4]; i++) {
+   for(int i = 0; i < miloa[4]; i++) {
       
       if(!getline(ifs, str, '\n'))
          return false;
@@ -257,15 +265,19 @@ CirMgr::readCircuit(const string& fileName)
          return false;
 
       if(ilo == "i") {
-         CirPiGate* pi = static_cast<CirPiGate*>(piList[index]);
+         cout << "out[index] = " << outs[index] << endl;
+         CirPiGate* pi = static_cast<CirPiGate*>( getGate(ins[(unsigned) index]) );
          pi->setName(tmp[1]);
       }
       if(ilo == "o") {
-         CirPoGate* po = static_cast<CirPoGate*>(poList[index]);
+         cout << "out[index] = " << outs[index] << endl;
+         CirPoGate* po = static_cast<CirPoGate*>( getGate(outs[(unsigned) index]) );
          po->setName(tmp[1]);
       }
    }
-   
+   CirPoGate* po = static_cast<CirPoGate*>( getGate(outs[1]) );
+   cout << po->getName() << endl;
+    
    return true;
 }
 
