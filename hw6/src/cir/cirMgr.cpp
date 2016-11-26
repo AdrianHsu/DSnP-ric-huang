@@ -147,13 +147,13 @@ parseError(CirParseError err)
 
 // Convert string "str" to unsigned integer "num". Return false if str does not appear
 // to be a number
-bool
-myStr2Uns(const string& str, unsigned& num)
+unsigned
+myStr2Uns(const string& str)
 {
-   num = 0;
+   unsigned num = 0;
    size_t i = 0;
    //int sign = 1;
-   if (str[0] == '-')  return false;
+   //if (str[0] == '-')  return false;
    bool valid = false;
    for (; i < str.size(); ++i) {
       if (isdigit(str[i])) {
@@ -163,7 +163,7 @@ myStr2Uns(const string& str, unsigned& num)
       }
       else return false;
    }
-   return valid;
+   return num;
 }
 
 
@@ -199,42 +199,48 @@ CirMgr::lexOptions
 bool 
 CirMgr::aigerAddAnd(string& str) {
    
-   unsigned lit[3] = {0, 0, 0}; // lhs, rhs0, rhs1
+   unsigned var[3] = {0, 0, 0}; // lhs, rhs0, rhs1
    vector<string> tmp;
    if(!lexOptions(str, tmp, 3))
       return false;
    for(int i = 0; i < 3; i++) {
-      if(!myStr2Uns(tmp[i], lit[i]))
-         return false;
+      var[i] = myStr2Uns(tmp[i]);
+      var[i] = aiger_lit2var(var[i]);
    }
    
-   assert(lit[0] > 1);
-   assert(!aiger_sign(lit[0]));
-
-   CirAigGate* aig = new CirAigGate(lit[0], lit[1], lit[2]);
-   gateList[ aiger_lit2var(lit[0]) ] = aig;
+   CirAigGate* aig = new CirAigGate(var[0]);
+   gateList[ var[0] ] = aig;
    return true;
 }
 bool
 CirMgr::aigerAddUndef(string& str) {
    
    unsigned lit[3] = {0, 0, 0}; // lhs, rhs0, rhs1
+   unsigned var[3] = {0, 0, 0}; // lhs, rhs0, rhs1
    vector<string> tmp;
    if(!lexOptions(str, tmp, 3))
       return false;
    for(int i = 0; i < 3; i++) {
-      if(!myStr2Uns(tmp[i], lit[i]))
-         return false;
+      lit[i] = myStr2Uns(tmp[i]);
+      var[i] = aiger_lit2var(lit[i]);
    }
    
-   //CirGate* g1 = getGate( aiger_lit2var(lit[0]) );
-   CirGate* g2 = getGate( aiger_lit2var(lit[1]) );
+   CirAigGate* g1 = static_cast<CirAigGate*>(getGate( var[0] ));
+   CirGate* g2 = getGate( var[1] );
    if(g2 == 0)
-      gateList[ aiger_lit2var(lit[1]) ] = new CirUndefGate(lit[1]);
-   CirGate* g3 = getGate( aiger_lit2var(lit[2]) );
-   if(g3 == 0)
-      gateList[ aiger_lit2var(lit[2]) ] = new CirUndefGate(lit[2]);
+      g2 = gateList[ var[1] ] = new CirUndefGate(var[1]);
    
+   CirGate* g3 = getGate( var[2] );
+   if(g3 == 0)
+      g3 = gateList[ var[2] ] = new CirUndefGate(var[2]);
+   // add fanin, fanout 
+   g1->getfin().push_back(g2);
+   g1->inv_rhs0 = aiger_sign(lit[1]);
+   g1->getfin().push_back(g3);
+   g1->inv_rhs1 = aiger_sign(lit[2]);
+   g2->getfout().push_back(g1);
+   g3->getfout().push_back(g1);
+
    return true;
 }
 bool
@@ -255,24 +261,25 @@ CirMgr::readCircuit(const string& fileName)
    ifs.close(); 
 
    vector<string> tmp;
+   // aag M I L O A
    if(!lexOptions(cmd[0], tmp, 6))
       return false;
    for(int i = 1; i <= 5; i++)
-      myStr2Uns(tmp[i], miloa[i - 1]);
+      miloa[i - 1] = myStr2Uns(tmp[i]);
+   
    unsigned _m = miloa[0], _i = miloa[1], _o = miloa[3], _a = miloa[4];
-
    gateList.clear();
    gateList.resize(miloa[0] + miloa[3] + 1, 0);
+   // const gate
    gateList[0] = new CirConstGate();
-
+   
    vector<unsigned> ins;
    for(int i = 0; i < _i; i++) {
       
-      unsigned lit;
-      if(!myStr2Uns(cmd[i + 1], lit))
-         return false;
-      ins.push_back(aiger_lit2var(lit));
-      gateList[ aiger_lit2var(lit) ] = new CirPiGate(lit);
+      unsigned lit = myStr2Uns(cmd[i + 1]);
+      unsigned var = aiger_lit2var(lit);
+      ins.push_back(var);
+      gateList[ var ] = new CirPiGate(var);
    }
    for(int i = 0; i < _a; i++)
       aigerAddAnd(cmd[i + _i + _o + 1]); 
@@ -280,14 +287,19 @@ CirMgr::readCircuit(const string& fileName)
       aigerAddUndef(cmd[i + _i + _o + 1]); 
    
    for(int i = 0; i < _o; i++) {
-      
-      unsigned f;
-      if(!myStr2Uns(cmd[i + _i + 1], f))
-         return false;
-      gateList[ i + _m + 1 ] = new CirPoGate(i + _m + 1, f); //(id, fanin)
+      unsigned lit = myStr2Uns(cmd[i + _i + 1]);
+      CirPoGate *gate = new CirPoGate(i + _m + 1);
+      gateList[i + _m + 1] = gate;
+      //add fanin
+      CirGate *pre = getGate( aiger_lit2var(lit) );
+      gate->getfin().push_back(pre);
+      gate->inv = aiger_sign(lit);
+      pre->getfout().push_back(gate);
    }
+   
    unsigned i = _i + _o + _a + 1, listSize = cmd.size();
    for( ;i < listSize; i++) {
+      
       string s = cmd[i];
       if(s == "c") {
          string comment = cmd[++i];
@@ -297,8 +309,7 @@ CirMgr::readCircuit(const string& fileName)
       vector<string> tmp;
       if(!lexOptions(s, tmp , 2))
          return false;
-      unsigned id = 0;
-      myStr2Uns(tmp[0].substr(1), id);// i13, o271..etc
+      unsigned id = myStr2Uns(tmp[0].substr(1));// i13, o271..etc
       char ilo = tmp[0][0];
       if(ilo == 'i')
          static_cast<CirPiGate*>(getGate(ins[id]))->setName(tmp[2]);
