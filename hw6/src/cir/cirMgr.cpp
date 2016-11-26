@@ -145,12 +145,127 @@ parseError(CirParseError err)
    return false;
 }
 
+// if nOpts is specified (!= 0), the number of tokens must be exactly = nOpts
+// Otherwise, return false.
+//
+bool
+CirMgr::lexOptions
+(const string& option, vector<string>& tokens, size_t nOpts) const
+{
+   string token;
+   size_t n = myStrGetTok(option, token);
+   while (token.size()) {
+      tokens.push_back(token);
+      n = myStrGetTok(option, token, n);
+   }
+   if (nOpts != 0) {
+      if (tokens.size() < nOpts) {
+         //errorOption(CMD_OPT_MISSING, "");
+         return false;
+      }
+      if (tokens.size() > nOpts) {
+         //errorOption(CMD_OPT_EXTRA, tokens[nOpts]);
+         return false;
+      }
+   }
+   return true;
+}
+
 /**************************************************************/
 /*   class CirMgr member functions for circuit construction   */
 /**************************************************************/
+bool 
+CirMgr::aigerAddAnd(string& str) {
+   
+   int argv[3] = {0, 0, 0}; // lhs, rhs0, rhs1
+   vector<string> tmp;
+   if(!lexOptions(str, tmp, 3))
+      return false;
+   for(int i = 0; i < 3; i++) {
+      if(!myStr2Int(tmp[i], argv[i]))
+         return false;
+   }
+   assert(argv[0] > 1);
+   assert(!aiger_sign(argv[0]));
+   CirAigGate* aig = new CirAigGate(argv[0], argv[1], argv[2]);
+   aigList.push_back(aig);
+   return true;
+}
 bool
 CirMgr::readCircuit(const string& fileName)
 {
+   if(!flag)
+      flag = 1; //netlist should be constructed before any operations
+   
+
+   ifstream ifs(fileName);
+   if(!ifs.is_open())
+      return false;
+   
+   string str;
+   // without error handling
+   int argv[5] = {0, 0, 0, 0, 0}; // aag M I L O A == aag [0] [1] [2] [3] [4]
+   if(getline(ifs, str, '\n')) {
+      vector<string> tmp;
+      if(!lexOptions(str, tmp, 6))
+         return false;
+      for(int i = 1; i <= 5; i++)
+         myStr2Int(tmp[i], argv[i - 1]);
+   }
+
+   for(int i = 0; i < argv[1]; i++) {
+      
+      if(!getline(ifs, str, '\n'))
+         return false;
+      int lit;
+      if(!myStr2Int(str, lit))
+         return false;
+      piList.push_back(new CirPiGate((unsigned)lit));
+   }
+   for(int i = 0; i < argv[3]; i++) {
+      
+      if(!getline(ifs, str, '\n'))
+         return false;
+      int lit;
+      if(!myStr2Int(str, lit))
+         return false;
+      poList.push_back(new CirPoGate((unsigned)lit));
+   }
+   for(int i = 0; i < argv[4]; i++) {
+      
+      if(!getline(ifs, str, '\n'))
+         return false;
+      aigerAddAnd(str); 
+   }
+
+   while(getline(ifs, str, '\n')) {
+      if(str == "c") {
+         if(!getline(ifs, str, '\n'))
+            return false;
+         setComment(str);
+         continue;
+      }
+      vector<string> tmp;
+      if(!lexOptions(str, tmp, 2))
+         return false;
+      // i13 symbol
+      string ilo;
+      ilo += tmp[0][0];
+      string str_index = tmp[0].erase(0, 1);
+      int index = 0;
+      if(!myStr2Int(str_index, index))
+         return false;
+
+      if(ilo == "i") {
+         CirPiGate* pi = static_cast<CirPiGate*>(piList[index]);
+         pi->setName(tmp[1]);
+      }
+      if(ilo == "o") {
+         CirPoGate* po = static_cast<CirPoGate*>(poList[index]);
+         po->setName(tmp[1]);
+      }
+   }
+   
    return true;
 }
 

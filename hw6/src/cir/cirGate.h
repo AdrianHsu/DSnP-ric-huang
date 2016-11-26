@@ -45,12 +45,13 @@ class CirGate {
 class CirPiGate : public CirGate {
 
    public:
-      CirPiGate(GateType _t = PI_GATE, unsigned _lit = 0)
-         : CirGate(_t), lit(_lit), name("") {}
+      CirPiGate(unsigned _lit = 0)
+         : CirGate(PI_GATE), lit(_lit), name("") {}
       ~CirPiGate() {}
 
       void printGate() const;
       void setName(string str) { if(name.empty()) name = str; }
+      string getName() { return name; } 
    
    protected:
       unsigned lit;
@@ -60,25 +61,24 @@ class CirPiGate : public CirGate {
 class CirPoGate : public CirGate {
 
    public:
-      CirPoGate(GateType _t = PO_GATE, unsigned _lit = 0)
-         : CirGate(_t), lit(_lit), name("") {}
+      CirPoGate(unsigned _lit = 0)
+         : CirGate(PO_GATE), lit(_lit), name("") {}
       ~CirPoGate() {}
 
       void printGate() const;
       void setName(string str) { if(name.empty()) name = str; }
-   
+      string getName() { return name; } 
    protected:
       unsigned lit;
       string name;
-      CirGate* fanin;
+      //CirGate* fanin;
 };
 
 class CirAigGate : public CirGate {
 
    public:
-      CirAigGate(GateType _t = AIG_GATE, 
-                  unsigned _l = 0, unsigned _r0 = 0, unsigned _r1 = 0) 
-         : CirGate(_t), lhs(_l), rhs0(_r0), rhs1(_r1) {}
+      CirAigGate(unsigned _l = 0, unsigned _r0 = 0, unsigned _r1 = 0) 
+         : CirGate(AIG_GATE), lhs(_l), rhs0(_r0), rhs1(_r1) {}
       ~CirAigGate() {}
 
       void printGate() const;
@@ -87,15 +87,15 @@ class CirAigGate : public CirGate {
       unsigned lhs;
       unsigned rhs0;
       unsigned rhs1;
-      GateList faninList;
+      //GateList faninList;
       // Aig has no name
 };
 
 class CirUndefGate : public CirGate {
 
    public:
-      CirUndefGate(GateType _t = UNDEF_GATE, unsigned _lit = 0)
-         : CirGate(_t), lit(_lit) {}
+      CirUndefGate(unsigned _lit = 0)
+         : CirGate(UNDEF_GATE), lit(_lit) {}
       ~CirUndefGate() {}
 
       void printGate() const;
@@ -107,8 +107,8 @@ class CirUndefGate : public CirGate {
 class CirConstGate : public CirGate {
 
    public:
-      CirConstGate(GateType _t = CONST_GATE, unsigned _lit = 0)
-         : CirGate(_t), lit(_lit) {}
+      CirConstGate(unsigned _lit = 0)
+         : CirGate(CONST_GATE), lit(_lit) {}
       ~CirConstGate() {}
 
       void printGate() const;
