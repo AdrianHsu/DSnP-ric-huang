@@ -72,6 +72,7 @@ CirGate::reportGate() const
 void
 CirGate::reportFanin(int level) const
 {
+   
    assert (level >= 0);
 }
 
@@ -85,14 +86,14 @@ void
 CirPiGate::printGate() const
 {
    //[9] PI  7 (7GAT)
-   cout << "[" << getLineNo() << "] " << setw(4) << left << getTypeStr()
+   cout << "[" << index++ << "] " << setw(4) << left << getTypeStr()
       << getId() << " (" << getName() << ")" << endl;
 }
 void
 CirPoGate::printGate() const
 {
    //[8] PO  24 !22 (22GAT$PO)
-   cout << "[" << getLineNo() << "] " << setw(4) << left << getTypeStr() << getId() << " ";
+   cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
    CirGate* fin = faninList[0];
    if(fin == NULL) return; // error
    string str;
@@ -107,7 +108,7 @@ void
 CirAigGate::printGate() const
 {
    //[7] AIG 22 !10 !16
-   cout << "[" << getLineNo() << "] " << setw(4) << left << getTypeStr() << getId() << " ";
+   cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
    CirGate* rhs0 = faninList[0];
    CirGate* rhs1 = faninList[1];
     
@@ -130,7 +131,7 @@ void
 CirConstGate::printGate() const
 {
    //[1] CONST0
-   cout << "[" << getLineNo() << "] " << getTypeStr();
+   cout << "[" << index++ << "] " << getTypeStr();
    cout << getId() << endl;
 }
 void

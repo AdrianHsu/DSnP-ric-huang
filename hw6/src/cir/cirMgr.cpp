@@ -349,13 +349,28 @@ CirMgr::printSummary() const
 void
 CirMgr::printNetlist() const
 {
-
+   unsigned _m = miloa[0], _o = miloa[3];
+   cout << endl;
+   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
+      CirGate *g = getGate(i);
+      if (g == 0) continue;
+      if (g->getType() == PO_GATE)
+         g->printGate();
+   }
+   CirGate::index = 0;
 }
 
 void
 CirMgr::printPIs() const
 {
    cout << "PIs of the circuit:";
+   unsigned _m = miloa[0], _o = miloa[3];
+   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
+      CirGate *g = getGate(i);
+      if (g != 0 && g->getType() == PI_GATE)
+         cout << " " << g->getId();
+   }
+
    cout << endl;
 }
 
@@ -363,6 +378,12 @@ void
 CirMgr::printPOs() const
 {
    cout << "POs of the circuit:";
+   unsigned _m = miloa[0], _o = miloa[3];
+   for (unsigned i = _m + 1, size = _m + _o + 1; i < size; ++i) {
+      CirGate *g = getGate(i);
+      if (g != 0 && g->getType() == PO_GATE)
+         cout << " " << g->getId();
+   }
    cout << endl;
 }
 
