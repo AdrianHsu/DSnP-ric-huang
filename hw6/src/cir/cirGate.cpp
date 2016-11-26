@@ -27,15 +27,17 @@ extern CirMgr *cirMgr;
 string 
 CirGate::getTypeStr() const 
 {
-   string s;
-   return s;
-}
-
-unsigned
-CirGate::getLineNo() const
-{
-
-   return 0;
+   if(type == PI_GATE)
+      return "PI";
+   else if(type == PO_GATE)
+      return "PO";
+   else if(type == AIG_GATE)
+      return "AIG";
+   else if(type == CONST_GATE)
+      return "CONST";
+   else if(type == UNDEF_GATE)
+      return "UNDEF";
+   return "UNDEF";
 }
 
 void

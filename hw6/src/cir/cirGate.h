@@ -26,13 +26,14 @@ class CirGate;
 class CirGate {
    
    public:
-      CirGate(GateType _t, unsigned _id): type(_t), id(_id) {}
+      CirGate(GateType _t, unsigned _id, unsigned _n): type(_t), lineNo(_n), id(_id) {}
       virtual ~CirGate() {}
 
       // Basic access methods
       string getTypeStr() const;
-      unsigned getLineNo() const;
-
+      GateType getType() const {return type;}
+      unsigned getLineNo() const { return lineNo; };
+      
       // Printing functions
       virtual void printGate() const = 0;
       void reportGate() const;
@@ -43,6 +44,7 @@ class CirGate {
 
    protected:
       GateType type;
+      unsigned lineNo;
       unsigned id;
       GateList faninList;
       GateList fanoutList;
@@ -50,8 +52,8 @@ class CirGate {
 class CirPiGate : public CirGate {
 
    public:
-      CirPiGate(unsigned _id = 0)
-         : CirGate(PI_GATE, _id), name("") {}
+      CirPiGate(unsigned _id, unsigned _n)
+         : CirGate(PI_GATE, _id, _n), name("") {}
       virtual ~CirPiGate() {}
 
       void printGate() const;
@@ -65,8 +67,8 @@ class CirPiGate : public CirGate {
 class CirPoGate : public CirGate {
 
    public:
-      CirPoGate(unsigned _id = 0)
-         : CirGate(PO_GATE, _id), inv(0), name("") {}
+      CirPoGate(unsigned _id, unsigned _n)
+         : CirGate(PO_GATE, _id, _n), inv(0), name("") {}
       virtual ~CirPoGate() {}
 
       void printGate() const;
@@ -81,8 +83,8 @@ class CirPoGate : public CirGate {
 class CirAigGate : public CirGate {
 
    public:
-      CirAigGate(unsigned _id = 0) 
-         : CirGate(AIG_GATE, _id), inv_rhs0(0), inv_rhs1(0) {}
+      CirAigGate(unsigned _id, unsigned _n) 
+         : CirGate(AIG_GATE, _id, _n), inv_rhs0(0), inv_rhs1(0) {}
       virtual ~CirAigGate() {}
 
       void printGate() const;
@@ -96,8 +98,8 @@ class CirAigGate : public CirGate {
 class CirUndefGate : public CirGate {
 
    public:
-      CirUndefGate(unsigned _id = 0)
-         : CirGate(UNDEF_GATE, _id) {}
+      CirUndefGate(unsigned _id, unsigned _n)
+         : CirGate(UNDEF_GATE, _id, _n) {}
       virtual ~CirUndefGate() {}
 
       void printGate() const;
@@ -108,8 +110,8 @@ class CirUndefGate : public CirGate {
 class CirConstGate : public CirGate {
 
    public:
-      CirConstGate()
-         : CirGate(CONST_GATE, 0) {}
+      CirConstGate(unsigned _n)
+         : CirGate(CONST_GATE, 0, _n) {}
       virtual ~CirConstGate() {}
 
       void printGate() const;

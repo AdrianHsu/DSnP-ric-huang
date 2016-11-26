@@ -197,7 +197,7 @@ CirMgr::lexOptions
 /*   class CirMgr member functions for circuit construction   */
 /**************************************************************/
 bool 
-CirMgr::aigerAddAnd(string& str) {
+CirMgr::aigerAddAnd(string& str, unsigned lNo) {
    
    unsigned var[3] = {0, 0, 0}; // lhs, rhs0, rhs1
    vector<string> tmp;
@@ -208,7 +208,7 @@ CirMgr::aigerAddAnd(string& str) {
       var[i] = aiger_lit2var(var[i]);
    }
    
-   CirAigGate* aig = new CirAigGate(var[0]);
+   CirAigGate* aig = new CirAigGate(var[0], lNo);
    gateList[ var[0] ] = aig;
    return true;
 }
@@ -228,11 +228,11 @@ CirMgr::aigerAddUndef(string& str) {
    CirAigGate* g1 = static_cast<CirAigGate*>(getGate( var[0] ));
    CirGate* g2 = getGate( var[1] );
    if(g2 == 0)
-      g2 = gateList[ var[1] ] = new CirUndefGate(var[1]);
+      g2 = gateList[ var[1] ] = new CirUndefGate(var[1], 0);
    
    CirGate* g3 = getGate( var[2] );
    if(g3 == 0)
-      g3 = gateList[ var[2] ] = new CirUndefGate(var[2]);
+      g3 = gateList[ var[2] ] = new CirUndefGate(var[2], 0);
    // add fanin, fanout 
    g1->getfin().push_back(g2);
    g1->inv_rhs0 = aiger_sign(lit[1]);
@@ -268,27 +268,30 @@ CirMgr::readCircuit(const string& fileName)
       miloa[i - 1] = myStr2Uns(tmp[i]);
    
    unsigned _m = miloa[0], _i = miloa[1], _o = miloa[3], _a = miloa[4];
+   lineNo = 0; 
    gateList.clear();
    gateList.resize(miloa[0] + miloa[3] + 1, 0);
    // const gate
-   gateList[0] = new CirConstGate();
-   
+   gateList[0] = new CirConstGate(0);// dummy lineNo
    vector<unsigned> ins;
    for(int i = 0; i < _i; i++) {
       
       unsigned lit = myStr2Uns(cmd[i + 1]);
       unsigned var = aiger_lit2var(lit);
       ins.push_back(var);
-      gateList[ var ] = new CirPiGate(var);
+      gateList[ var ] = new CirPiGate(var, i + 2);
    }
-   for(int i = 0; i < _a; i++)
-      aigerAddAnd(cmd[i + _i + _o + 1]); 
+   for(int i = 0; i < _a; i++) {
+      unsigned lNo = i + _i + _o + 2;
+      aigerAddAnd(cmd[i + _i + _o + 1], lNo); 
+   }
    for(int i = 0; i < _a; i++)
       aigerAddUndef(cmd[i + _i + _o + 1]); 
    
    for(int i = 0; i < _o; i++) {
       unsigned lit = myStr2Uns(cmd[i + _i + 1]);
-      CirPoGate *gate = new CirPoGate(i + _m + 1);
+      unsigned lNo = i + _i + 2;
+      CirPoGate *gate = new CirPoGate(i + _m + 1, lNo);
       gateList[i + _m + 1] = gate;
       //add fanin
       CirGate *pre = getGate( aiger_lit2var(lit) );
@@ -299,7 +302,6 @@ CirMgr::readCircuit(const string& fileName)
    
    unsigned i = _i + _o + _a + 1, listSize = cmd.size();
    for( ;i < listSize; i++) {
-      
       string s = cmd[i];
       if(s == "c") {
          string comment = cmd[++i];
@@ -312,9 +314,9 @@ CirMgr::readCircuit(const string& fileName)
       unsigned id = myStr2Uns(tmp[0].substr(1));// i13, o271..etc
       char ilo = tmp[0][0];
       if(ilo == 'i')
-         static_cast<CirPiGate*>(getGate(ins[id]))->setName(tmp[2]);
+         static_cast<CirPiGate*>(getGate(ins[id]))->setName(tmp[1]);
       else if(ilo == 'o')
-         static_cast<CirPoGate*>(getGate(id + _m + 1))->setName(tmp[2]);
+         static_cast<CirPoGate*>(getGate(id + _m + 1))->setName(tmp[1]);
    }
 
    return true;
@@ -335,11 +337,19 @@ Circuit Statistics
 void
 CirMgr::printSummary() const
 {
+   cout  << "\nCircuit Statistics\n"
+      << "==================\n"
+      << "  PI" << setw(12) << right << miloa[1] << "\n"
+      << "  PO" << setw(12) << right << miloa[3] << "\n"
+      << "  AIG" << setw(11) << right << miloa[4] << "\n"
+      << "------------------\n"
+      << "  Total" << setw(9) << right << miloa[1] + miloa[3] + miloa[4] << '\n';
 }
 
 void
 CirMgr::printNetlist() const
 {
+
 }
 
 void

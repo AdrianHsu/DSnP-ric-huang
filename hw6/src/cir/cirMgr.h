@@ -41,7 +41,7 @@ public:
 
    // by AH
    bool lexOptions(const string&, vector<string>&, size_t) const;
-   bool aigerAddAnd(string&);
+   bool aigerAddAnd(string&, unsigned);
    bool aigerAddUndef(string&);
    void setComment(string& str){ comment.clear(); comment = str; };
 
