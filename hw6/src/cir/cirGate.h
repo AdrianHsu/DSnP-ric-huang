@@ -41,6 +41,9 @@ class CirGate {
       void reportFanout(int level) const;
       GateList getfin(){ return faninList; }
       GateList getfout(){ return fanoutList; }
+      
+      static unsigned index;
+
 
    protected:
       GateType type;
@@ -75,6 +78,7 @@ class CirPoGate : public CirGate {
       void setName(string str) { if(name.empty()) name = str; }
       string getName() const { return name; } 
       bool inv;
+   
    protected:
       string name;
       //CirGate* fanin;

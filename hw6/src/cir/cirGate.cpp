@@ -21,6 +21,7 @@ extern CirMgr *cirMgr;
 
 // TODO: Implement memeber functions for class(es) in cirGate.h
 
+unsigned CirGate::index = 0;
 string unsToStr(unsigned n) {
    stringstream ss;
    ss << n;
@@ -49,6 +50,23 @@ CirGate::getTypeStr() const
 void
 CirGate::reportGate() const
 {
+   // e.g.
+   //==================================================
+   //= PO(25)”23GAT$PO”, line 9                       =
+   //==================================================
+   cout << "==================================================\n";
+   stringstream ss;
+   ss << "= " + getTypeStr() << '(' << getId() << ")";
+   if(type == PI_GATE) {
+      const CirPiGate* g = (CirPiGate*)this;
+      ss << "\"" << g->getName() << "\"";
+   } else if(type == PI_GATE) {
+      const CirPoGate* g = (CirPoGate*)this;
+      ss << "\"" << g->getName() << "\"";
+   }
+   ss << ", line " << getLineNo();
+   cout << setw(49) << left << ss.str() << "=\n";
+   cout << "==================================================\n";
 }
 
 void
@@ -67,44 +85,46 @@ void
 CirPiGate::printGate() const
 {
    //[9] PI  7 (7GAT)
-   cout << "[" << getLineNo() << "] " << getTypeStr() << "  "
-        << getId() << " (" << getName() << ")" << endl;
-   
+   cout << "[" << getLineNo() << "] " << setw(4) << left << getTypeStr()
+      << getId() << " (" << getName() << ")" << endl;
 }
 void
 CirPoGate::printGate() const
 {
    //[8] PO  24 !22 (22GAT$PO)
-   cout << "[" << getLineNo() << "] " << getTypeStr() << "  " << getId() << " ";
+   cout << "[" << getLineNo() << "] " << setw(4) << left << getTypeStr() << getId() << " ";
    CirGate* fin = faninList[0];
    if(fin == NULL) return; // error
+   string str;
    if(fin->getType() == UNDEF_GATE)
-      cout << "*";
-   if(inv) cout << "!";
-   cout << fin->getId();
-   cout << " (" << getName() << ")" << endl;
-
+      str += "*";
+   if(inv) str += "!";
+   str += unsToStr( fin->getId() );
+   
+   cout << str << " (" << getName() << ")" << endl;
 }
 void
 CirAigGate::printGate() const
 {
    //[7] AIG 22 !10 !16
-   cout << "[" << getLineNo() << "] " << getTypeStr() << "  " << getId() << " ";
+   cout << "[" << getLineNo() << "] " << setw(4) << left << getTypeStr() << getId() << " ";
    CirGate* rhs0 = faninList[0];
    CirGate* rhs1 = faninList[1];
-   
+    
    if(rhs0 == NULL || rhs1 == NULL) return; //error
+   string str;
    if(rhs0->getType() == UNDEF_GATE)
-      cout << "*";
-   if(inv_rhs0) cout << "!";
-   cout << rhs0->getId();
-   cout << " ";
+      str += "*";
+   if(inv_rhs0) str += "!";
+   str += unsToStr( rhs0->getId() );
+   cout << str << " ";
+   str.clear();
    if(rhs1->getType() == UNDEF_GATE)
-      cout << "*";
-   if(inv_rhs1) cout << "!";
-   cout << rhs1->getId();
+      str += "*";
+   if(inv_rhs1) str += "!";
+   str += unsToStr( rhs1->getId() );
+   cout << str;
    cout << endl;
-
 }
 void
 CirConstGate::printGate() const
