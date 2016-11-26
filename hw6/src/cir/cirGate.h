@@ -32,8 +32,8 @@ class CirGate {
       // Basic access methods
       string getTypeStr() const;
       GateType getType() const {return type;}
-      unsigned getLineNo() const { return lineNo; };
-      
+      unsigned getLineNo() const { return lineNo; }
+      unsigned getId() const {return id; }
       // Printing functions
       virtual void printGate() const = 0;
       void reportGate() const;
@@ -58,7 +58,7 @@ class CirPiGate : public CirGate {
 
       void printGate() const;
       void setName(string str) { if(name.empty()) name = str; }
-      string getName() { return name; } 
+      string getName() const { return name; } 
    
    protected:
       string name;
@@ -73,7 +73,7 @@ class CirPoGate : public CirGate {
 
       void printGate() const;
       void setName(string str) { if(name.empty()) name = str; }
-      string getName() { return name; } 
+      string getName() const { return name; } 
       bool inv;
    protected:
       string name;

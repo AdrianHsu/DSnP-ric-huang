@@ -21,6 +21,12 @@ extern CirMgr *cirMgr;
 
 // TODO: Implement memeber functions for class(es) in cirGate.h
 
+string unsToStr(unsigned n) {
+   stringstream ss;
+   ss << n;
+   return ss.str();
+}
+
 /**************************************/
 /*   class CirGate member functions   */
 /**************************************/
@@ -60,25 +66,55 @@ CirGate::reportFanout(int level) const
 void
 CirPiGate::printGate() const
 {
-
+   //[9] PI  7 (7GAT)
+   cout << "[" << getLineNo() << "] " << getTypeStr() << "  "
+        << getId() << " (" << getName() << ")" << endl;
+   
 }
 void
 CirPoGate::printGate() const
 {
+   //[8] PO  24 !22 (22GAT$PO)
+   cout << "[" << getLineNo() << "] " << getTypeStr() << "  " << getId() << " ";
+   CirGate* fin = faninList[0];
+   if(fin == NULL) return; // error
+   if(fin->getType() == UNDEF_GATE)
+      cout << "*";
+   if(inv) cout << "!";
+   cout << fin->getId();
+   cout << " (" << getName() << ")" << endl;
 
 }
 void
 CirAigGate::printGate() const
 {
+   //[7] AIG 22 !10 !16
+   cout << "[" << getLineNo() << "] " << getTypeStr() << "  " << getId() << " ";
+   CirGate* rhs0 = faninList[0];
+   CirGate* rhs1 = faninList[1];
+   
+   if(rhs0 == NULL || rhs1 == NULL) return; //error
+   if(rhs0->getType() == UNDEF_GATE)
+      cout << "*";
+   if(inv_rhs0) cout << "!";
+   cout << rhs0->getId();
+   cout << " ";
+   if(rhs1->getType() == UNDEF_GATE)
+      cout << "*";
+   if(inv_rhs1) cout << "!";
+   cout << rhs1->getId();
+   cout << endl;
 
 }
 void
 CirConstGate::printGate() const
 {
-
+   //[1] CONST0
+   cout << "[" << getLineNo() << "] " << getTypeStr();
+   cout << getId() << endl;
 }
 void
 CirUndefGate::printGate() const
 {
-
+   // will not be called
 }

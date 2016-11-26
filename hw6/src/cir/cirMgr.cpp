@@ -246,8 +246,8 @@ CirMgr::aigerAddUndef(string& str) {
 bool
 CirMgr::readCircuit(const string& fileName)
 {
-   if(!flag)
-      flag = 1; //netlist should be constructed before any operations
+   //if(!flag)
+   //   flag = 1; //netlist should be constructed before any operations
 
    ifstream ifs(fileName);
    if(!ifs.is_open())
