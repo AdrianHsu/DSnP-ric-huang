@@ -259,13 +259,14 @@ CirMgr::readCircuit(const string& fileName)
       return false;
    for(int i = 1; i <= 5; i++)
       myStr2Uns(tmp[i], miloa[i - 1]);
+   unsigned _m = miloa[0], _i = miloa[1], _o = miloa[3], _a = miloa[4];
 
    gateList.clear();
    gateList.resize(miloa[0] + miloa[3] + 1, 0);
    gateList[0] = new CirConstGate();
 
-   vector<int> ins;
-   for(int i = 0; i < miloa[1]; i++) {
+   vector<unsigned> ins;
+   for(int i = 0; i < _i; i++) {
       
       unsigned lit;
       if(!myStr2Uns(cmd[i + 1], lit))
@@ -273,19 +274,38 @@ CirMgr::readCircuit(const string& fileName)
       ins.push_back(aiger_lit2var(lit));
       gateList[ aiger_lit2var(lit) ] = new CirPiGate(lit);
    }
-   for(int i = 0; i < miloa[4]; i++)
-      aigerAddAnd(cmd[i + miloa[1] + miloa[3] + 1]); 
-   for(int i = 0; i < miloa[4]; i++)
-      aigerAddUndef(cmd[i + miloa[1] + miloa[3] + 1]); 
+   for(int i = 0; i < _a; i++)
+      aigerAddAnd(cmd[i + _i + _o + 1]); 
+   for(int i = 0; i < _a; i++)
+      aigerAddUndef(cmd[i + _i + _o + 1]); 
    
-   for(int i = 0; i < miloa[3]; i++) {
+   for(int i = 0; i < _o; i++) {
       
       unsigned f;
-      if(!myStr2Uns(cmd[i + miloa[1] + 1], f))
+      if(!myStr2Uns(cmd[i + _i + 1], f))
          return false;
-      gateList[ i + miloa[0] + 1 ] = new CirPoGate(i + miloa[0] + 1, f); //(id, fanin)
+      gateList[ i + _m + 1 ] = new CirPoGate(i + _m + 1, f); //(id, fanin)
    }
-   
+   unsigned i = _i + _o + _a + 1, listSize = cmd.size();
+   for( ;i < listSize; i++) {
+      string s = cmd[i];
+      if(s == "c") {
+         string comment = cmd[++i];
+         setComment(comment);
+         continue;
+      }
+      vector<string> tmp;
+      if(!lexOptions(s, tmp , 2))
+         return false;
+      unsigned id = 0;
+      myStr2Uns(tmp[0].substr(1), id);// i13, o271..etc
+      char ilo = tmp[0][0];
+      if(ilo == 'i')
+         static_cast<CirPiGate*>(getGate(ins[id]))->setName(tmp[2]);
+      else if(ilo == 'o')
+         static_cast<CirPoGate*>(getGate(id + _m + 1))->setName(tmp[2]);
+   }
+
    return true;
 }
 
