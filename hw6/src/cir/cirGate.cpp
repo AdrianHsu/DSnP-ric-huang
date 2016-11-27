@@ -119,7 +119,7 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
             else if(g2 == this) {
                myinv = g->isInv(j);
                g->fanoutDfsVisit(l - 1, myinv);
-               break;
+               break; //founded
             }
          }
       }

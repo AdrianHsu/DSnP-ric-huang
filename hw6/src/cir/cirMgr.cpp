@@ -294,13 +294,13 @@ CirMgr::readCircuit(const string& fileName)
       unsigned lit = myStr2Uns(cmd[i + _i + 1]);
       unsigned lNo = i + _i + 2;
       CirPoGate *gate = new CirPoGate(i + _m + 1, lNo);
-      gateList[i + _m + 1] = gate;
       //add fanin
       unsigned var = aiger_lit2var(lit);
       CirGate *pre = getGate( var );
       if(pre == 0)
          pre = gateList[ var ] = new CirUndefGate(var, 0);
       gate->addInput(pre, aiger_sign(lit));
+      gateList[i + _m + 1] = gate;
       pre->addOutput(gate);
    }
    
