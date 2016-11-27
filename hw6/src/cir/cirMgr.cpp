@@ -440,7 +440,20 @@ void
 CirMgr::writeDfsVisit(CirGate* g, 
    vector<unsigned>& ins, vector<string>& aigs, bool inv) const
 {
-   
+   if(g->getColor()) return;
+   for(int i = 0; i < g->getfinSize(); i++)
+      writeDfsVisit(g->getInput(i), ins, aigs, g->isInv(i));
+   if(g->getType() == PI_GATE) {
+      ins.push_back( aiger_var2lit( g->getId() ) );
+   } else if(g->getType() == AIG_GATE) {
+      unsigned _lhs = aiger_var2lit(g->getId());
+      if(inv)_lhs++;
+      unsigned _rhs0 = aiger_var2lit(g->getInput(0)->getId());
+      if(g->isInv(0))_rhs0++;
+      unsigned _rhs1 = aiger_var2lit(g->getInput(1)->getId());
+      if(g->isInv(1))_rhs1++;
+   }
+   // g->setColor(1);
 }
 
 void
@@ -457,7 +470,7 @@ CirMgr::writeAag(ostream& outfile) const
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PO_GATE) {
-         // writeDfsVisit(g, ins, aigs, g->isInv(0));
+         writeDfsVisit(g, ins, aigs, g->isInv(0));
          unsigned lit = aiger_var2lit( g->getId() );
          if(g->isInv(0))lit++;
          outs.push_back(lit);
