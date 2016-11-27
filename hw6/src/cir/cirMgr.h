@@ -37,7 +37,6 @@ public:
    }
 
    // by AH
-   bool lexOptions(const string&, vector<string>&, size_t) const;
    bool aigerAddAnd(string&, unsigned);
    bool aigerAddUndef(string&);
    void setComment(string& str){ comment.clear(); comment = str; };
@@ -53,7 +52,8 @@ public:
    void printPOs() const;
    void printFloatGates() const;
    void writeAag(ostream&) const;
-   void writeDfsVisit(CirGate*, vector<unsigned>&, vector<unsigned>&, bool) const;
+   void writeDfsVisit(CirGate*, vector<unsigned>&, bool, vector<string>&) const;
+   vector<unsigned> ins; 
 
 private:
    // aag M I L O A == aag [0] [1] [2] [3] [4]

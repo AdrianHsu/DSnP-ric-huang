@@ -167,13 +167,21 @@ myStr2Uns(const string& str)
    return num;
 }
 
-
+void getTokens (const string& option, vector<string>& tokens) {
+   
+   string token;
+   string second = option;
+   myStrGetTok(option, token);
+   tokens.push_back(token);
+   second = second.substr(token.size() + 1);
+   tokens.push_back(second);
+}
 // if nOpts is specified (!= 0), the number of tokens must be exactly = nOpts
 // Otherwise, return false.
 //
 bool
-CirMgr::lexOptions
-(const string& option, vector<string>& tokens, size_t nOpts) const
+lexOptions
+(const string& option, vector<string>& tokens, size_t nOpts)
 {
    string token;
    size_t n = myStrGetTok(option, token);
@@ -267,7 +275,7 @@ CirMgr::readCircuit(const string& fileName)
    gateList.resize(miloa[0] + miloa[3] + 1, 0);
    // const gate
    gateList[0] = new CirConstGate(0);// dummy lineNo
-   vector<unsigned> ins;
+   ins.clear();
    for(int i = 0; i < _i; i++) {
       
       unsigned lit = myStr2Uns(cmd[i + 1]);
@@ -300,6 +308,7 @@ CirMgr::readCircuit(const string& fileName)
    for( ;i < listSize; i++) {
       string s = cmd[i];
       if(s == "c") {
+         if(i + 1 == listSize) break;
          string comment = cmd[++i];
          while(i != listSize - 1) {
             comment += '\n';
@@ -310,15 +319,15 @@ CirMgr::readCircuit(const string& fileName)
          break;
       }
       vector<string> tmp;
-      if(!lexOptions(s, tmp , 2)) {
-         return false;
-      }
+      getTokens(s, tmp);
+      if(tmp.size() != 2) return false;
+      string sym = tmp[1];
       unsigned id = myStr2Uns(tmp[0].substr(1));// i13, o271..etc
       char ilo = tmp[0][0];
       if(ilo == 'i')
-         static_cast<CirPiGate*>(getGate(ins[id]))->setName(tmp[1]);
+         static_cast<CirPiGate*>(getGate(ins[id]))->setName(sym);
       else if(ilo == 'o')
-         static_cast<CirPoGate*>(getGate(id + _m + 1))->setName(tmp[1]);
+         static_cast<CirPoGate*>(getGate(id + _m + 1))->setName(sym);
    }
    return true;
 }
@@ -376,28 +385,30 @@ CirMgr::printNetlist() const
 void
 CirMgr::printPIs() const
 {
-   cout << "PIs of the circuit:";
-   unsigned _m = miloa[0];
-   for (unsigned i = 0, size = _m + 1; i < size; ++i) {
-      CirGate *g = getGate(i);
-      if (g != 0 && g->getType() == PI_GATE)
-         cout << " " << g->getId();
+   if(ins.size() != 0) {
+      cout << "PIs of the circuit:";
+      for (unsigned i = 0; i < ins.size(); ++i) {
+         cout << " " << ins[i];
+      }
+      cout << endl;
    }
-
-   cout << endl;
+   CirGate::index = 0;
+   resetColors();
+   
 }
-
 void
 CirMgr::printPOs() const
 {
-   cout << "POs of the circuit:";
    unsigned _m = miloa[0], _o = miloa[3];
-   for (unsigned i = _m + 1, size = _m + _o + 1; i < size; ++i) {
-      CirGate *g = getGate(i);
-      if (g != 0 && g->getType() == PO_GATE)
-         cout << " " << g->getId();
+   if(_o != 0) {
+      cout << "POs of the circuit:";
+      for (unsigned i = _m + 1, size = _m + _o + 1; i < size; ++i) {
+         CirGate *g = getGate(i);
+         if (g != 0 && g->getType() == PO_GATE)
+            cout << " " << g->getId();
+      }
+      cout << endl;
    }
-   cout << endl;
 }
 
 void
@@ -447,14 +458,15 @@ CirMgr::printFloatGates() const
    }
 }
 void
-CirMgr::writeDfsVisit(CirGate* g, 
-   vector<unsigned>& ins, vector<unsigned>& aigs, bool inv) const
+CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv, vector<string>& ins_symbol) const
 {
    if(g->getColor()) return;
    for(int i = 0; i < g->getfinSize(); i++)
-      writeDfsVisit(g->getInput(i), ins, aigs, g->isInv(i));
+      writeDfsVisit(g->getInput(i), aigs, g->isInv(i), ins_symbol);
    if(g->getType() == PI_GATE) {
-      ins.push_back( aiger_var2lit( g->getId() ) );
+      //ins.push_back( aiger_var2lit( g->getId() ) );
+      CirPiGate* pi = (CirPiGate*) g;
+      ins_symbol.push_back(pi->getName());
    } else if(g->getType() == AIG_GATE) {
       unsigned _lhs = aiger_var2lit(g->getId());
       aigs.push_back(_lhs); //_lhs must even
@@ -472,24 +484,26 @@ CirMgr::writeAag(ostream& outfile) const
 {
    
    unsigned _m = miloa[0], _i = miloa[1], _l = miloa[2], _o = miloa[3], _a = miloa[4];
-   vector<unsigned> ins;
+   //vector<unsigned> mins;
    vector<unsigned> outs;
    vector<unsigned> aigs;
+   vector<string> ins_symbol;
    outfile << "aag " << _m << " " << _i << " "
       << _l << " " << _o << " " << _a << endl;
    for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PO_GATE) {
-         writeDfsVisit(g, ins, aigs, g->isInv(0));
+         writeDfsVisit(g, aigs, g->isInv(0), ins_symbol);
          unsigned lit = aiger_var2lit(g->getInput(0)->getId());
          if(g->isInv(0))lit++;
          outs.push_back(lit);
       }
    }
    CirGate::index = 0;
+   resetColors();
    for(unsigned i = 0; i < ins.size(); i++)
-      outfile << ins[i] << endl;
+      outfile << aiger_var2lit(ins[i]) << endl;
    for(unsigned i = 0; i < outs.size(); i++)
       outfile << outs[i] << endl;
    for(unsigned j = 0; j < aigs.size(); j++) {
@@ -497,17 +511,9 @@ CirMgr::writeAag(ostream& outfile) const
       outfile << aigs[++j] << " ";
       outfile << aigs[++j] << endl;
    }
-   resetColors();
-   for(unsigned i = 0 ,size = _m + 1, count = 0; i < size; i++) {
-      CirGate *g = getGate(i);
-      if (g != 0 && g->getType() == PI_GATE) {
-         CirPiGate *pig = (CirPiGate*)g;
-         if(pig->getName() != "") {
-            outfile << "i" << count << " " << pig->getName() << endl;
-            count++;
-         }
-      }
-   }
+   for(int i = 0; i < ins.size(); i++)
+      if(ins_symbol[i] != "")outfile << "i" << i << " " << ins_symbol[i] << endl;
+   
    for(unsigned i = _m + 1 ,size = _m + _o + 1, count = 0; i < size; i++) {
       CirGate *g = getGate(i);
       if (g != 0 && g->getType() == PO_GATE) {
@@ -518,7 +524,8 @@ CirMgr::writeAag(ostream& outfile) const
          }
       }
    }
-   if(getComment() != "")
+   //if(getComment() != "")
+      //cout << "c\n" << "AAG output by Pin-Chun (Adrian) Hsu" << endl;
+      cout << "c\n" << "AAG output by Chung-Yang (Ric) Huang" << endl;
       //cout << "c\n" << getComment() << endl;
-      cout << "c\n" << "AAG output by Pin-Chun (Adrian) Hsu" << endl;
 }

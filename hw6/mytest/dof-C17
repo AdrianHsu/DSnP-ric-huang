@@ -1,1 +1,39 @@
 cirr C17.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 16 -fanin 4
+cirg 16 -fanin 3
+cirg 16 -fanin 2
+cirg 16 -fanin 1
+cirg 16 -fanout 4
+cirg 16 -fanout 3
+cirg 16 -fanout 2
+cirg 16 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
+q -f
