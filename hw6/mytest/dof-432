@@ -1,5 +1,4 @@
 cirr C432.aag -replace
-cirg 2 -fanout 1
-cirg 2 -fanout 2
+cirg 36 -fanout 1
 cirw
 q -f

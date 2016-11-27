@@ -265,7 +265,6 @@ CirMgr::readCircuit(const string& fileName)
 
    vector<string> tmp;
    // aag M I L O A
-      cout << "??" << endl;
    if(!lexOptions(cmd[0], tmp, 6))
       return false;
    for(int i = 1; i <= 5; i++)
@@ -302,7 +301,7 @@ CirMgr::readCircuit(const string& fileName)
          pre = gateList[ var ] = new CirUndefGate(var, 0);
       gate->addInput(pre, aiger_sign(lit));
       gateList[i + _m + 1] = gate;
-      pre->addOutput(gate);
+      pre->addOutput(gate); //bug here
    }
    
    unsigned i = _i + _o + _a + 1, listSize = cmd.size();

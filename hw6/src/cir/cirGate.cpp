@@ -108,10 +108,26 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
    if(l == 0) cout << endl;
    else if(color) cout << " (*)" << endl;
    else {
+      
+      vector<unsigned> order;
+      vector<unsigned> ind;
+      for(unsigned i = 0; i < size; i++){ 
+         CirGate* g = getOutput(i);
+         order.push_back(g->getId());
+         ind.push_back(i);
+      }
+      
+      for(unsigned i = 0; i < size; i++)
+         for(unsigned j = i; j < size; j++)
+            if(order[j] < order[i]) {
+               swap(order[j], order[i]);
+               swap(ind[j], ind[i]);
+            }
+
       cout << endl;
       for(int i = 0; i < size; i++) {
          index++;
-         CirGate* g = getOutput(i);
+         CirGate* g = getOutput(ind[i]); //bug here
          bool myinv = 0;
          for(int j = 0; j < g->getfinSize(); j++) {
             CirGate* g2 = g->getInput(j);
