@@ -36,9 +36,6 @@ public:
       return gateList[gid];
    }
 
-   // Member functions about circuit construction
-   bool readCircuit(const string&);
-
    // by AH
    bool lexOptions(const string&, vector<string>&, size_t) const;
    bool aigerAddAnd(string&, unsigned);
@@ -46,7 +43,9 @@ public:
    void setComment(string& str){ comment.clear(); comment = str; };
    string getComment() const { return comment; };
    void resetColors() const;
-
+   
+   // Member functions about circuit construction
+   bool readCircuit(const string&);
    // Member functions about circuit reporting
    void printSummary() const;
    void printNetlist() const;
@@ -54,6 +53,7 @@ public:
    void printPOs() const;
    void printFloatGates() const;
    void writeAag(ostream&) const;
+   void writeDfsVisit(CirGate*, vector<unsigned>&, vector<string>&, bool) const;
 
 private:
    // aag M I L O A == aag [0] [1] [2] [3] [4]
