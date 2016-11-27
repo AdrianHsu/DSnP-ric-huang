@@ -59,10 +59,10 @@ CirGate::reportGate() const
    ss << "= " + getTypeStr() << '(' << getId() << ")";
    if(type == PI_GATE) {
       const CirPiGate* g = (CirPiGate*)this;
-      ss << "\"" << g->getName() << "\"";
+      if(g->getName() != "")ss << "\"" << g->getName() << "\"";
    } else if(type == PO_GATE) {
       const CirPoGate* g = (CirPoGate*)this;
-      ss << "\"" << g->getName() << "\"";
+      if(g->getName() != "")ss << "\"" << g->getName() << "\"";
    }
    ss << ", line " << getLineNo();
    cout << setw(49) << left << ss.str() << "=\n";

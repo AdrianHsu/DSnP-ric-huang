@@ -403,38 +403,48 @@ CirMgr::printPOs() const
 void
 CirMgr::printFloatGates() const
 {
-   cout << "Gates with floating fanin(s):";
    unsigned _m = miloa[0], _i = miloa[1] ,_o = miloa[3];
+   vector<unsigned> case1;
+   vector<unsigned> case2;
    for (unsigned i = _i + 1, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if(g->getType() == PO_GATE) {
          if(g->getfinSize() != 1) return; //error
          if(g->getInput(0)->getType() == UNDEF_GATE)
-            cout << " " << g->getId();
+            case1.push_back(g->getId());
 
       } else if(g->getType() == AIG_GATE) {
          if(g->getfinSize() != 2) return; // error
          for(unsigned i = 0; i < g->getfinSize(); i++) {
 
             if(g->getInput(i)->getType() == UNDEF_GATE) {
-               cout << " " << g->getId();
+               case1.push_back(g->getId());
                break;
             }
          }
       }
    }
-   cout << endl;
-   cout << "Gates defined but not used  :";
+   if(case1.size() != 0) {
+      cout << "Gates with floating fanin(s):";
+      for(int i = 0; i < case1.size(); i++)
+         cout << " " << case1[i];
+      cout << endl;
+   }
    for (unsigned i = 0, size = _m + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PI_GATE || g->getType() == AIG_GATE) {
          if(g->getfoutSize() == 0)
-            cout << " " << g->getId();
+            case2.push_back(g->getId());
       }
    }
-   cout << endl;
+   if(case1.size() != 0) {
+      cout << "Gates defined but not used  :";
+      for(int i = 0; i < case2.size(); i++)
+         cout << " " << case2[i];
+      cout << endl;
+   }
 }
 void
 CirMgr::writeDfsVisit(CirGate* g, 
@@ -509,5 +519,6 @@ CirMgr::writeAag(ostream& outfile) const
       }
    }
    if(getComment() != "")
-      cout << "c\n" << getComment() << endl;
+      //cout << "c\n" << getComment() << endl;
+      cout << "c\n" << "AAG output by Pin-Chun (Adrian) Hsu" << endl;
 }
