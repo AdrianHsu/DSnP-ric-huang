@@ -60,7 +60,7 @@ CirGate::reportGate() const
    if(type == PI_GATE) {
       const CirPiGate* g = (CirPiGate*)this;
       ss << "\"" << g->getName() << "\"";
-   } else if(type == PI_GATE) {
+   } else if(type == PO_GATE) {
       const CirPoGate* g = (CirPoGate*)this;
       ss << "\"" << g->getName() << "\"";
    }
@@ -86,28 +86,46 @@ void
 CirPiGate::printGate() const
 {
    //[9] PI  7 (7GAT)
+   //for(int i = 0; i < faninList.size(); i++)
+   //   faninList[i]->printGate();
+   if(color) return;
    cout << "[" << index++ << "] " << setw(4) << left << getTypeStr()
-      << getId() << " (" << getName() << ")" << endl;
+      << getId();
+   if(!getName().empty())
+      cout << " (" << getName() << ")" << endl;
+   else
+      cout << endl;
+   setColor(1);
 }
 void
 CirPoGate::printGate() const
 {
    //[8] PO  24 !22 (22GAT$PO)
+   if(color) return;
+   for(int i = 0; i < faninList.size(); i++)
+      faninList[i]->printGate();
    cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
    CirGate* fin = faninList[0];
-   if(fin == NULL) return; // error
    string str;
    if(fin->getType() == UNDEF_GATE)
       str += "*";
    if(inv) str += "!";
    str += unsToStr( fin->getId() );
-   
-   cout << str << " (" << getName() << ")" << endl;
+   cout << str;
+
+   if(!getName().empty())
+      cout << " (" << getName() << ")" << endl;
+   else
+      cout << endl;
+   setColor(1);
 }
 void
 CirAigGate::printGate() const
 {
    //[7] AIG 22 !10 !16
+   if(color) return;
+   for(int i = 0; i < faninList.size(); i++)
+      faninList[i]->printGate();
    cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
    CirGate* rhs0 = faninList[0];
    CirGate* rhs1 = faninList[1];
@@ -126,13 +144,18 @@ CirAigGate::printGate() const
    str += unsToStr( rhs1->getId() );
    cout << str;
    cout << endl;
+   setColor(1);
 }
 void
 CirConstGate::printGate() const
 {
    //[1] CONST0
+   //for(int i = 0; i < faninList.size(); i++)
+   //   faninList[i]->printGate();
+   if(color) return;
    cout << "[" << index++ << "] " << getTypeStr();
    cout << getId() << endl;
+   setColor(1);
 }
 void
 CirUndefGate::printGate() const

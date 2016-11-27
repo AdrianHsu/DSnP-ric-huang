@@ -44,6 +44,7 @@ public:
    bool aigerAddAnd(string&, unsigned);
    bool aigerAddUndef(string&);
    void setComment(string& str){ comment.clear(); comment = str; };
+   void resetColors() const;
 
    // Member functions about circuit reporting
    void printSummary() const;

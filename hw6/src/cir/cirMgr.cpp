@@ -207,7 +207,6 @@ CirMgr::aigerAddAnd(string& str, unsigned lNo) {
       var[i] = myStr2Uns(tmp[i]);
       var[i] = aiger_lit2var(var[i]);
    }
-   
    CirAigGate* aig = new CirAigGate(var[0], lNo);
    gateList[ var[0] ] = aig;
    return true;
@@ -294,7 +293,10 @@ CirMgr::readCircuit(const string& fileName)
       CirPoGate *gate = new CirPoGate(i + _m + 1, lNo);
       gateList[i + _m + 1] = gate;
       //add fanin
-      CirGate *pre = getGate( aiger_lit2var(lit) );
+      unsigned var = aiger_lit2var(lit);
+      CirGate *pre = getGate( var );
+      if(pre == 0)
+         pre = gateList[ var ] = new CirUndefGate(var, 0);
       gate->getfin().push_back(pre);
       gate->inv = aiger_sign(lit);
       pre->getfout().push_back(gate);
@@ -318,6 +320,7 @@ CirMgr::readCircuit(const string& fileName)
       else if(ilo == 'o')
          static_cast<CirPoGate*>(getGate(id + _m + 1))->setName(tmp[1]);
    }
+   
 
    return true;
 }
@@ -345,6 +348,17 @@ CirMgr::printSummary() const
       << "------------------\n"
       << "  Total" << setw(9) << right << miloa[1] + miloa[3] + miloa[4] << '\n';
 }
+void
+CirMgr::resetColors() const
+{
+   unsigned _m = miloa[0], _o = miloa[3];
+   cout << endl;
+   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
+      CirGate *g = getGate(i);
+      if (g == 0) continue;
+      g->setColor(0);
+   }
+}
 
 void
 CirMgr::printNetlist() const
@@ -354,10 +368,12 @@ CirMgr::printNetlist() const
    for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
-      if (g->getType() == PO_GATE)
+      if (g->getType() == PO_GATE) {
          g->printGate();
+      }
    }
    CirGate::index = 0;
+   resetColors();
 }
 
 void

@@ -26,7 +26,7 @@ class CirGate;
 class CirGate {
    
    public:
-      CirGate(GateType _t, unsigned _id, unsigned _n): type(_t), lineNo(_n), id(_id) {}
+      CirGate(GateType _t, unsigned _id, unsigned _n): type(_t), lineNo(_n), id(_id), color(0) {}
       virtual ~CirGate() {}
 
       // Basic access methods
@@ -39,16 +39,17 @@ class CirGate {
       void reportGate() const;
       void reportFanin(int level) const;
       void reportFanout(int level) const;
-      GateList getfin(){ return faninList; }
-      GateList getfout(){ return fanoutList; }
-      
-      static unsigned index;
+      GateList& getfin(){ return faninList; }
+      GateList& getfout(){ return fanoutList; }
+      void setColor(bool c) const {color = c;}
 
+      static unsigned index;
 
    protected:
       GateType type;
       unsigned lineNo;
       unsigned id;
+      mutable bool color;
       GateList faninList;
       GateList fanoutList;
 };
