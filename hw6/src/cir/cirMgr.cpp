@@ -380,8 +380,8 @@ void
 CirMgr::printPIs() const
 {
    cout << "PIs of the circuit:";
-   unsigned _m = miloa[0], _o = miloa[3];
-   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
+   unsigned _m = miloa[0];
+   for (unsigned i = 0, size = _m + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g != 0 && g->getType() == PI_GATE)
          cout << " " << g->getId();
@@ -407,8 +407,8 @@ void
 CirMgr::printFloatGates() const
 {
    cout << "Gates with floating fanin(s):";
-   unsigned _m = miloa[0], _o = miloa[3];
-   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
+   unsigned _m = miloa[0], _i = miloa[1] ,_o = miloa[3];
+   for (unsigned i = _i + 1, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if(g->getType() == PO_GATE) {
@@ -418,7 +418,7 @@ CirMgr::printFloatGates() const
 
       } else if(g->getType() == AIG_GATE) {
          if(g->getfin().size() != 2) return; // error
-         for(int i = 0; i < g->getfin().size(); i++) {
+         for(unsigned i = 0; i < g->getfin().size(); i++) {
 
             if(g->getfin()[i]->getType() == UNDEF_GATE) {
                cout << " " << g->getId();
@@ -429,7 +429,7 @@ CirMgr::printFloatGates() const
    }
    cout << endl;
    cout << "Gates defined but not used  :";
-   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
+   for (unsigned i = 0, size = _m + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PI_GATE || g->getType() == AIG_GATE) {
@@ -443,4 +443,62 @@ CirMgr::printFloatGates() const
 void
 CirMgr::writeAag(ostream& outfile) const
 {
+   
+   unsigned _m = miloa[0], _i = miloa[1], _l = miloa[2], _o = miloa[3], _a = miloa[4];
+   
+   outfile << "aag " << _m << " " << _i << " "
+      << _l << " " << _o << " " << _a << endl;
+   for(unsigned i = 0 ,size = _m + 1; i < size; i++) {
+      CirGate *g = getGate(i);
+      if (g != 0 && g->getType() == PI_GATE)
+         outfile << aiger_var2lit(g->getId()) << endl;
+   }
+   for(unsigned i = _m + 1 ,size = _m + _o + 1; i < size; i++) {
+      CirGate *g = getGate(i);
+      if (g != 0 && g->getType() == PO_GATE) {
+         if(g->getfin().size() != 1) return; // error
+         unsigned lit = aiger_var2lit(g->getfin()[0]->getId());
+         CirPoGate *pog = (CirPoGate*) g;
+         if(pog->inv) lit++;
+         outfile << lit << endl;
+      }
+   }
+   for(unsigned i = 0, size = _m + 1; i < size; i++) {
+      CirGate *g = getGate(i);
+      if (g != 0 && g->getType() == AIG_GATE) {
+         
+         outfile << aiger_var2lit(g->getId()); //lhs0 must be even
+         if(g->getfin().size() != 2) return; //error
+         //if(g->getfin()[i]->getType() == UNDEF_GATE) {
+         unsigned rhs0 = aiger_var2lit(g->getfin()[0]->getId());
+         unsigned rhs1 = aiger_var2lit(g->getfin()[1]->getId());
+         CirAigGate *aig = (CirAigGate*) g;
+         if(aig->inv_rhs0) rhs0++;
+         if(aig->inv_rhs1) rhs1++;
+
+         outfile << " " << rhs0 << " " << rhs1 << endl;
+      }
+   }
+   for(unsigned i = 0 ,size = _m + 1, count = 0; i < size; i++) {
+      CirGate *g = getGate(i);
+      if (g != 0 && g->getType() == PI_GATE) {
+         CirPiGate *pig = (CirPiGate*)g;
+         if(pig->getName() != "") {
+            outfile << "i" << count << " " << pig->getName() << endl;
+            count++;
+         }
+      }
+   }
+   for(unsigned i = _m + 1 ,size = _m + _o + 1, count = 0; i < size; i++) {
+      CirGate *g = getGate(i);
+      if (g != 0 && g->getType() == PO_GATE) {
+         CirPoGate *pog = (CirPoGate*)g;
+         if(pog->getName() != "") {
+            outfile << "o" << count << " " << pog->getName() << endl;
+            count++;
+         }
+      }
+   }
+   if(getComment() != "")
+      cout << "c\n" << getComment() << endl;
 }
