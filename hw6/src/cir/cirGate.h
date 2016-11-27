@@ -43,7 +43,7 @@ class CirGate {
       GateList& getfout(){ return fanoutList; }
       void setColor(int c) const {color = c;}
       void faninDfsVisit(int, bool) const;
-      void fanoutDfsVisit(int) const;
+      void fanoutDfsVisit(int, bool) const;
 
       static unsigned index;
 
