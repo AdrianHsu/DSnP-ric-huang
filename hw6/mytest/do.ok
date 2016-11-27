@@ -37,14 +37,421 @@ cirg 3 -fanout 2
 cirg 3 -fanout 1
 cirw
 cirr ok02.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 8 -fanin 4
+cirg 8 -fanin 3
+cirg 8 -fanin 2
+cirg 8 -fanin 1
+cirg 8 -fanout 4
+cirg 8 -fanout 3
+cirg 8 -fanout 2
+cirg 8 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
 cirr ok03.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 8 -fanin 4
+cirg 8 -fanin 3
+cirg 8 -fanin 2
+cirg 8 -fanin 1
+cirg 8 -fanout 4
+cirg 8 -fanout 3
+cirg 8 -fanout 2
+cirg 8 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
 cirr ok04.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 8 -fanin 4
+cirg 8 -fanin 3
+cirg 8 -fanin 2
+cirg 8 -fanin 1
+cirg 8 -fanout 4
+cirg 8 -fanout 3
+cirg 8 -fanout 2
+cirg 8 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
 cirr ok05.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 8 -fanin 4
+cirg 8 -fanin 3
+cirg 8 -fanin 2
+cirg 8 -fanin 1
+cirg 8 -fanout 4
+cirg 8 -fanout 3
+cirg 8 -fanout 2
+cirg 8 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
 cirr ok06.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 8 -fanin 4
+cirg 8 -fanin 3
+cirg 8 -fanin 2
+cirg 8 -fanin 1
+cirg 8 -fanout 4
+cirg 8 -fanout 3
+cirg 8 -fanout 2
+cirg 8 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
 cirr ok07.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 8 -fanin 4
+cirg 8 -fanin 3
+cirg 8 -fanin 2
+cirg 8 -fanin 1
+cirg 8 -fanout 4
+cirg 8 -fanout 3
+cirg 8 -fanout 2
+cirg 8 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
 cirr ok08.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 8 -fanin 4
+cirg 8 -fanin 3
+cirg 8 -fanin 2
+cirg 8 -fanin 1
+cirg 8 -fanout 4
+cirg 8 -fanout 3
+cirg 8 -fanout 2
+cirg 8 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
 cirr ok09.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 8 -fanin 4
+cirg 8 -fanin 3
+cirg 8 -fanin 2
+cirg 8 -fanin 1
+cirg 8 -fanout 4
+cirg 8 -fanout 3
+cirg 8 -fanout 2
+cirg 8 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
 cirr ok10.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 8 -fanin 4
+cirg 8 -fanin 3
+cirg 8 -fanin 2
+cirg 8 -fanin 1
+cirg 8 -fanout 4
+cirg 8 -fanout 3
+cirg 8 -fanout 2
+cirg 8 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
 cirr ok11.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 8 -fanin 4
+cirg 8 -fanin 3
+cirg 8 -fanin 2
+cirg 8 -fanin 1
+cirg 8 -fanout 4
+cirg 8 -fanout 3
+cirg 8 -fanout 2
+cirg 8 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
 cirr good.aag -replace
+cirp -n
+cirp -s
+cirp -pi
+cirp -po
+cirp -fl
+cirg 1
+cirg 2
+cirg 4
+cirg 5
+cirg 8
+cirg 9
+cirg 10
+cirg 1 -fanin 4
+cirg 1 -fanin 3
+cirg 1 -fanin 2
+cirg 1 -fanin 1
+cirg 1 -fanout 4
+cirg 1 -fanout 3
+cirg 1 -fanout 2
+cirg 1 -fanout 1
+cirg 8 -fanin 4
+cirg 8 -fanin 3
+cirg 8 -fanin 2
+cirg 8 -fanin 1
+cirg 8 -fanout 4
+cirg 8 -fanout 3
+cirg 8 -fanout 2
+cirg 8 -fanout 1
+cirg 5 -fanout 4
+cirg 5 -fanout 3
+cirg 5 -fanout 2
+cirg 5 -fanout 1
+cirg 3 -fanout 4
+cirg 3 -fanout 3
+cirg 3 -fanout 2
+cirg 3 -fanout 1
+cirw
 q -f
