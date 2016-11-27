@@ -1,0 +1,100 @@
+cir> cirr ok01.aag -replace
+
+cir> cirp -n
+
+cir> cirp -s
+
+cir> cirp -pi
+
+cir> cirp -po
+
+cir> cirp -fl
+
+cir> cirg 1
+
+cir> cirg 2
+
+cir> cirg 4
+
+cir> cirg 5
+
+cir> cirg 8
+
+cir> cirg 9
+
+cir> cirg 10
+
+cir> cirg 1 -fanin 4
+
+cir> cirg 1 -fanin 3
+
+cir> cirg 1 -fanin 2
+
+cir> cirg 1 -fanin 1
+
+cir> cirg 1 -fanout 4
+
+cir> cirg 1 -fanout 3
+
+cir> cirg 1 -fanout 2
+
+cir> cirg 1 -fanout 1
+
+cir> cirg 8 -fanin 4
+
+cir> cirg 8 -fanin 3
+
+cir> cirg 8 -fanin 2
+
+cir> cirg 8 -fanin 1
+
+cir> cirg 8 -fanout 4
+
+cir> cirg 8 -fanout 3
+
+cir> cirg 8 -fanout 2
+
+cir> cirg 8 -fanout 1
+
+cir> cirg 5 -fanout 4
+
+cir> cirg 5 -fanout 3
+
+cir> cirg 5 -fanout 2
+
+cir> cirg 5 -fanout 1
+
+cir> cirg 3 -fanout 4
+
+cir> cirg 3 -fanout 3
+
+cir> cirg 3 -fanout 2
+
+cir> cirg 3 -fanout 1
+
+cir> cirw
+
+cir> cirr ok02.aag -replace
+
+cir> cirr ok03.aag -replace
+
+cir> cirr ok04.aag -replace
+
+cir> cirr ok05.aag -replace
+
+cir> cirr ok06.aag -replace
+
+cir> cirr ok07.aag -replace
+
+cir> cirr ok08.aag -replace
+
+cir> cirr ok09.aag -replace
+
+cir> cirr ok10.aag -replace
+
+cir> cirr ok11.aag -replace
+
+cir> cirr good.aag -replace
+
+cir> q -f
+

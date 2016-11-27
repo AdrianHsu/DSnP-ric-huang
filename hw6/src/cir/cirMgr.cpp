@@ -304,12 +304,18 @@ CirMgr::readCircuit(const string& fileName)
       string s = cmd[i];
       if(s == "c") {
          string comment = cmd[++i];
+         while(i != listSize - 1) {
+            comment += '\n';
+            comment += cmd[++i];
+         }
+
          setComment(comment);
-         continue;
+         break;
       }
       vector<string> tmp;
-      if(!lexOptions(s, tmp , 2))
+      if(!lexOptions(s, tmp , 2)) {
          return false;
+      }
       unsigned id = myStr2Uns(tmp[0].substr(1));// i13, o271..etc
       char ilo = tmp[0][0];
       if(ilo == 'i')
@@ -317,8 +323,6 @@ CirMgr::readCircuit(const string& fileName)
       else if(ilo == 'o')
          static_cast<CirPoGate*>(getGate(id + _m + 1))->setName(tmp[1]);
    }
-   
-
    return true;
 }
 
