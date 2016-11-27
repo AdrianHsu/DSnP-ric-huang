@@ -68,12 +68,10 @@ CirGate::reportGate() const
    cout << setw(49) << left << ss.str() << "=\n";
    cout << "==================================================\n";
 }
-
 void
 CirGate::faninDfsVisit(int l, bool inv) const
 {
    if(l == -1) { index--; return; };
-   if(color == 0) setColor(1);
    for (unsigned i = 0; i < index; ++i)   cout << "  ";
    if(inv) cout << "!";
 
@@ -84,33 +82,20 @@ CirGate::faninDfsVisit(int l, bool inv) const
    bool star = 1;
 
    for(int i = 0; i < faninList.size(); i++) { //size must <= 2
-      if(faninList[i]->color == 0 || (faninList[i]->color == 2 && color == 1)) {
+      if(getInput(i)->color == 0 || (getInput(i)->color == 1 && color == 0)) {
          if(star) {
             cout << endl;
             star = 0;
          }
          index++;
-         bool myinv = 0;
-         if(type == AIG_GATE) {
-            CirAigGate* g = (CirAigGate*) this;
-            if(i == 0)
-               myinv = g->inv_rhs0;
-            else if(i == 1)
-               myinv = g->inv_rhs1;
-            else 
-               return; //error
-         } else if(type == PO_GATE) {
-            CirPoGate* g = (CirPoGate*) this;
-            myinv = g->inv; 
-         }
-         faninList[i]->faninDfsVisit(l - 1, myinv);
+         getInput(i)->faninDfsVisit(l - 1, isInv(i));
       }
    }
    if(star && faninList.size() != 0) {
       cout << " (*)" << endl;
    }
    index--;
-   setColor(2);
+   setColor(1);
 }
 
 void
@@ -125,7 +110,6 @@ void
 CirGate::fanoutDfsVisit(int l, bool inv) const
 {
    if(l == -1) { index--; return; };
-   if(color == 0) setColor(1);
    for (unsigned i = 0; i < index; ++i)   cout << "  ";
    if(inv) cout << "!";
 
@@ -136,31 +120,33 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
    bool star = 1;
 
    for(int i = 0; i < fanoutList.size(); i++) {
-      if(fanoutList[i]->color == 0 || (fanoutList[i]->color == 2 && color == 1)) {
+      if(getOutput(i)->color == 0 || (getOutput(i)->color == 1 && color == 0)) {
          if(star) {
             cout << endl;
             star = 0;
          }
          index++;
          bool myinv = 0;
-         if(fanoutList[i]->type == AIG_GATE) {
-           CirAigGate* g = (CirAigGate*) fanoutList[i];
-           if(this == g->getfin()[0])
-              myinv = g->inv_rhs0;
-           else if(this == g->getfin()[1])
-              myinv = g->inv_rhs1;
-         } else if (fanoutList[i]->type == PO_GATE) {
-            CirPoGate* g = (CirPoGate*) fanoutList[i];
-            myinv = g->inv;
+         unsigned j = 0;
+         CirGate* g = getOutput(i);
+         while (true) {
+            CirGate* g2 = g->getInput(j);
+            if (g2 == 0)   break;
+            if (this == g2) {
+               myinv = g->isInv(j);
+               break;
+            }
+            ++j;
          }
-         fanoutList[i]->fanoutDfsVisit(l - 1, myinv);
+
+         g->fanoutDfsVisit(l - 1, myinv);
       }
    }
    if(star && fanoutList.size() != 0) {
       cout << " (*)" << endl;
    }
    index--;
-   setColor(2);
+   setColor(1);
 }
 
 void
@@ -193,13 +179,13 @@ CirPoGate::printGate() const
    //[8] PO  24 !22 (22GAT$PO)
    if(color) return;
    for(int i = 0; i < faninList.size(); i++)
-      faninList[i]->printGate();
+      getInput(i)->printGate();
    cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
-   CirGate* fin = faninList[0];
+   CirGate* fin = getInput(0);
    string str;
    if(fin->getType() == UNDEF_GATE)
       str += "*";
-   if(inv) str += "!";
+   if(isInv(0)) str += "!";
    str += unsToStr( fin->getId() );
    cout << str;
 
@@ -215,22 +201,22 @@ CirAigGate::printGate() const
    //[7] AIG 22 !10 !16
    if(color) return;
    for(int i = 0; i < faninList.size(); i++)
-      faninList[i]->printGate();
+      getInput(i)->printGate();
    cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
-   CirGate* rhs0 = faninList[0];
-   CirGate* rhs1 = faninList[1];
+   CirGate* rhs0 = getInput(0);
+   CirGate* rhs1 = getInput(1);
     
    if(rhs0 == NULL || rhs1 == NULL) return; //error
    string str;
    if(rhs0->getType() == UNDEF_GATE)
       str += "*";
-   if(inv_rhs0) str += "!";
+   if(isInv(0)) str += "!";
    str += unsToStr( rhs0->getId() );
    cout << str << " ";
    str.clear();
    if(rhs1->getType() == UNDEF_GATE)
       str += "*";
-   if(inv_rhs1) str += "!";
+   if(isInv(1)) str += "!";
    str += unsToStr( rhs1->getId() );
    cout << str;
    cout << endl;

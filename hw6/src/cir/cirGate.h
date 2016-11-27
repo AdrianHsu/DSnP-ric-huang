@@ -39,9 +39,26 @@ class CirGate {
       void reportGate() const;
       void reportFanin(int level) const;
       void reportFanout(int level) const;
-      GateList& getfin(){ return faninList; }
-      GateList& getfout(){ return fanoutList; }
+
+      void addInput(CirGate* g, bool inv = false) {
+         if (inv) g = (CirGate*)((size_t)g + 1);
+         faninList.push_back(g);
+      }
+      void addOutput(CirGate* g) { fanoutList.push_back(g); }
+      CirGate* getInput(size_t i) const {
+         if (i >= faninList.size()) return 0;
+         return (CirGate*)(((size_t)faninList[i]) & ~size_t(NEG));
+      }
+      CirGate* getOutput(size_t i) const {
+         if (i >= fanoutList.size()) return 0;
+         return fanoutList[i];
+      }
+      bool isInv(size_t i) const { return ((size_t)faninList[i] & NEG); }
+
+      size_t getfinSize(){ return faninList.size(); }
+      size_t getfoutSize(){ return fanoutList.size(); }
       void setColor(int c) const {color = c;}
+      int getColor() {return color;}
       void faninDfsVisit(int, bool) const;
       void fanoutDfsVisit(int, bool) const;
 
@@ -74,13 +91,12 @@ class CirPoGate : public CirGate {
 
    public:
       CirPoGate(unsigned _id, unsigned _n)
-         : CirGate(PO_GATE, _id, _n), inv(0), name("") {}
+         : CirGate(PO_GATE, _id, _n), name("") {}
       virtual ~CirPoGate() {}
 
       void printGate() const;
       void setName(string str) { if(name.empty()) name = str; }
       string getName() const { return name; } 
-      bool inv;
    
    protected:
       string name;
@@ -91,12 +107,10 @@ class CirAigGate : public CirGate {
 
    public:
       CirAigGate(unsigned _id, unsigned _n) 
-         : CirGate(AIG_GATE, _id, _n), inv_rhs0(0), inv_rhs1(0) {}
+         : CirGate(AIG_GATE, _id, _n) {}
       virtual ~CirAigGate() {}
 
       void printGate() const;
-      bool inv_rhs0;
-      bool inv_rhs1;
    protected:
       //GateList faninList;
       // Aig has no name

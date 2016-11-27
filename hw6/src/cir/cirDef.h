@@ -13,6 +13,8 @@
 
 using namespace std;
 
+#define NEG 0x1
+
 #define aiger_false 0
 #define aiger_true 1
 

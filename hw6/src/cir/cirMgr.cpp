@@ -16,6 +16,7 @@
 #include "cirGate.h"
 #include "util.h"
 
+
 using namespace std;
 
 // TODO: Implement memeber functions for class CirMgr
@@ -233,12 +234,10 @@ CirMgr::aigerAddUndef(string& str) {
    if(g3 == 0)
       g3 = gateList[ var[2] ] = new CirUndefGate(var[2], 0);
    // add fanin, fanout 
-   g1->getfin().push_back(g2);
-   g1->inv_rhs0 = aiger_sign(lit[1]);
-   g1->getfin().push_back(g3);
-   g1->inv_rhs1 = aiger_sign(lit[2]);
-   g2->getfout().push_back(g1);
-   g3->getfout().push_back(g1);
+   g1->addInput(g2, aiger_sign(lit[1]));
+   g1->addInput(g3, aiger_sign(lit[2]));
+   g2->addOutput(g1);
+   g3->addOutput(g1);
 
    return true;
 }
@@ -264,7 +263,6 @@ CirMgr::readCircuit(const string& fileName)
       miloa[i - 1] = myStr2Uns(tmp[i]);
    
    unsigned _m = miloa[0], _i = miloa[1], _o = miloa[3], _a = miloa[4];
-   lineNo = 0; 
    gateList.clear();
    gateList.resize(miloa[0] + miloa[3] + 1, 0);
    // const gate
@@ -294,9 +292,8 @@ CirMgr::readCircuit(const string& fileName)
       CirGate *pre = getGate( var );
       if(pre == 0)
          pre = gateList[ var ] = new CirUndefGate(var, 0);
-      gate->getfin().push_back(pre);
-      gate->inv = aiger_sign(lit);
-      pre->getfout().push_back(gate);
+      gate->addInput(pre, aiger_sign(lit));
+      pre->addOutput(gate);
    }
    
    unsigned i = _i + _o + _a + 1, listSize = cmd.size();
@@ -412,15 +409,15 @@ CirMgr::printFloatGates() const
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if(g->getType() == PO_GATE) {
-         if(g->getfin().size() != 1) return; //error
-         if(g->getfin()[0]->getType() == UNDEF_GATE)
+         if(g->getfinSize() != 1) return; //error
+         if(g->getInput(0)->getType() == UNDEF_GATE)
             cout << " " << g->getId();
 
       } else if(g->getType() == AIG_GATE) {
-         if(g->getfin().size() != 2) return; // error
-         for(unsigned i = 0; i < g->getfin().size(); i++) {
+         if(g->getfinSize() != 2) return; // error
+         for(unsigned i = 0; i < g->getfinSize(); i++) {
 
-            if(g->getfin()[i]->getType() == UNDEF_GATE) {
+            if(g->getInput(i)->getType() == UNDEF_GATE) {
                cout << " " << g->getId();
                break;
             }
@@ -433,11 +430,17 @@ CirMgr::printFloatGates() const
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PI_GATE || g->getType() == AIG_GATE) {
-         if(g->getfout().size() == 0)
+         if(g->getfoutSize() == 0)
             cout << " " << g->getId();
       }
    }
    cout << endl;
+}
+void
+CirMgr::writeDfsVisit(CirGate* g, 
+   vector<unsigned>& ins, vector<string>& aigs, bool inv) const
+{
+   
 }
 
 void
@@ -445,40 +448,29 @@ CirMgr::writeAag(ostream& outfile) const
 {
    
    unsigned _m = miloa[0], _i = miloa[1], _l = miloa[2], _o = miloa[3], _a = miloa[4];
-   
+   vector<unsigned> ins;
+   vector<unsigned> outs;
+   vector<string> aigs;
    outfile << "aag " << _m << " " << _i << " "
       << _l << " " << _o << " " << _a << endl;
-   for(unsigned i = 0 ,size = _m + 1; i < size; i++) {
+   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
-      if (g != 0 && g->getType() == PI_GATE)
-         outfile << aiger_var2lit(g->getId()) << endl;
-   }
-   for(unsigned i = _m + 1 ,size = _m + _o + 1; i < size; i++) {
-      CirGate *g = getGate(i);
-      if (g != 0 && g->getType() == PO_GATE) {
-         if(g->getfin().size() != 1) return; // error
-         unsigned lit = aiger_var2lit(g->getfin()[0]->getId());
-         CirPoGate *pog = (CirPoGate*) g;
-         if(pog->inv) lit++;
-         outfile << lit << endl;
+      if (g == 0) continue;
+      if (g->getType() == PO_GATE) {
+         // writeDfsVisit(g, ins, aigs, g->isInv(0));
+         unsigned lit = aiger_var2lit( g->getId() );
+         if(g->isInv(0))lit++;
+         outs.push_back(lit);
       }
    }
-   for(unsigned i = 0, size = _m + 1; i < size; i++) {
-      CirGate *g = getGate(i);
-      if (g != 0 && g->getType() == AIG_GATE) {
-         
-         outfile << aiger_var2lit(g->getId()); //lhs0 must be even
-         if(g->getfin().size() != 2) return; //error
-         //if(g->getfin()[i]->getType() == UNDEF_GATE) {
-         unsigned rhs0 = aiger_var2lit(g->getfin()[0]->getId());
-         unsigned rhs1 = aiger_var2lit(g->getfin()[1]->getId());
-         CirAigGate *aig = (CirAigGate*) g;
-         if(aig->inv_rhs0) rhs0++;
-         if(aig->inv_rhs1) rhs1++;
-
-         outfile << " " << rhs0 << " " << rhs1 << endl;
-      }
-   }
+   CirGate::index = 0;
+   for(unsigned i = 0; i < ins.size(); i++)
+      outfile << ins[i] << endl;
+   for(unsigned i = 0; i < outs.size(); i++)
+      outfile << outs[i] << endl;
+   for(unsigned i = 0; i < aigs.size(); i++)
+      outfile << aigs[i] << endl;
+   resetColors();
    for(unsigned i = 0 ,size = _m + 1, count = 0; i < size; i++) {
       CirGate *g = getGate(i);
       if (g != 0 && g->getType() == PI_GATE) {
