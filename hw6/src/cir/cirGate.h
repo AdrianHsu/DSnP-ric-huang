@@ -41,7 +41,9 @@ class CirGate {
       void reportFanout(int level) const;
       GateList& getfin(){ return faninList; }
       GateList& getfout(){ return fanoutList; }
-      void setColor(bool c) const {color = c;}
+      void setColor(int c) const {color = c;}
+      void faninDfsVisit(int) const;
+      void fanoutDfsVisit(int) const;
 
       static unsigned index;
 
@@ -49,7 +51,7 @@ class CirGate {
       GateType type;
       unsigned lineNo;
       unsigned id;
-      mutable bool color;
+      mutable int color;
       GateList faninList;
       GateList fanoutList;
 };

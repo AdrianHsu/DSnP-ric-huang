@@ -70,10 +70,47 @@ CirGate::reportGate() const
 }
 
 void
-CirGate::reportFanin(int level) const
+CirGate::faninDfsVisit(int l) const
 {
+   if(l == -1) return;
+   setColor(1);
+   for (unsigned i = 0; i < index; ++i)   cout << "  ";
    
+   if(faninList.size() == 0)
+      cout << getTypeStr() << " " << getId() << endl;
+   else
+      cout << getTypeStr() << " " << getId();
+   bool star = 1;
+
+   for(int i = 0; i < faninList.size(); i++) {
+      if(faninList[i]->color == 0 || (faninList[i]->color == 2 && color == 1)) {
+         if(star) {
+            cout << endl;
+            star = 0;
+         }
+         index++;
+         faninList[i]->faninDfsVisit(l - 1);
+      }
+   }
+   if(star && faninList.size() != 0) {
+      cout << " (*)" << endl;
+   }
+   index--;
+   setColor(2);
+}
+
+void
+CirGate::reportFanin(int level) const
+{ 
    assert (level >= 0);
+   faninDfsVisit(level);
+   cirMgr->resetColors();
+   index = 0;
+}
+
+void
+CirGate::fanoutDfsVisit(int l) const
+{
 }
 
 void

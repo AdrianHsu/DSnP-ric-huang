@@ -24,7 +24,7 @@ extern CirMgr *cirMgr;
 class CirMgr
 {
 public:
-   CirMgr(): flag(0) {
+   CirMgr(){
       for(int i = 0; i < 5; i++) miloa[i] = 0;
    }
    ~CirMgr() {}
@@ -56,7 +56,6 @@ public:
    void writeAag(ostream&) const;
 
 private:
-   bool flag;
    // aag M I L O A == aag [0] [1] [2] [3] [4]
    unsigned miloa[5];
    GateList gateList;

@@ -245,9 +245,6 @@ CirMgr::aigerAddUndef(string& str) {
 bool
 CirMgr::readCircuit(const string& fileName)
 {
-   //if(!flag)
-   //   flag = 1; //netlist should be constructed before any operations
-
    ifstream ifs(fileName);
    if(!ifs.is_open())
       return false;
@@ -352,7 +349,6 @@ void
 CirMgr::resetColors() const
 {
    unsigned _m = miloa[0], _o = miloa[3];
-   cout << endl;
    for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
