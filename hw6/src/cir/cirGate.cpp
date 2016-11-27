@@ -70,12 +70,14 @@ CirGate::reportGate() const
 }
 
 void
-CirGate::faninDfsVisit(int l) const
+CirGate::faninDfsVisit(int l, bool inv) const
 {
    if(l == -1) return;
    setColor(1);
    for (unsigned i = 0; i < index; ++i)   cout << "  ";
-   
+   if(type == PI_GATE || type == AIG_GATE || type == CONST_GATE)
+      if(inv) cout << "!";
+
    if(faninList.size() == 0)
       cout << getTypeStr() << " " << getId() << endl;
    else
@@ -89,7 +91,20 @@ CirGate::faninDfsVisit(int l) const
             star = 0;
          }
          index++;
-         faninList[i]->faninDfsVisit(l - 1);
+         bool myinv = 0;
+         if(type == AIG_GATE) {
+            CirAigGate* g = (CirAigGate*) this;
+            if(i == 0)
+               myinv = g->inv_rhs0;
+            else if(i == 1)
+               myinv = g->inv_rhs1;
+            else 
+               return; //error
+         } else if(type == PO_GATE) {
+            CirPoGate* g = (CirPoGate*) this;
+            myinv = g->inv; 
+         }
+         faninList[i]->faninDfsVisit(l - 1, myinv);
       }
    }
    if(star && faninList.size() != 0) {
@@ -103,7 +118,7 @@ void
 CirGate::reportFanin(int level) const
 { 
    assert (level >= 0);
-   faninDfsVisit(level);
+   faninDfsVisit(level, 0);
    cirMgr->resetColors();
    index = 0;
 }
