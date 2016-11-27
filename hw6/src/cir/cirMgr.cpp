@@ -406,6 +406,38 @@ CirMgr::printPOs() const
 void
 CirMgr::printFloatGates() const
 {
+   cout << "Gates with floating fanin(s):";
+   unsigned _m = miloa[0], _o = miloa[3];
+   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
+      CirGate *g = getGate(i);
+      if (g == 0) continue;
+      if(g->getType() == PO_GATE) {
+         if(g->getfin().size() != 1) return; //error
+         if(g->getfin()[0]->getType() == UNDEF_GATE)
+            cout << " " << g->getId();
+
+      } else if(g->getType() == AIG_GATE) {
+         if(g->getfin().size() != 2) return; // error
+         for(int i = 0; i < g->getfin().size(); i++) {
+
+            if(g->getfin()[i]->getType() == UNDEF_GATE) {
+               cout << " " << g->getId();
+               break;
+            }
+         }
+      }
+   }
+   cout << endl;
+   cout << "Gates defined but not used  :";
+   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
+      CirGate *g = getGate(i);
+      if (g == 0) continue;
+      if (g->getType() == PI_GATE || g->getType() == AIG_GATE) {
+         if(g->getfout().size() == 0)
+            cout << " " << g->getId();
+      }
+   }
+   cout << endl;
 }
 
 void
