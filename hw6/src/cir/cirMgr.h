@@ -53,7 +53,7 @@ public:
    void printPOs() const;
    void printFloatGates() const;
    void writeAag(ostream&) const;
-   void writeDfsVisit(CirGate*, vector<unsigned>&, vector<string>&, bool) const;
+   void writeDfsVisit(CirGate*, vector<unsigned>&, vector<unsigned>&, bool) const;
 
 private:
    // aag M I L O A == aag [0] [1] [2] [3] [4]
