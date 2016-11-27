@@ -71,31 +71,22 @@ CirGate::reportGate() const
 void
 CirGate::faninDfsVisit(int l, bool inv) const
 {
-   if(l == -1) { index--; return; };
+   if(l == -1) return;
    for (unsigned i = 0; i < index; ++i)   cout << "  ";
    if(inv) cout << "!";
-
-   if(faninList.size() == 0)
-      cout << getTypeStr() << " " << getId() << endl;
-   else
-      cout << getTypeStr() << " " << getId();
-   bool star = 1;
-
-   for(int i = 0; i < faninList.size(); i++) { //size must <= 2
-      if(getInput(i)->color == 0 || (getInput(i)->color == 1 && color == 0)) {
-         if(star) {
-            cout << endl;
-            star = 0;
-         }
+   cout << getTypeStr() << " " << id;
+   unsigned size = faninList.size();
+   if(l == 0) cout << endl;
+   else if(color) cout << " (*)" << endl;
+   else  { 
+      cout << endl;
+      for(int i = 0; i < size; i++) {
          index++;
          getInput(i)->faninDfsVisit(l - 1, isInv(i));
       }
-   }
-   if(star && faninList.size() != 0) {
-      cout << " (*)" << endl;
+      if(size != 0) setColor(1);
    }
    index--;
-   setColor(1);
 }
 
 void
@@ -109,44 +100,32 @@ CirGate::reportFanin(int level) const
 void
 CirGate::fanoutDfsVisit(int l, bool inv) const
 {
-   if(l == -1) { index--; return; };
+   if(l == -1) return;
    for (unsigned i = 0; i < index; ++i)   cout << "  ";
    if(inv) cout << "!";
-
-   if(fanoutList.size() == 0)
-      cout << getTypeStr() << " " << getId() << endl;
-   else
-      cout << getTypeStr() << " " << getId();
-   bool star = 1;
-
-   for(int i = 0; i < fanoutList.size(); i++) {
-      if(getOutput(i)->color == 0 || (getOutput(i)->color == 1 && color == 0)) {
-         if(star) {
-            cout << endl;
-            star = 0;
-         }
+   cout << getTypeStr() << " " << id;
+   unsigned size = fanoutList.size();
+   if(l == 0) cout << endl;
+   else if(color) cout << " (*)" << endl;
+   else {
+      cout << endl;
+      for(int i = 0; i < size; i++) {
          index++;
-         bool myinv = 0;
-         unsigned j = 0;
          CirGate* g = getOutput(i);
-         while (true) {
+         bool myinv = 0;
+         for(int j = 0; j < g->getfinSize(); j++) {
             CirGate* g2 = g->getInput(j);
-            if (g2 == 0)   break;
-            if (this == g2) {
+            if(g2 == 0) break;
+            else if(g2 == this) {
                myinv = g->isInv(j);
+               g->fanoutDfsVisit(l - 1, myinv);
                break;
             }
-            ++j;
          }
-
-         g->fanoutDfsVisit(l - 1, myinv);
       }
-   }
-   if(star && fanoutList.size() != 0) {
-      cout << " (*)" << endl;
+      if(size != 0) setColor(1);
    }
    index--;
-   setColor(1);
 }
 
 void
