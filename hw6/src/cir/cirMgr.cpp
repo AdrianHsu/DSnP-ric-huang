@@ -455,7 +455,6 @@ CirMgr::writeDfsVisit(CirGate* g,
    }
    // g->setColor(1);
 }
-
 void
 CirMgr::writeAag(ostream& outfile) const
 {
