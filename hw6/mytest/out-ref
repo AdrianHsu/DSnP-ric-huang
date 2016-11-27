@@ -1,15 +1,10 @@
-cir> cirr my.aag
+cir> cirr myout.aag
 
-cir> cirp -n
-
-[0] PI  1
-[1] AIG 3 1 *4
-[2] PO  12 3
-
-cir> cirg 4 -fanout 3
-UNDEF 4
+cir> cirg 1 -fanout 2
+PI 1
+  AIG 2
   AIG 3
-    PO 12
+    PO 7
 
 cir> q -f
 

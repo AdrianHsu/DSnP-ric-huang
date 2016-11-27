@@ -265,6 +265,7 @@ CirMgr::readCircuit(const string& fileName)
 
    vector<string> tmp;
    // aag M I L O A
+      cout << "??" << endl;
    if(!lexOptions(cmd[0], tmp, 6))
       return false;
    for(int i = 1; i <= 5; i++)
