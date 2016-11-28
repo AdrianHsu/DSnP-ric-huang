@@ -52,7 +52,7 @@ public:
    void printPOs() const;
    void printFloatGates() const;
    void writeAag(ostream&) const;
-   void writeDfsVisit(CirGate*, vector<unsigned>&, bool, vector<string>&) const;
+   void writeDfsVisit(CirGate*, vector<unsigned>&, bool) const;
    vector<unsigned> ins; 
 
 private:

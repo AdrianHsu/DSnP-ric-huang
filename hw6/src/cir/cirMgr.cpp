@@ -450,7 +450,7 @@ CirMgr::printFloatGates() const
             case2.push_back(g->getId());
       }
    }
-   if(case1.size() != 0) {
+   if(case2.size() != 0) {
       cout << "Gates defined but not used  :";
       for(int i = 0; i < case2.size(); i++)
          cout << " " << case2[i];
@@ -458,15 +458,13 @@ CirMgr::printFloatGates() const
    }
 }
 void
-CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv, vector<string>& ins_symbol) const
+CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv) const
 {
    if(g->getColor()) return;
    for(int i = 0; i < g->getfinSize(); i++)
-      writeDfsVisit(g->getInput(i), aigs, g->isInv(i), ins_symbol);
+      writeDfsVisit(g->getInput(i), aigs, g->isInv(i));
    if(g->getType() == PI_GATE) {
       //ins.push_back( aiger_var2lit( g->getId() ) );
-      CirPiGate* pi = (CirPiGate*) g;
-      ins_symbol.push_back(pi->getName());
    } else if(g->getType() == AIG_GATE) {
       unsigned _lhs = aiger_var2lit(g->getId());
       aigs.push_back(_lhs); //_lhs must even
@@ -483,23 +481,23 @@ void
 CirMgr::writeAag(ostream& outfile) const
 {
    
-   unsigned _m = miloa[0], _i = miloa[1], _l = miloa[2], _o = miloa[3], _a = miloa[4];
+   unsigned _m = miloa[0], _i = miloa[1], _l = miloa[2], _o = miloa[3];
    //vector<unsigned> mins;
    vector<unsigned> outs;
    vector<unsigned> aigs;
-   vector<string> ins_symbol;
-   outfile << "aag " << _m << " " << _i << " "
-      << _l << " " << _o << " " << _a << endl;
+   //vector<string> ins_symbol;
    for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PO_GATE) {
-         writeDfsVisit(g, aigs, g->isInv(0), ins_symbol);
+         writeDfsVisit(g, aigs, g->isInv(0));
          unsigned lit = aiger_var2lit(g->getInput(0)->getId());
          if(g->isInv(0))lit++;
          outs.push_back(lit);
       }
    }
+   outfile << "aag " << _m << " " << _i << " "
+      << _l << " " << _o << " " << (aigs.size() / 3) << endl;
    CirGate::index = 0;
    resetColors();
    for(unsigned i = 0; i < ins.size(); i++)
@@ -511,9 +509,10 @@ CirMgr::writeAag(ostream& outfile) const
       outfile << aigs[++j] << " ";
       outfile << aigs[++j] << endl;
    }
-   for(int i = 0; i < ins.size(); i++)
-      if(ins_symbol[i] != "")outfile << "i" << i << " " << ins_symbol[i] << endl;
-   
+   for(unsigned i = 0; i < ins.size(); i++) {
+      CirPiGate* g = (CirPiGate*)gateList[ ins[i] ];
+      if(g->getName() != "")outfile << "i" << i << " " << g->getName() << endl;
+   }
    for(unsigned i = _m + 1 ,size = _m + _o + 1, count = 0; i < size; i++) {
       CirGate *g = getGate(i);
       if (g != 0 && g->getType() == PO_GATE) {
