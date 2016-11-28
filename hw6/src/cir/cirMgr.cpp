@@ -162,7 +162,7 @@ myStr2Uns(const string& str)
          num += unsigned(str[i] - '0');
          valid = true;
       }
-      else return false;
+      else return 0;
    }
    return num;
 }

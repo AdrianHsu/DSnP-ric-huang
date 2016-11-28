@@ -127,7 +127,7 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
       cout << endl;
       for(int i = 0; i < size; i++) {
          index++;
-         CirGate* g = getOutput(ind[i]); //bug here
+         CirGate* g = getOutput(ind[i]);
          bool myinv = 0;
          for(int j = 0; j < g->getfinSize(); j++) {
             CirGate* g2 = g->getInput(j);
@@ -135,7 +135,7 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
             else if(g2 == this) {
                myinv = g->isInv(j);
                g->fanoutDfsVisit(l - 1, myinv);
-               break; //founded
+               break; //found
             }
          }
       }
