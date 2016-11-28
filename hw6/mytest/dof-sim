@@ -1,0 +1,14 @@
+cirr sim06.aag
+cirp -n
+cirg 1 -fanout 100
+cirg 1 -fanin 100
+cirg 4275 -fanin 100
+cirg 4275 -fanout 100
+cirr strash05.aag -rep
+cirp -n
+cirg 1 -fanout 100
+cirg 1 -fanin 100
+cirg 9 -fanin 100
+cirg 9 -fanout 100
+cirg 8 -fanout 100
+q -f

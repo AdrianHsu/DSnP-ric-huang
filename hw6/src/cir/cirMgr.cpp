@@ -262,7 +262,7 @@ CirMgr::readCircuit(const string& fileName)
    while(getline(ifs, str, '\n'))
       cmd.push_back(str);
    ifs.close(); 
-
+   if(cmd[0][0] != 'a') return false;
    vector<string> tmp;
    // aag M I L O A
    if(!lexOptions(cmd[0], tmp, 6))
