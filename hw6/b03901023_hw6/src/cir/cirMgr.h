@@ -13,10 +13,20 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include "cirDef.h"
 
 using namespace std;
 
-#include "cirDef.h"
+#define NEG 0x1
+
+#define aiger_sign(l) \
+  (((unsigned)(l))&1)
+
+#define aiger_var2lit(i) \
+  (((unsigned)(i)) << 1)
+
+#define aiger_lit2var(l) \
+  (((unsigned)(l)) >> 1)
 
 extern CirMgr *cirMgr;
 

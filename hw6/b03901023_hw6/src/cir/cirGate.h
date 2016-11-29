@@ -16,6 +16,17 @@
 
 using namespace std;
 
+#define NEG 0x1
+
+#define aiger_sign(l) \
+  (((unsigned)(l))&1)
+
+#define aiger_var2lit(i) \
+  (((unsigned)(i)) << 1)
+
+#define aiger_lit2var(l) \
+  (((unsigned)(l)) >> 1)
+
 
 class CirGate;
 

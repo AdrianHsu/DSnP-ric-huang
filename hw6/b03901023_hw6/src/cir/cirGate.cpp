@@ -80,7 +80,7 @@ CirGate::faninDfsVisit(int l, bool inv) const
    else if(color) cout << " (*)" << endl;
    else  { 
       cout << endl;
-      for(int i = 0; i < size; i++) {
+      for(unsigned i = 0; i < size; i++) {
          index++;
          getInput(i)->faninDfsVisit(l - 1, isInv(i));
       }
@@ -125,11 +125,11 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
             }
 
       cout << endl;
-      for(int i = 0; i < size; i++) {
+      for(unsigned i = 0; i < size; i++) {
          index++;
          CirGate* g = getOutput(ind[i]);
          bool myinv = 0;
-         for(int j = 0; j < g->getfinSize(); j++) {
+         for(unsigned j = 0; j < g->getfinSize(); j++) {
             CirGate* g2 = g->getInput(j);
             if(g2 == 0) break;
             else if(g2 == this) {
@@ -173,7 +173,7 @@ CirPoGate::printGate() const
 {
    //[8] PO  24 !22 (22GAT$PO)
    if(color) return;
-   for(int i = 0; i < faninList.size(); i++)
+   for(unsigned i = 0; i < faninList.size(); i++)
       getInput(i)->printGate();
    cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
    CirGate* fin = getInput(0);
@@ -195,7 +195,7 @@ CirAigGate::printGate() const
 {
    //[7] AIG 22 !10 !16
    if(color) return;
-   for(int i = 0; i < faninList.size(); i++)
+   for(unsigned i = 0; i < faninList.size(); i++)
       getInput(i)->printGate();
    cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
    CirGate* rhs0 = getInput(0);

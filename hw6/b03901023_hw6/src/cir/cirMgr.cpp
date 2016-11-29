@@ -155,12 +155,10 @@ myStr2Uns(const string& str)
    size_t i = 0;
    //int sign = 1;
    //if (str[0] == '-')  return false;
-   bool valid = false;
    for (; i < str.size(); ++i) {
       if (isdigit(str[i])) {
          num *= 10;
          num += unsigned(str[i] - '0');
-         valid = true;
       }
       else return 0;
    }
@@ -252,7 +250,7 @@ CirMgr::aigerAddUndef(string& str) {
 bool
 CirMgr::readCircuit(const string& fileName)
 {
-   ifstream ifs(fileName);
+   ifstream ifs(fileName.c_str());
    if(!ifs.is_open())
       return false;
    
@@ -276,21 +274,21 @@ CirMgr::readCircuit(const string& fileName)
    // const gate
    gateList[0] = new CirConstGate(0);// dummy lineNo
    ins.clear();
-   for(int i = 0; i < _i; i++) {
+   for(unsigned i = 0; i < _i; i++) {
       
       unsigned lit = myStr2Uns(cmd[i + 1]);
       unsigned var = aiger_lit2var(lit);
       ins.push_back(var);
       gateList[ var ] = new CirPiGate(var, i + 2);
    }
-   for(int i = 0; i < _a; i++) {
+   for(unsigned i = 0; i < _a; i++) {
       unsigned lNo = i + _i + _o + 2;
       aigerAddAnd(cmd[i + _i + _o + 1], lNo); 
    }
-   for(int i = 0; i < _a; i++)
+   for(unsigned i = 0; i < _a; i++)
       aigerAddUndef(cmd[i + _i + _o + 1]); 
    
-   for(int i = 0; i < _o; i++) {
+   for(unsigned i = 0; i < _o; i++) {
       unsigned lit = myStr2Uns(cmd[i + _i + 1]);
       unsigned lNo = i + _i + 2;
       CirPoGate *gate = new CirPoGate(i + _m + 1, lNo);
@@ -438,7 +436,7 @@ CirMgr::printFloatGates() const
    }
    if(case1.size() != 0) {
       cout << "Gates with floating fanin(s):";
-      for(int i = 0; i < case1.size(); i++)
+      for(unsigned i = 0; i < case1.size(); i++)
          cout << " " << case1[i];
       cout << endl;
    }
@@ -452,7 +450,7 @@ CirMgr::printFloatGates() const
    }
    if(case2.size() != 0) {
       cout << "Gates defined but not used  :";
-      for(int i = 0; i < case2.size(); i++)
+      for(unsigned i = 0; i < case2.size(); i++)
          cout << " " << case2[i];
       cout << endl;
    }
@@ -461,7 +459,7 @@ void
 CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv) const
 {
    if(g->getColor()) return;
-   for(int i = 0; i < g->getfinSize(); i++)
+   for(unsigned i = 0; i < g->getfinSize(); i++)
       writeDfsVisit(g->getInput(i), aigs, g->isInv(i));
    if(g->getType() == PI_GATE) {
       //ins.push_back( aiger_var2lit( g->getId() ) );
