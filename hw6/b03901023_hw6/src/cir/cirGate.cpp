@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 #include <sstream>
 #include <stdarg.h>
 #include <cassert>
@@ -97,6 +98,8 @@ CirGate::reportFanin(int level) const
    cirMgr->resetColors();
    index = 0;
 }
+bool orderSort (CirGate* i,CirGate* j) { return (i->getId() < j->getId()); }
+
 void
 CirGate::fanoutDfsVisit(int l, bool inv) const
 {
@@ -109,25 +112,17 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
    else if(color) cout << " (*)" << endl;
    else {
       
-      vector<unsigned> order;
-      vector<unsigned> ind;
+      vector<CirGate*> order;
       for(unsigned i = 0; i < size; i++){ 
          CirGate* g = getOutput(i);
-         order.push_back(g->getId());
-         ind.push_back(i);
+         order.push_back(g);
       }
-      
-      for(unsigned i = 0; i < size; i++)
-         for(unsigned j = i; j < size; j++)
-            if(order[j] < order[i]) {
-               swap(order[j], order[i]);
-               swap(ind[j], ind[i]);
-            }
+      std::sort (order.begin(), order.end(), orderSort);
 
       cout << endl;
       for(unsigned i = 0; i < size; i++) {
          index++;
-         CirGate* g = getOutput(ind[i]);
+         CirGate* g = order[i];
          bool myinv = 0;
          for(unsigned j = 0; j < g->getfinSize(); j++) {
             CirGate* g2 = g->getInput(j);

@@ -383,8 +383,8 @@ CirMgr::printNetlist() const
 void
 CirMgr::printPIs() const
 {
+   cout << "PIs of the circuit:";
    if(ins.size() != 0) {
-      cout << "PIs of the circuit:";
       for (unsigned i = 0; i < ins.size(); ++i) {
          cout << " " << ins[i];
       }
@@ -398,8 +398,8 @@ void
 CirMgr::printPOs() const
 {
    unsigned _m = miloa[0], _o = miloa[3];
+   cout << "POs of the circuit:";
    if(_o != 0) {
-      cout << "POs of the circuit:";
       for (unsigned i = _m + 1, size = _m + _o + 1; i < size; ++i) {
          CirGate *g = getGate(i);
          if (g != 0 && g->getType() == PO_GATE)
