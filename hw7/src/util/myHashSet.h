@@ -84,7 +84,7 @@ public:
             for(int a = n; a >= 0; a--)
                if(!buckets[a].empty()) {
                   n = a;
-                  i = buckets[a].size();
+                  i = buckets[a].size() - 1;
                }
          } else
             i--;
@@ -149,7 +149,9 @@ public:
          }
       }
       int n = _numBuckets - 1;
-      return iterator(_buckets, _numBuckets, n, _buckets[n].size() - 1);
+      int i = _buckets[n].size() - 1;
+      if(i < 0) cerr << "ERROR" << endl;
+      return iterator(_buckets, _numBuckets, n, i);
    }
    // return true if no valid data
    bool empty() const { 
