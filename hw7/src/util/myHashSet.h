@@ -48,27 +48,22 @@ public:
       friend class HashSet<Data>;
 
    public:
-      iterator(vector<Data>* b, size_t num, size_t _n, size_t _i)
-         :buckets(b), numBuckets(num), n(_n), i(_i) {}
+      iterator(vector<Data>* b, size_t num, size_t _n, typename vector<Data>::iterator _it)
+         :buckets(b), numBuckets(num), n(_n), it(_it) {}
       iterator(const iterator& iter)
-         :buckets(iter.buckets), numBuckets(iter.numBuckets), n(iter.n), i(iter.i){}
+         :buckets(iter.buckets), numBuckets(iter.numBuckets), n(iter.n), it(iter.it){}
       ~iterator(){}
-      const Data& operator * () const { return *(this); }
-      Data& operator *() {return buckets[n][i];}
+      const Data& operator * () const { return *this; }
+      Data& operator *() {return *(it);}
       iterator& operator++() {
-         size_t _i_size = buckets[n].size();
-         if(i == _i_size - 1) {
-            if(n == numBuckets - 1)
-               n = 0;
-            else n++;
-            for(size_t a = n; a < numBuckets; a++)
-               if(!buckets[a].empty()) {
-                  n = a;
-                  i = 0;
+         if(it == buckets[numBuckets - 1].end()) return *this;
+         if(++it == buckets[n].end()) {
+            for(size_t i = ++n; i < numBuckets; i++, n++)
+               if(!buckets[i].empty()) {
+                  it = buckets[i].begin();
+                  break;
                }
-         } else 
-            i++;
-         
+         }
          return *this;
       }
       iterator operator++(int) {
@@ -77,17 +72,16 @@ public:
          return tmp;
       }
       iterator& operator--() {
-         if(i == 0) {
-            if(n == 0)
-               n = numBuckets - 1;
-            else n--;
-            for(int a = n; a >= 0; a--)
-               if(!buckets[a].empty()) {
-                  n = a;
-                  i = buckets[a].size() - 1;
+         if (numBuckets == 0 || it == buckets[0].begin()) return *this;
+         if(it != buckets[n].begin()) {
+            --it;
+         } else {
+            for(int i = --n; i >= 0; i--, n--)
+               if(!buckets[i].empty()) {
+                  it = buckets[i].back();
+                  break;
                }
-         } else
-            i--;
+         }
          return *this;
       }
       iterator operator--(int) {
@@ -99,12 +93,12 @@ public:
          buckets = iter.buckets;
          numBuckets = iter.numBuckets;
          n = iter.n;
-         i = iter.i;
+         it = iter.it;
          return this;
       }
       bool operator == (const iterator& iter) {
          return(buckets == iter.buckets && numBuckets == iter.numBuckets &&
-            n == iter.n && i == iter.i);
+            n == iter.n && it == iter.it);
       }
       bool operator != (const iterator& iter) {
          return !(*this == iter);
@@ -115,7 +109,7 @@ public:
       vector<Data>* buckets;
       size_t numBuckets;
       size_t n;
-      size_t i;
+      typename vector<Data>::iterator it;
    };
 
    void init(size_t b) { _numBuckets = b; _buckets = new vector<Data>[b]; }
@@ -134,24 +128,16 @@ public:
    // TODO: implement these functions
 
    // Point to the first valid data
-   iterator begin() const { 
+   iterator begin() const {
       for(size_t n = 0; n < _numBuckets; n++)
          if(!_buckets[n].empty())
-            return iterator(_buckets, _numBuckets, n, 0);
+            return iterator(_buckets, _numBuckets, n, _buckets[n].begin());
       return iterator(end());
    }
    // Pass the end
    iterator end() const {
-      for(int n = _numBuckets - 1; n >= 0; n--) {
-         if(!_buckets[n].empty()) {
-            size_t _end = _buckets[n].size() - 1;
-            return iterator(_buckets, _numBuckets, n, _end);
-         }
-      }
-      int n = _numBuckets - 1;
-      int i = _buckets[n].size() - 1;
-      if(i < 0) cerr << "ERROR" << endl;
-      return iterator(_buckets, _numBuckets, n, i);
+      size_t n = _numBuckets - 1;
+      return iterator(_buckets, _numBuckets, n, _buckets[n].end());
    }
    // return true if no valid data
    bool empty() const { 
