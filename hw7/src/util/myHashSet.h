@@ -62,16 +62,14 @@ public:
                n = 0;
             else n++;
             for(size_t a = n; a < numBuckets; a++)
-               for(size_t b = 0; b < buckets[a].size(); b++)
-                  if(buckets[a][b] != 0) {
-                     n = a;
-                     i = b;
-                     return *this;
-                  }
-         } else {
+               if(!buckets[a].empty()) {
+                  n = a;
+                  i = 0;
+               }
+         } else 
             i++;
-            return *this;
-         }
+         
+         return *this;
       }
       iterator operator++(int) {
          iterator tmp = iterator(*this);
@@ -83,17 +81,14 @@ public:
             if(n == 0)
                n = numBuckets - 1;
             else n--;
-            for(size_t a = n; a >= 0; a--)
-               for(size_t b = buckets[a].size() - 1; b >= 0; b--)
-                  if(buckets[a][b] != 0) {
-                     n = a;
-                     i = b;
-                     return *this;
-                  }
-         } else {
+            for(int a = n; a >= 0; a--)
+               if(!buckets[a].empty()) {
+                  n = a;
+                  i = buckets[a].size();
+               }
+         } else
             i--;
-            return *this;
-         }
+         return *this;
       }
       iterator operator--(int) {
          iterator tmp = iterator(*this);
@@ -141,18 +136,20 @@ public:
    // Point to the first valid data
    iterator begin() const { 
       for(size_t n = 0; n < _numBuckets; n++)
-         for(size_t i = 0; i < _buckets[n].size(); i++)
-            if(_buckets[n][i] != 0)
-               return iterator(_buckets, numBuckets, n, i);
-      return iterator(0);
+         if(!_buckets[n].empty())
+            return iterator(_buckets, _numBuckets, n, 0);
+      return iterator(end());
    }
    // Pass the end
    iterator end() const {
-      for(size_t n = _numBuckets - 1; n >= 0; n--)
-         for(size_t i = _buckets[n].size() - 1; i >= 0; i--)
-            if(_buckets[n][i] != 0)
-               return iterator(_buckets, numBuckets, n, i);
-      return iterator(0); 
+      for(int n = _numBuckets - 1; n >= 0; n--) {
+         if(!_buckets[n].empty()) {
+            size_t _end = _buckets[n].size() - 1;
+            return iterator(_buckets, _numBuckets, n, _end);
+         }
+      }
+      int n = _numBuckets - 1;
+      return iterator(_buckets, _numBuckets, n, _buckets[n].size() - 1);
    }
    // return true if no valid data
    bool empty() const { 
@@ -210,7 +207,7 @@ public:
    bool insert(const Data& d) {
       size_t n = bucketNum(d);
       bool tmp = false;
-      for(size_t i = 0; i < _buckets[n].size(); i+=)
+      for(size_t i = 0; i < _buckets[n].size(); i++)
          if(_buckets[n][i] == d)
             tmp = true;
       if(tmp)
@@ -223,7 +220,7 @@ public:
    // return false otherwise (i.e. nothing is removed)
    bool remove(const Data& d) { 
       size_t n = bucketNum(d);
-      for(size_t i = 0; i < _buckets[n].size(); i+=)
+      for(size_t i = 0; i < _buckets[n].size(); i++)
          if(_buckets[n][i] == d) {
             _buckets[n].erase(_buckets[n].begin() + i);
             return true;
