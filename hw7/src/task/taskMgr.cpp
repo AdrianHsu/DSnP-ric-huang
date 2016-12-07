@@ -86,7 +86,8 @@ void
 TaskMgr::add(size_t nMachines)
 {
    // TODO...
-   
+   for(size_t i = 0; i < nMachines; i++)
+      _taskHeap.insert(TaskNode());
 
 }
 
@@ -96,7 +97,13 @@ bool
 TaskMgr::add(const string& s, size_t l)
 {
    // TODO...
-   return false;
+   TaskNode n(s, l);
+   for(size_t i = 0; i < size(); i ++)
+      if(n == _taskHeap[i])
+        return false;
+
+   _taskHeap.insert(n);
+   return true;
 }
 
 // Assign the min task node with 'l' extra load.

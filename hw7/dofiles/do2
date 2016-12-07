@@ -10,3 +10,4 @@ taska 1000 -r 100000
 taskq -hash
 taskq -heap
 usage
+q -f

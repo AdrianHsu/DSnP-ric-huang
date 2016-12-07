@@ -48,8 +48,21 @@ public:
       friend class HashSet<Data>;
 
    public:
+      iterator(Data* d = 0): _node(d){}
+      iterator(const iterator& i): _node(i._node){}
+      ~iterator(){}
+      const Data& operator * () const {return *(this);}
+      Data& operator *() {return *(_node);}
+      iterator& operator++() {return 0;}
+      iterator operator++(int) {return 0;}
+      iterator& operator--() {return 0;}
+      iterator operator--(int) {return 0;}
+      iterator& operator = (const iterator& i) {return 0;}
 
+      bool operator == (const iterator& i) {return false;}
+      bool operator != (const iterator& i) {return false;}
    private:
+      Data* _node;
    };
 
    void init(size_t b) { _numBuckets = b; _buckets = new vector<Data>[b]; }
@@ -84,20 +97,55 @@ public:
    // query if d is in the hash...
    // if yes, replace d with the data in the hash and return true;
    // else return false;
-   bool query(Data& d) const { return false; }
+   bool query(Data& d) const { 
+      size_t n = bucketNum(d);
+      for(size_t i = 0; i < _buckets[n].size(); i++)
+         if(_buckets[n][i] == d) {
+            d = _buckets[n][i];
+            return true;
+         }
+      return false; 
+   }
 
    // update the entry in hash that is equal to d (i.e. == return true)
    // if found, update that entry with d and return true;
    // else insert d into hash as a new entry and return false;
-   bool update(const Data& d) { return false; }
+   bool update(const Data& d) { 
+      size_t n = bucketNum(d);
+      for(size_t i = 0; i < _buckets[n].size(); i++)
+         if(_buckets[n][i] == d) {
+            _buckets[n][i] = d;
+            return true;
+         }
+      _buckets[n].push_back(d);
+      return false;
+   }
 
    // return true if inserted successfully (i.e. d is not in the hash)
    // return false is d is already in the hash ==> will not insert
-   bool insert(const Data& d) { return true; }
+   bool insert(const Data& d) {
+      size_t n = bucketNum(d);
+      bool tmp = false;
+      for(size_t i = 0; i < _buckets[n].size(); i+=)
+         if(_buckets[n][i] == d)
+            tmp = true;
+      if(tmp)
+         return false; // will not insert
+      _buckets[n].push_back(d);
+      return true;
+   }
 
    // return true if removed successfully (i.e. d is in the hash)
-   // return fasle otherwise (i.e. nothing is removed)
-   bool remove(const Data& d) { return false; }
+   // return false otherwise (i.e. nothing is removed)
+   bool remove(const Data& d) { 
+      size_t n = bucketNum(d);
+      for(size_t i = 0; i < _buckets[n].size(); i+=)
+         if(_buckets[n][i] == d) {
+            _buckets[n].erase(_buckets[n].begin() + i);
+            return true;
+         }
+      return false;
+   }
 
 private:
    // Do not add any extra data member
