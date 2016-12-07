@@ -18,8 +18,8 @@ using namespace std;
 
 class TaskNode
 {
-#define NAME_LEN  5
-#define LOAD_RN   10000
+#define NAME_LEN  6
+#define LOAD_RN   20000
 
 public:
    TaskNode();
@@ -47,7 +47,7 @@ public:
    TaskMgr(size_t nMachines);
    ~TaskMgr() {}
 
-   void clear() { _taskHeap.clear(); _taskHash.clear(); }
+   void clear();
 
    size_t size() const { return _taskHeap.size(); }
    bool empty() { return size() == 0; }

@@ -23,7 +23,7 @@ TaskNode::TaskNode()
    _name.resize(NAME_LEN);
    for (int i = 0; i < NAME_LEN; ++i)
       _name[i] = 'a' + rnGen(26);
-   _load = rnGen(10000);
+   _load = rnGen(LOAD_RN);
 }
 
 size_t
@@ -44,11 +44,20 @@ TaskMgr::TaskMgr(size_t nMachines)
 : _taskHeap(nMachines), _taskHash(getHashSize(nMachines)) { }
 
 void
+TaskMgr::clear()
+{
+   for (size_t i = 0, n = size(); i < n; ++i)
+      cout << "Task node removed: " << _taskHeap[i] << endl;
+   _taskHeap.clear(); _taskHash.clear();
+}
+
+void
 TaskMgr::remove(size_t nMachines)
 {        
    for (size_t i = 0, n = nMachines; i < n; ++i) {
       size_t j = rnGen(size());
       assert(_taskHash.remove(_taskHeap[j]));
+      cout << "Task node removed: " << _taskHeap[j] << endl;
       _taskHeap.delData(j);
    }
 }
@@ -59,9 +68,14 @@ bool
 TaskMgr::remove(const string& s)
 {
    TaskNode n(s, 0);
+   if (!_taskHash.remove(n)) return false;
    for (size_t i = 0, m = size(); i < m; ++i)
-      if (_taskHeap[i] == n) { _taskHeap.delData(i); break; }
-   return _taskHash.remove(n);
+      if (_taskHeap[i] == n) {
+         cout << "Task node removed: " << _taskHeap[i] << endl;
+         _taskHeap.delData(i);
+         break;
+      }
+   return true;
 }
 // END: DO NOT CHANGE THIS PART
 

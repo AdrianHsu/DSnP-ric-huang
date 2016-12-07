@@ -86,7 +86,7 @@ public:
    // else return false;
    bool query(Data& d) const { return false; }
 
-   // update the entry in hash that is equal to d
+   // update the entry in hash that is equal to d (i.e. == return true)
    // if found, update that entry with d and return true;
    // else insert d into hash as a new entry and return false;
    bool update(const Data& d) { return false; }

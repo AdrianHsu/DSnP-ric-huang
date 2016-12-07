@@ -224,6 +224,10 @@ TaskQueryCmd::exec(const string& option)
       cout << "Number of tasks: " << taskMgr->size() << endl;
    }
    else if (myStrNCmp("-MINimum", token, 4) == 0) {
+      if (taskMgr->empty()) {
+         cerr << "Error: task manager is empty!" << endl;
+         return CMD_EXEC_ERROR;
+      }
       cout << "Min task node: " << taskMgr->min() << endl;
    }
    else if (isValidVarName(token)) {
@@ -239,7 +243,8 @@ TaskQueryCmd::exec(const string& option)
 void
 TaskQueryCmd::usage(ostream& os) const
 {
-   os << "Usage: TASKQuery <(string name) | -All | -MINimum >" << endl;
+   os << "Usage: TASKQuery <(string name) | -HAsh | -HEap | -MINimum >"
+      << endl;
 }
 
 void
