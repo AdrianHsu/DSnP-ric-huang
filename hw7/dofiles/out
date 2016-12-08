@@ -1,7 +1,7 @@
-task> taski 10
-Task manager is initialized (10)
+task> taski 15
+Task manager is initialized (15)
 
-task> taskn -r 10
+task> taskn -r 15
 Task node inserted: (gpcbg, 8861)
 Task node inserted: (ibqbz, 4829)
 Task node inserted: (pwubv, 8968)
@@ -12,89 +12,48 @@ Task node inserted: (nzuea, 7576)
 Task node inserted: (rqqls, 4760)
 Task node inserted: (isruo, 142)
 Task node inserted: (dxwmb, 1596)
-... 10 new task nodes are added.
+Task node inserted: (jqsvh, 3436)
+Task node inserted: (nvhiz, 3366)
+Task node inserted: (brzsc, 6960)
+Task node inserted: (elkwg, 9364)
+Task node inserted: (wjvtw, 9075)
+... 15 new task nodes are added.
+
+task> taskq -hash
+(gpcbg, 8861)
+(pwubv, 8968)
+(zemvj, 3373)
+(rqqls, 4760)
+(wjvtw, 9075)
+(jqsvh, 3436)
+(elkwg, 9364)
+(oolqq, 7097)
+(nzuea, 7576)
+(jwjeh, 8761)
+(isruo, 142)
+(dxwmb, 1596)
+(nvhiz, 3366)
+(ibqbz, 4829)
+(brzsc, 6960)
+Number of tasks: 15
 
 task> taskq -heap
 (isruo, 142)
 (dxwmb, 1596)
-(oolqq, 7097)
+(nvhiz, 3366)
 (rqqls, 4760)
 (zemvj, 3373)
-(pwubv, 8968)
+(brzsc, 6960)
 (nzuea, 7576)
 (gpcbg, 8861)
 (ibqbz, 4829)
 (jwjeh, 8761)
-Number of tasks: 10
-
-task> taska 100
-Task assignment succeeds...
-Updating min: (isruo, 242)
-
-task> taskq -heap
-(isruo, 242)
-(dxwmb, 1596)
+(jqsvh, 3436)
+(pwubv, 8968)
 (oolqq, 7097)
-(rqqls, 4760)
-(zemvj, 3373)
-(pwubv, 8968)
-(nzuea, 7576)
-(gpcbg, 8861)
-(ibqbz, 4829)
-(jwjeh, 8761)
-Number of tasks: 10
-
-task> taska 1000
-Task assignment succeeds...
-Updating min: (isruo, 1242)
-
-task> taskq -heap
-(isruo, 1242)
-(dxwmb, 1596)
-(oolqq, 7097)
-(rqqls, 4760)
-(zemvj, 3373)
-(pwubv, 8968)
-(nzuea, 7576)
-(gpcbg, 8861)
-(ibqbz, 4829)
-(jwjeh, 8761)
-Number of tasks: 10
-
-task> taska 1000 -r 10
-Task assignment succeeds...
-Updating min: (dxwmb, 1596)
-Task assignment succeeds...
-Updating min: (isruo, 2242)
-Task assignment succeeds...
-Updating min: (dxwmb, 2596)
-Task assignment succeeds...
-Updating min: (isruo, 3242)
-Task assignment succeeds...
-Updating min: (zemvj, 3373)
-Task assignment succeeds...
-Updating min: (dxwmb, 3596)
-Task assignment succeeds...
-Updating min: (isruo, 4242)
-Task assignment succeeds...
-Updating min: (zemvj, 4373)
-Task assignment succeeds...
-Updating min: (dxwmb, 4596)
-Task assignment succeeds...
-Updating min: (rqqls, 4760)
-
-task> taskq -heap
-(rqqls, 4760)
-(ibqbz, 4829)
-(oolqq, 7097)
-(zemvj, 5373)
-(isruo, 5242)
-(pwubv, 8968)
-(nzuea, 7576)
-(gpcbg, 8861)
-(jwjeh, 8761)
-(dxwmb, 5596)
-Number of tasks: 10
+(elkwg, 9364)
+(wjvtw, 9075)
+Number of tasks: 15
 
 task> q -f
 
