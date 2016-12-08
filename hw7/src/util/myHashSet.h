@@ -80,7 +80,7 @@ public:
             --_i;
          else {
             size_t t = _n;
-            while(t > 0 && t <= _numBuckets) {
+            while(t > 0) {
                --t;
                if(!_buckets[t].empty()) {
                   _i = _buckets[t].size() - 1;

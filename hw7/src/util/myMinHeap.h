@@ -41,41 +41,40 @@ public:
       _data.push_back(d);
       while(t > 0) {
          int p = (t - 1) / 2;
-         if(d < _data[p]) {
-            _data[t] = _data[p];
-            t = p; 
-         }
+         if(_data[t] < _data[p])
+            swap(_data[t], _data[p]);
          else break;
+         t = p;
       }
-      _data[t] = d;
    }
    void delMin() {delData(0);}
 
    void delData(size_t i) {
-      Data ret = _data.back();
+      if(_data.empty()) return;
+
+      swap(_data[i], _data.back());
       _data.pop_back();
       int s = _data.size();
-      int p = i, c = p * 2 + 1;
-      if(p == s) return;
-      while (c < s) {
-         if(c + 1 < s && _data[c + 1] < _data[c]) ++c;
-         if(ret < _data[c]) break;
-         _data[p] = _data[c];
-         p = c;
-         c = p * 2 + 1;
-      }
-
-      c = (p - 1) / 2;
-      while (c > 0) {
-         if(ret < _data[c]) {
-            _data[p] = _data[c];
-            p = c;
-            c = (p - 1) / 2;
-         }
+      if(i == s) return;
+      //sifting
+      int a = i, b = a * 2 + 1;
+      while(b < s) {
+         if(b + 1 < s && _data[b + 1] < _data[b]) b++;
+         if(_data[b] < _data[a])
+            swap(_data[a], _data[b]);
          else break;
+         a = b;
+         b = 2 * a + 1;
       }
-      
-      _data[p] = ret;
+      //floating
+      int p = (a - 1) / 2;
+      while(a > 0) {
+         if(_data[a] < _data[p])
+            swap(_data[a], _data[p]);
+         else break;
+         a = p;
+         p = (a - 1) / 2;
+      }
    }
 
 private:
