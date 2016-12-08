@@ -60,9 +60,8 @@ public:
       int a = i, b = a * 2 + 1;
       while(b < s) {
          if(b + 1 < s && _data[b + 1] < _data[b]) b++;
-         if(_data[b] < _data[a])
-            swap(_data[a], _data[b]);
-         else break;
+         if(_data[a] < _data[b]) break;
+         swap(_data[a], _data[b]);
          a = b;
          b = 2 * a + 1;
       }
