@@ -52,27 +52,30 @@ public:
    void delMin() {delData(0);}
 
    void delData(size_t i) {
-      swap(_data[i], _data[_data.size() - 1]);
-      //MIN_HEAPIFY(i)
-      bool run = 1;
-      i++;
-      while(run) {
-         size_t l = (2 * i) , r = (2 * i + 1);
-         size_t largest = 0;
-
-         if(l < _data.size() && _data[l - 1] < _data[i - 1]) {
-            largest = l;
-         } else largest = i;
-         if(r < _data.size() && _data[r - 1] < _data[largest - 1]) {
-            largest = r;
-         }
-         if(largest != i) {
-            swap(_data[i - 1], _data[largest - 1]);
-            i = largest;
-            run = 1;
-         } else run = 0;
-      }
+      Data ret = _data.back();
       _data.pop_back();
+      int s = _data.size();
+      int p = i, c = p * 2 + 1;
+      if(p == s) return;
+      while (c < s) {
+         if(c + 1 < s && _data[c + 1] < _data[c]) ++c;
+         if(ret < _data[c]) break;
+         _data[p] = _data[c];
+         p = c;
+         c = p * 2 + 1;
+      }
+
+      c = (p - 1) / 2;
+      while (c > 0) {
+         if(ret < _data[c]) {
+            _data[p] = _data[c];
+            p = c;
+            c = (p - 1) / 2;
+         }
+         else break;
+      }
+      
+      _data[p] = ret;
    }
 
 private:
