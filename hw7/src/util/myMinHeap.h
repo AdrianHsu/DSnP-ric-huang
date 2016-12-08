@@ -59,15 +59,18 @@ public:
       //sifting
       size_t a = i, b = a * 2 + 1;
       while(b < s) {
-         if(b + 1 < s && _data[b + 1] < _data[b]) b++;
-         if(_data[a] < _data[b]) break;
+         if(b + 1 < s && (_data[b + 1] < _data[b])) b++;
+         if(_data[a] < _data[b]) {
+            a = b;
+            break;
+         }
          swap(_data[a], _data[b]);
          a = b;
          b = 2 * a + 1;
       }
       //floating
       int p = (a - 1) / 2;
-      while(a > 0) {
+      while(p > 0) {
          if(_data[a] < _data[p])
             swap(_data[a], _data[p]);
          else break;
