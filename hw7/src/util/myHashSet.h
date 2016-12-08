@@ -169,7 +169,7 @@ public:
       for(size_t i = 0; i < _buckets[n].size(); i++)
          if(_buckets[n][i] == d)
             return true;
-      return false; 
+      return false;
    }
    // query if d is in the hash...
    // if yes, replace d with the data in the hash and return true;

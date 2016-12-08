@@ -1,7 +1,7 @@
-taski 100000
-taskn -r 100000
-taskq -heap
-taskr -r 50000
-taskq -heap
+taski 1000
+taskn -r 1000
+taskq -hash
+taskr -r 500
+taskq -hash
 usage
 q -f

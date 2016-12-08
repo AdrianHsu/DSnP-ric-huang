@@ -57,8 +57,7 @@ TaskMgr::remove(size_t nMachines)
    for (size_t i = 0, n = nMachines; i < n; ++i) {
       size_t j = rnGen(size());
       assert(_taskHash.remove(_taskHeap[j]));
-      // cout << "Task node removed: " << _taskHeap[j] << endl; // remember to ADD BACK!!!
-
+      // cout << "Task node removed: " << _taskHeap[j] << endl; // remember to ADD BACK!!!!!
       _taskHeap.delData(j);
    }
 }
