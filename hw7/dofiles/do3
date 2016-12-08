@@ -1,7 +1,10 @@
 taski 10
 taskn -r 1
+taskq -hash
 taskn -n abcde 100
+taskq -hash
 taskn -n qqqqq 8000
+taskq -hash
 taskn -n xxxxx 4000
 taskn -n xxxxx 3000
 taskn -n bbbbb 5000

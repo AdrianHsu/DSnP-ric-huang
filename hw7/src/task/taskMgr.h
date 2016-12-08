@@ -18,8 +18,8 @@ using namespace std;
 
 class TaskNode
 {
-#define NAME_LEN  6
-#define LOAD_RN   20000
+#define NAME_LEN  5
+#define LOAD_RN   10000
 
 public:
    TaskNode();

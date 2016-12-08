@@ -48,22 +48,26 @@ public:
       friend class HashSet<Data>;
 
    public:
-      iterator(vector<Data>* b, size_t num, size_t _n, typename vector<Data>::iterator _it)
-         :buckets(b), numBuckets(num), n(_n), it(_it) {}
-      iterator(const iterator& iter)
-         :buckets(iter.buckets), numBuckets(iter.numBuckets), n(iter.n), it(iter.it){}
+      iterator(vector<Data>* b, size_t num, size_t n) 
+      : _numBuckets(num),  _n(n), _i(0), _buckets(b) {
+         if(_n != _numBuckets) _node = &_buckets[_n][_i];
+         else _node = NULL;
+      }
       ~iterator(){}
-      const Data& operator * () const { return *this; }
-      Data& operator *() {return *(it);}
+      const Data& operator * () const { return *(_node); }
+      Data& operator *() { return *(_node); }
       iterator& operator++() {
-         if(it == buckets[numBuckets - 1].end()) return *this;
-         if(++it == buckets[n].end()) {
-            for(size_t i = ++n; i < numBuckets; i++, n++)
-               if(!buckets[i].empty()) {
-                  it = buckets[i].begin();
+         if(_n == _numBuckets) return *this;
+         else if(_i < _buckets[_n].size() - 1) ++_i;
+         else { //_i == _buckets[_n].size() - 1
+            while(++_n < _numBuckets)
+               if(!_buckets[_n].empty())
                   break;
-               }
+            _i = 0;
          }
+         if(_n != _numBuckets) _node = &_buckets[_n][_i];
+         else _node = NULL;
+
          return *this;
       }
       iterator operator++(int) {
@@ -72,44 +76,47 @@ public:
          return tmp;
       }
       iterator& operator--() {
-         if (numBuckets == 0 || it == buckets[0].begin()) return *this;
-         if(it != buckets[n].begin()) {
-            --it;
-         } else {
-            for(int i = --n; i >= 0; i--, n--)
-               if(!buckets[i].empty()) {
-                  it = buckets[i].back();
+         if(_i > 0)
+            --_i;
+         else {
+            size_t t = _n;
+            while(t > 0 && t <= _numBuckets) {
+               --t;
+               if(!_buckets[t].empty()) {
+                  _i = _buckets[t].size() - 1;
+                  _n = t;
                   break;
                }
+            }
          }
-         return *this;
+         _node = &_buckets[_n][_i];
+         return (*this);
       }
       iterator operator--(int) {
          iterator tmp = iterator(*this);
          --(*this);
          return tmp;
       }
-      iterator& operator = (const iterator& iter) {
-         buckets = iter.buckets;
-         numBuckets = iter.numBuckets;
-         n = iter.n;
-         it = iter.it;
+      iterator& operator = (const iterator& i) {
+         _node = i._node;
+         _numBuckets = i._numBuckets;
+         _i = i._i;
+         _n = i._n;
+         _buckets = i._buckets;
          return this;
       }
-      bool operator == (const iterator& iter) {
-         return(buckets == iter.buckets && numBuckets == iter.numBuckets &&
-            n == iter.n && it == iter.it);
+      bool operator == (const iterator& i) const {
+         return((_i == i._i) && (_n == i._n) && (_node == i._node));
       }
-      bool operator != (const iterator& iter) {
-         return !(*this == iter);
+      bool operator != (const iterator& i) const {
+         return !(*this == i);
       }
          
          
    private:
-      vector<Data>* buckets;
-      size_t numBuckets;
-      size_t n;
-      typename vector<Data>::iterator it;
+      Data*             _node;
+      size_t            _numBuckets, _n, _i;
+      vector<Data>*     _buckets;
    };
 
    void init(size_t b) { _numBuckets = b; _buckets = new vector<Data>[b]; }
@@ -130,14 +137,15 @@ public:
    // Point to the first valid data
    iterator begin() const {
       for(size_t n = 0; n < _numBuckets; n++)
-         if(!_buckets[n].empty())
-            return iterator(_buckets, _numBuckets, n, _buckets[n].begin());
-      return iterator(end());
+         if(!_buckets[n].empty()) {
+            return iterator(_buckets, _numBuckets, n);
+         }
+      return end();
    }
    // Pass the end
    iterator end() const {
-      size_t n = _numBuckets - 1;
-      return iterator(_buckets, _numBuckets, n, _buckets[n].end());
+      size_t n = _numBuckets;
+      return iterator(_buckets, _numBuckets, n);
    }
    // return true if no valid data
    bool empty() const { 
@@ -166,7 +174,7 @@ public:
    // query if d is in the hash...
    // if yes, replace d with the data in the hash and return true;
    // else return false;
-   bool query(Data& d) const { 
+   bool query(Data& d) const {
       size_t n = bucketNum(d);
       for(size_t i = 0; i < _buckets[n].size(); i++)
          if(_buckets[n][i] == d) {
@@ -194,12 +202,10 @@ public:
    // return false is d is already in the hash ==> will not insert
    bool insert(const Data& d) {
       size_t n = bucketNum(d);
-      bool tmp = false;
       for(size_t i = 0; i < _buckets[n].size(); i++)
          if(_buckets[n][i] == d)
-            tmp = true;
-      if(tmp)
-         return false; // will not insert
+            return false;
+
       _buckets[n].push_back(d);
       return true;
    }

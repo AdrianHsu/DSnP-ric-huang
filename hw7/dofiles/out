@@ -283,8 +283,8 @@ task> taskq -hash
 (dhlny, 5787)
 (pjeih, 3745)
 (nzuea, 7576)
-(zfhdk, 8200)
 (pyhoq, 3786)
+(zfhdk, 8200)
 (emthm, 2725)
 (ureom, 564)
 (iador, 8274)
@@ -314,7 +314,7 @@ Number of tasks: 98
 task> usage
 Period time used : 0 seconds
 Total time used  : 0 seconds
-Total memory used: 0.08203 M Bytes
+Total memory used: 0.1172 M Bytes
 
 task> q -f
 

@@ -1,0 +1,7 @@
+taski 100
+taskn -r 100
+taskq -hash
+taskr -r 2
+taskq -hash
+usage
+q -f

@@ -27,61 +27,52 @@ public:
    Data& operator [] (size_t i) { return _data[i]; }
 
    size_t size() const { 
-      if(_data.size() == 0) return 0;
-      else if(_data.size() == 1) return 0; // ERROR
-      else return _data.size() - 1; 
+      return _data.size();
    }
 
    // TODO
    const Data& min() const { 
       // if (!_data.empty()) 
-         return _data[1];
-      // return Data(); //DUMMY
+      return _data[0];
    }
    void insert(const Data& d) { 
-      if(_data.size() == 0)
-         _data.push_back(Data()); // NULL
       
+      int t = _data.size();
       _data.push_back(d);
-      size_t t = _data.size();
-      
-      while(t > 1) {
-         int p = t / 2;
-         if(_data[p] < d || _data[p] == d)
-            break;
-         _data[t] = _data[p];
-         t = p;
+      while(t > 0) {
+         int p = (t - 1) / 2;
+         if(d < _data[p]) {
+            _data[t] = _data[p];
+            t = p; 
+         }
+         else break;
       }
       _data[t] = d;
    }
    void delMin() {delData(0);}
 
    void delData(size_t i) {
-      i++;
       swap(_data[i], _data[_data.size() - 1]);
       //MIN_HEAPIFY(i)
       bool run = 1;
+      i++;
       while(run) {
-         size_t l = (2 * i), r = (2 * i + 1);
+         size_t l = (2 * i) , r = (2 * i + 1);
          size_t largest = 0;
 
-         if(l < _data.size()) {
-            if(_data[l] < _data[i])
-               largest = l;
+         if(l < _data.size() && _data[l - 1] < _data[i - 1]) {
+            largest = l;
          } else largest = i;
-         if(r < _data.size()) {
-            if(_data[r] < _data[largest])
-               largest = r;
+         if(r < _data.size() && _data[r - 1] < _data[largest - 1]) {
+            largest = r;
          }
          if(largest != i) {
-            swap(_data[i], _data[largest]);
+            swap(_data[i - 1], _data[largest - 1]);
             i = largest;
             run = 1;
          } else run = 0;
       }
       _data.pop_back();
-      if(_data.size() == 1)
-         _data.pop_back();
    }
 
 private:
