@@ -37,13 +37,7 @@ public:
    CirMgr(){
       for(int i = 0; i < 5; i++) miloa[i] = 0;
    }
-   ~CirMgr() {
-      size_t s  = gateList.size();
-      if(s == 0) return;
-      for(int i = s - 1; i >= 0; i--)
-         if(gateList[i] != NULL) delete gateList[i];
-      gateList.clear();
-   }
+   ~CirMgr();
 
    // Access functions
    // return '0' if "gid" corresponds to an undefined gate.

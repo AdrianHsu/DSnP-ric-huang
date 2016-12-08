@@ -59,6 +59,13 @@ static string errMsg;
 static int errInt;
 static CirGate *errGate;
 
+CirMgr::~CirMgr() {
+   size_t s  = gateList.size();
+   if(s == 0) return;
+   for(int i = s - 1; i >= 0; i--)
+      if(gateList[i] != NULL) delete gateList[i];
+   gateList.clear();
+}
 static bool
 parseError(CirParseError err)
 {
@@ -260,11 +267,11 @@ CirMgr::readCircuit(const string& fileName)
    while(getline(ifs, str, '\n'))
       cmd.push_back(str);
    ifs.close(); 
-   if(cmd[0][0] != 'a') return false;
+   if(cmd[0][0] != 'a') return parseError(ILLEGAL_WSPACE);
    vector<string> tmp;
    // aag M I L O A
    if(!lexOptions(cmd[0], tmp, 6))
-      return false;
+      return parseError(ILLEGAL_WSPACE);
    for(int i = 1; i <= 5; i++)
       miloa[i - 1] = myStr2Uns(tmp[i]);
    
