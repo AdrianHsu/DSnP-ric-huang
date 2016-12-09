@@ -50,7 +50,7 @@ public:
    public:
       iterator(vector<Data>* b, size_t num, size_t n) 
       : _numBuckets(num),  _n(n), _i(0), _buckets(b) {
-         if(_n != _numBuckets) _node = &_buckets[_n][_i];
+         if(n != num) _node = &_buckets[_n][_i];
          else _node = NULL;
       }
       ~iterator(){}
@@ -130,7 +130,7 @@ public:
    size_t numBuckets() const { return _numBuckets; }
 
    vector<Data>& operator [] (size_t i) { return _buckets[i]; }
-   const vector<Data>& operator [](size_t i) const { return _buckets[i]; }
+   const vector<Data>& operator [] (size_t i) const { return _buckets[i]; }
 
    // TODO: implement these functions
 

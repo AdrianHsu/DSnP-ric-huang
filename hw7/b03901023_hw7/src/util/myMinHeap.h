@@ -54,20 +54,23 @@ public:
 
       swap(_data[i], _data.back());
       _data.pop_back();
-      int s = _data.size();
+      size_t s = _data.size();
       if(i == s) return;
       //sifting
-      int a = i, b = a * 2 + 1;
+      size_t a = i, b = a * 2 + 1;
       while(b < s) {
-         if(b + 1 < s && _data[b + 1] < _data[b]) b++;
-         if(_data[a] < _data[b]) break;
+         if(b + 1 < s && (_data[b + 1] < _data[b])) b++;
+         if(_data[a] < _data[b]) {
+            a = b;
+            break;
+         }
          swap(_data[a], _data[b]);
          a = b;
          b = 2 * a + 1;
       }
       //floating
       int p = (a - 1) / 2;
-      while(a > 0) {
+      while(p > 0) {
          if(_data[a] < _data[p])
             swap(_data[a], _data[p]);
          else break;
