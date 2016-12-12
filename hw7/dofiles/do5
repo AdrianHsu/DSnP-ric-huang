@@ -1,8 +1,81 @@
-taski 10000
-taskn -r 10000
-taskq -heap
-taskr -r 5000
-taskq -heap
+taski 6050000
+taskn -n pdtdly 246
+taskn -n zfhjky 13613
+taskn -n vlzfxc 9666
+taskn -n iavimp 11313
+taskn -n mrlrqf 17521
+taskn -n esfvxo 16275
+taskn -n zycoms 4991
+taskn -n aezzps 9810
+taskn -n byvqyz 16507
+taskn -n ruztiz 14132
+taskn -n hhulxz 3642
+taskn -n exjrps 6418
+taskn -n jujyss 7035
+taskn -n otjuow 3605
+taskn -n wctsev 19938
+taskn -n uwirlk 2963
+taskn -n fyjnhr 4303
+taskn -n upivnt 10437
+taskn -n tcwtkf 3142
+taskn -n tfpvbs 11851
+taskn -n cpkoow 12323
+taskn -n odrqrj 15763
+taskn -n emlcct 6306
+taskn -n vgdlac 8623
+taskn -n sjvbhm 5352
+taskn -n rawpdv 128
+taskn -n yvxrbs 15488
+taskn -n ysvzqp 2428
+taskn -n djlpjn 8361
+taskn -n qddzyi 5917
+taskn -n jgbzso 4948
+taskn -n entjup 8943
+taskn -n ixnmfh 15171
+taskn -n kavicj 14130
+taskn -n qukboo 8925
+taskn -n rjrtph 9139
+taskn -n hckqiv 8762
+taskn -n qnncph 6687
+taskn -n cmeopl 1733
+taskn -n xapjgf 758
+taskn -n oojicm 11699
+taskn -n cniymm 7695
+taskn -n lnxstc 1616
+taskn -n mldhir 786
+taskn -n gceglo 12058
+taskn -n hxlhwu 19154
+taskn -n mjshsk 17161
+taskn -n hfvzgx 18789
+taskn -n squwwy 1570
+taskn -n eminky 1469
+taskn -r 16
+taskr -r 20
+taska 15562 -r 22
+taskn -r 4
+taskn -r 11
+taskr -r 36
+taska 8281 -r 22
+taska 7566 -r 13
+taskr -r 44
+taskn -r 6
+taskr -r 25
+taska 18452 -r 8
+taskn -r 43
+taskr -r 10
+taskn -r 10
+taskr -r 1
+taskn -r 11
+taskn -r 35
+taskn -r 32
+taskn -r 38
+taskr -r 11
+taskn -r 40
+taskr -r 36
+taskn -r 33
+taskn -r 38
 taskq -hash
-usage
+taskq -heap
+taskq -min
+USAGE
 q -f

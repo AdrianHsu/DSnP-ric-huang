@@ -1,0 +1,4 @@
+make clean
+echo "Removing outfiles..."
+rm -r -f outfiles
+mkdir outfiles

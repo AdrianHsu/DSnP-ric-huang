@@ -1,0 +1,10 @@
+total="10 50 100 1000 5000 10000 20000 50000 100000 150000 200000 500000 1000000"
+num=3
+
+g++ -o testGen testGen.cpp -O3
+
+for t in $total 
+do
+   let num++
+   ./testGen dofiles/do$num $t
+done

@@ -206,9 +206,11 @@ public:
    // return false otherwise (i.e. nothing is removed)
    bool remove(const Data& d) { 
       size_t n = bucketNum(d);
+      size_t s = _buckets[n].size();
       for(size_t i = 0; i < _buckets[n].size(); i++)
          if(_buckets[n][i] == d) {
-            _buckets[n].erase(_buckets[n].begin() + i);
+            _buckets[n][i] = _buckets[n].back();
+            _buckets[n].resize(s - 1);
             return true;
          }
       return false;

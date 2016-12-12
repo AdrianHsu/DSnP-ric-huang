@@ -38,9 +38,11 @@ public:
    void insert(const Data& d) { 
       
       int t = _data.size();
+      int p = (t - 1) / 2; 
       _data.push_back(d);
       while(t > 0) {
-         int p = (t - 1) / 2;
+         if(t > 0) p = (t - 1) / 2;
+         else p = 0;
          if(_data[t] < _data[p])
             swap(_data[t], _data[p]);
          else break;
@@ -53,31 +55,39 @@ public:
       if(_data.empty()) return;
 
       swap(_data[i], _data.back());
-      _data.pop_back();
-      size_t s = _data.size();
+      int s = _data.size();
+      _data.resize(--s);
       if(i == s) return;
       //floating
-      size_t a = i;
-      size_t p = (a - 1) / 2;
+      int a = i;
+      int p;
+      if(a > 0) p = (a - 1) / 2;
+      else p = 0;
+
       bool flt = 0;
       while(p > 0) {
-         if(_data[a] < _data[p]) {
+         if(_data[p] < _data[a] || _data[a].getLoad() == _data[p].getLoad()) {
+            break;
+         } else {
             swap(_data[a], _data[p]);
             flt = 1;
             a = p;
-            p = (a - 1) / 2;
-         } else break;
+            if(a > 0) p = (a - 1) / 2;
+            else p = 0;
+         }
       }
       if(flt) return;
       //sinking
-      size_t b = a * 2 + 1;
+      int b = a * 2 + 1;
       while(b < s) {
          if(b + 1 < s && (_data[b + 1] < _data[b])) b++;
-         if(_data[b] < _data[a]) {
+         if(_data[a] < _data[b] || _data[b].getLoad() == _data[a].getLoad()) {
+            break;
+         } else {
             swap(_data[a], _data[b]);
             a = b;
             b = 2 * a + 1;
-         } else break;
+         }
       }
    }
 

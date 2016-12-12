@@ -1,0 +1,31 @@
+NUM="7"
+#Change Student ID
+NAME="b03505028_hw$NUM"
+TNAME="$NAME.tgz"
+INDIR1="src/util/"
+FPATH1="./src/util/"
+FILES1="myHashSet.h myMinHeap.h"
+INDIR2="src/task/"
+FPATH2="./src/task/"
+FILES2="taskMgr.cpp"
+
+rm -f $TNAME
+rm -r -f ./$NAME
+mkdir -p ./$NAME/$INDIR1
+mkdir ./$NAME/$INDIR2
+
+for F in $FILES1
+do
+   cp $FPATH1$F ./$NAME/$INDIR1
+done
+
+for F in $FILES2
+do
+   cp $FPATH2$F ./$NAME/$INDIR2
+done
+
+tar zcvf $TNAME $NAME
+
+./SelfCheck $TNAME
+
+rm -r -f $NAME

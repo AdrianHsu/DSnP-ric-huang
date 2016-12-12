@@ -1,0 +1,44 @@
+RPATH="./ref/taskMgr-mac"
+MPATH="./taskMgr"
+OPATH="./outfiles/"
+DOPATH="./dofiles/do"
+RANGE="1 2 3 4 5 6 7 8 9 10 11 12 13 14"
+#RANGE="1 2 3 4 5 6 7 8 9 10"
+ONAME="out"
+RONAME="r$ONAME"
+ERRONAME="e$ONAME"
+ERRRONAME="er$ONAME"
+
+make clean 
+echo "------- Start Compilation ----------"
+make
+echo "------- Complete Compilation -------"
+echo ">> Dofiles <$RANGE> "
+
+#echo ">> Ref program is running....."
+#for num in $RANGE 
+#do
+#   echo "> Running REF do$num ..."
+#   $RPATH -f $DOPATH$num 1> $OPATH$RONAME$num 2> $OPATH$ERRRONAME$num
+#done
+
+echo ">> My program is running....."
+for num in $RANGE 
+do
+   echo "> Running MY do$num ..."
+   $MPATH -f $DOPATH$num 1> $OPATH$ONAME$num 2> $OPATH$ERRONAME$num
+done
+
+for num in $RANGE 
+do
+   echo "#############################"
+   echo "         DIFF DO$num        "
+   echo "#############################"
+   echo "***** DIFF DO$num BEGIN *****"
+   diff $OPATH$ONAME$num $OPATH$RONAME$num
+   echo "***** DIFF DO$num END   *****"
+   echo "***** DIFF DO$num BEGIN ERR *****"
+   diff $OPATH$ERRONAME$num $OPATH$ERRRONAME$num
+   echo "***** DIFF DO$num END   ERR *****"
+   echo ""
+done

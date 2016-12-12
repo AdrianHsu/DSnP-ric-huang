@@ -1,0 +1,2 @@
+g++ -o testGen testGen.cpp -O3
+./testGen dofiles/$1 $2

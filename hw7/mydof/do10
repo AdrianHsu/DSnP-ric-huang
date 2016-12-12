@@ -1,0 +1,15 @@
+taski 19920
+taskn -n abce 123
+taskn -n abcde 1234
+taskn -n abcd 124
+taskq -hea
+taskq -has
+taski 11
+taskn -n abce 123
+taskn -n abcde 1234
+taskn -n abcd 124
+taskq -hea
+taskq -has
+taska -r 2 10
+taskq -has
+q -f

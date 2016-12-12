@@ -1,0 +1,5 @@
+taski 15
+taskn -r 15
+taskq -hash
+taskq -heap
+q -f

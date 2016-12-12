@@ -1,5 +1,21 @@
-taski 15
-taskn -r 15
+taski 6050000
+taskn -n pdtdly 246
+taskn -n zfhjky 13613
+taskn -n vlzfxc 9666
+taskn -n iavimp 11313
+taskn -n mrlrqf 17521
+taskn -n esfvxo 16275
+taskn -n zycoms 4991
+taskn -n aezzps 9810
+taskn -n byvqyz 16507
+taskn -n ruztiz 14132
+taskr -r 3
+taska 8631 -r 17
+taska 3641 -r 2
+taskr -r 21
+taskn -r 29
 taskq -hash
 taskq -heap
+taskq -min
+USAGE
 q -f
