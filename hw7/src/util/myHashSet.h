@@ -48,7 +48,7 @@ public:
       friend class HashSet<Data>;
 
    public:
-      iterator(vector<Data>* b, const size_t num, size_t n) 
+      iterator(vector<Data>* b, size_t num, size_t n) 
       : _nb(num), _n(n), _i(0), _buckets(b) { }
       ~iterator(){}
       const Data& operator * () const { return _buckets[_n][_i]; }
@@ -95,7 +95,7 @@ public:
          _n = i._n;
          _i = i._i;
          _buckets = i._buckets;
-         return this;
+         return *this;
       }
       bool operator == (const iterator& i) const {
          return((_i == i._i) && (_n == i._n));
@@ -106,7 +106,7 @@ public:
          
          
    private:
-      const size_t   _nb;
+      size_t   _nb;
       size_t   _n, _i;
       vector<Data>*  _buckets;
    };

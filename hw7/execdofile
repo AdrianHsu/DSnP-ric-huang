@@ -2,8 +2,8 @@ RPATH="./ref/taskMgr-mac"
 MPATH="./taskMgr"
 OPATH="./outfiles/"
 DOPATH="./dofiles/do"
-RANGE="1 2 3 4 5 6 7 8 9 10 11 12 13 14"
-#RANGE="1 2 3 4 5 6 7 8 9 10"
+#RANGE="1 2 3 4 5 6 7 8 9 10 11 12 13 14"
+RANGE="1 2 3 4 5 6 7 8 9 10"
 ONAME="out"
 RONAME="r$ONAME"
 ERRONAME="e$ONAME"
@@ -15,12 +15,12 @@ make
 echo "------- Complete Compilation -------"
 echo ">> Dofiles <$RANGE> "
 
-#echo ">> Ref program is running....."
-#for num in $RANGE 
-#do
-#   echo "> Running REF do$num ..."
-#   $RPATH -f $DOPATH$num 1> $OPATH$RONAME$num 2> $OPATH$ERRRONAME$num
-#done
+echo ">> Ref program is running....."
+for num in $RANGE 
+do
+   echo "> Running REF do$num ..."
+   $RPATH -f $DOPATH$num 1> $OPATH$RONAME$num 2> $OPATH$ERRRONAME$num
+done
 
 echo ">> My program is running....."
 for num in $RANGE 
