@@ -57,7 +57,7 @@ public:
       swap(_data[i], _data.back());
       int s = _data.size();
       _data.resize(--s);
-      if(i == s) return;
+      if(i == (size_t) s) return;
       //floating
       int a = i;
       int p;
