@@ -56,26 +56,28 @@ public:
       _data.pop_back();
       size_t s = _data.size();
       if(i == s) return;
-      //sifting
-      size_t a = i, b = a * 2 + 1;
+      //floating
+      size_t a = i;
+      size_t p = (a - 1) / 2;
+      bool flt = 0;
+      while(p > 0) {
+         if(_data[a] < _data[p]) {
+            swap(_data[a], _data[p]);
+            flt = 1;
+            a = p;
+            p = (a - 1) / 2;
+         } else break;
+      }
+      if(flt) return;
+      //sinking
+      size_t b = a * 2 + 1;
       while(b < s) {
          if(b + 1 < s && (_data[b + 1] < _data[b])) b++;
-         if(_data[a] < _data[b]) {
+         if(_data[b] < _data[a]) {
+            swap(_data[a], _data[b]);
             a = b;
-            break;
-         }
-         swap(_data[a], _data[b]);
-         a = b;
-         b = 2 * a + 1;
-      }
-      //floating
-      int p = (a - 1) / 2;
-      while(p > 0) {
-         if(_data[a] < _data[p])
-            swap(_data[a], _data[p]);
-         else break;
-         a = p;
-         p = (a - 1) / 2;
+            b = 2 * a + 1;
+         } else break;
       }
    }
 

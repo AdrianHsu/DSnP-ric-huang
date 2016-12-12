@@ -45,7 +45,7 @@ class TaskMgr
 {
 public:
    TaskMgr(size_t nMachines);
-   ~TaskMgr() {}
+   ~TaskMgr(){}
 
    void clear();
 

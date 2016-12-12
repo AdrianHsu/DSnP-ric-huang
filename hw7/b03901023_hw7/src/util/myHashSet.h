@@ -48,26 +48,20 @@ public:
       friend class HashSet<Data>;
 
    public:
-      iterator(vector<Data>* b, size_t num, size_t n) 
-      : _numBuckets(num),  _n(n), _i(0), _buckets(b) {
-         if(n != num) _node = &_buckets[_n][_i];
-         else _node = NULL;
-      }
+      iterator(vector<Data>* b, const size_t num, size_t n) 
+      : _nb(num), _n(n), _i(0), _buckets(b) { }
       ~iterator(){}
-      const Data& operator * () const { return *(_node); }
-      Data& operator *() { return *(_node); }
+      const Data& operator * () const { return _buckets[_n][_i]; }
+      Data& operator *() { return _buckets[_n][_i]; }
       iterator& operator++() {
-         if(_n == _numBuckets) return *this;
+         if(_n == _nb) return *this;
          else if(_i < _buckets[_n].size() - 1) ++_i;
-         else { //_i == _buckets[_n].size() - 1
-            while(++_n < _numBuckets)
+         else {
+            while(++_n < _nb)
                if(!_buckets[_n].empty())
                   break;
             _i = 0;
          }
-         if(_n != _numBuckets) _node = &_buckets[_n][_i];
-         else _node = NULL;
-
          return *this;
       }
       iterator operator++(int) {
@@ -76,20 +70,19 @@ public:
          return tmp;
       }
       iterator& operator--() {
-         if(_i > 0)
+         if(_i > 0) {
             --_i;
-         else {
-            size_t t = _n;
-            while(t > 0) {
-               --t;
-               if(!_buckets[t].empty()) {
-                  _i = _buckets[t].size() - 1;
-                  _n = t;
-                  break;
-               }
+            return (*this);
+         }
+         size_t t = _n;
+         while(t > 0) {
+            --t;
+            if(!_buckets[t].empty()) {
+               _i = _buckets[t].size() - 1;
+               _n = t;
+               break;
             }
          }
-         _node = &_buckets[_n][_i];
          return (*this);
       }
       iterator operator--(int) {
@@ -98,15 +91,14 @@ public:
          return tmp;
       }
       iterator& operator = (const iterator& i) {
-         _node = i._node;
-         _numBuckets = i._numBuckets;
-         _i = i._i;
+         _nb = i._nb;
          _n = i._n;
+         _i = i._i;
          _buckets = i._buckets;
          return this;
       }
       bool operator == (const iterator& i) const {
-         return((_i == i._i) && (_n == i._n) && (_node == i._node));
+         return((_i == i._i) && (_n == i._n));
       }
       bool operator != (const iterator& i) const {
          return !(*this == i);
@@ -114,9 +106,9 @@ public:
          
          
    private:
-      Data*             _node;
-      size_t            _numBuckets, _n, _i;
-      vector<Data>*     _buckets;
+      const size_t   _nb;
+      size_t   _n, _i;
+      vector<Data>*  _buckets;
    };
 
    void init(size_t b) { _numBuckets = b; _buckets = new vector<Data>[b]; }
