@@ -59,13 +59,6 @@ static string errMsg;
 static int errInt;
 static CirGate *errGate;
 
-CirMgr::~CirMgr() {
-   size_t s  = gateList.size();
-   if(s == 0) return;
-   for(int i = s - 1; i >= 0; i--)
-      if(gateList[i] != NULL) delete gateList[i];
-   gateList.clear();
-}
 static bool
 parseError(CirParseError err)
 {
@@ -210,6 +203,13 @@ lexOptions
 /**************************************************************/
 /*   class CirMgr member functions for circuit construction   */
 /**************************************************************/
+CirMgr::~CirMgr() {
+   size_t s  = gateList.size();
+   if(s == 0) return;
+   for(int i = s - 1; i >= 0; i--)
+      if(gateList[i] != NULL) delete gateList[i];
+   gateList.clear();
+}
 bool 
 CirMgr::aigerAddAnd(string& str, unsigned lNo) {
    
@@ -238,7 +238,7 @@ CirMgr::aigerAddUndef(string& str) {
       var[i] = aiger_lit2var(lit[i]);
    }
    
-   CirAigGate* g1 = static_cast<CirAigGate*>(getGate( var[0] ));
+   CirAigGate* g1 = (CirAigGate*) getGate( var[0] );
    CirGate* g2 = getGate( var[1] );
    if(g2 == 0)
       g2 = gateList[ var[1] ] = new CirUndefGate(var[1], 0);
@@ -330,9 +330,9 @@ CirMgr::readCircuit(const string& fileName)
       unsigned id = myStr2Uns(tmp[0].substr(1));// i13, o271..etc
       char ilo = tmp[0][0];
       if(ilo == 'i')
-         static_cast<CirPiGate*>(getGate(ins[id]))->setName(sym);
+         ((CirPiGate*)getGate(ins[id]))->setName(sym);
       else if(ilo == 'o')
-         static_cast<CirPoGate*>(getGate(id + _m + 1))->setName(sym);
+         ((CirPoGate*)getGate(id + _m + 1))->setName(sym);
    }
    return true;
 }
@@ -395,8 +395,9 @@ CirMgr::printPIs() const
       for (unsigned i = 0; i < ins.size(); ++i) {
          cout << " " << ins[i];
       }
-      cout << endl;
    }
+   cout << endl;
+
    CirGate::index = 0;
    resetColors();
    
@@ -412,8 +413,8 @@ CirMgr::printPOs() const
          if (g != 0 && g->getType() == PO_GATE)
             cout << " " << g->getId();
       }
-      cout << endl;
    }
+   cout << endl;
 }
 
 void
@@ -468,9 +469,7 @@ CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv) const
    if(g->getColor()) return;
    for(unsigned i = 0; i < g->getfinSize(); i++)
       writeDfsVisit(g->getInput(i), aigs, g->isInv(i));
-   if(g->getType() == PI_GATE) {
-      //ins.push_back( aiger_var2lit( g->getId() ) );
-   } else if(g->getType() == AIG_GATE) {
+   if(g->getType() == AIG_GATE) {
       unsigned _lhs = aiger_var2lit(g->getId());
       aigs.push_back(_lhs); //_lhs must even
       unsigned _rhs0 = aiger_var2lit(g->getInput(0)->getId());

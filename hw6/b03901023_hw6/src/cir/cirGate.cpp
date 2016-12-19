@@ -22,13 +22,6 @@ extern CirMgr *cirMgr;
 
 // TODO: Implement memeber functions for class(es) in cirGate.h
 
-unsigned CirGate::index = 0;
-string unsToStr(unsigned n) {
-   stringstream ss;
-   ss << n;
-   return ss.str();
-}
-
 /**************************************/
 /*   class CirGate member functions   */
 /**************************************/
@@ -47,7 +40,12 @@ CirGate::getTypeStr() const
       return "UNDEF";
    return "UNDEF";
 }
-
+unsigned CirGate::index = 0;
+string unsToStr(unsigned n) {
+   stringstream ss;
+   ss << n;
+   return ss.str();
+}
 void
 CirGate::reportGate() const
 {
