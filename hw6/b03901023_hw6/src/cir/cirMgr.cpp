@@ -395,8 +395,8 @@ CirMgr::printPIs() const
       for (unsigned i = 0; i < ins.size(); ++i) {
          cout << " " << ins[i];
       }
-      cout << endl;
    }
+   cout << endl;
    CirGate::index = 0;
    resetColors();
    
@@ -412,8 +412,9 @@ CirMgr::printPOs() const
          if (g != 0 && g->getType() == PO_GATE)
             cout << " " << g->getId();
       }
-      cout << endl;
    }
+   cout << endl;
+
 }
 
 void
