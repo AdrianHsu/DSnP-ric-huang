@@ -1,0 +1,3 @@
+cirr myout.aag
+cirg 1 -fanout 2
+q -f

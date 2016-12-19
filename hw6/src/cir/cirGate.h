@@ -65,21 +65,26 @@ class CirGate {
          return fanoutList[i];
       }
       bool isInv(size_t i) const { return ((size_t)faninList[i] & NEG); }
+      bool isAig() const { return type == AIG_GATE; }
 
       size_t getfinSize(){ return faninList.size(); }
       size_t getfoutSize(){ return fanoutList.size(); }
-      void setColor(int c) const {color = c;}
-      int getColor() {return color;}
+      void setGlobalRef() const { globalRef++; }
+      void resetGlobalRef() const { globalRef = 0; }
+      bool isGlobalRef() const { return color == globalRef; }
+      void setToGlobalRef() const {color = globalRef; }
+
       void faninDfsVisit(int, bool) const;
       void fanoutDfsVisit(int, bool) const;
 
       static unsigned index;
+      static unsigned globalRef;
 
    protected:
       GateType type;
       unsigned lineNo;
       unsigned id;
-      mutable int color;
+      mutable unsigned color;
       GateList faninList;
       GateList fanoutList;
 };

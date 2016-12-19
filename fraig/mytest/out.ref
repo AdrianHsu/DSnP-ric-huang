@@ -1,0 +1,2213 @@
+fraig> cirr ok01.aag -replace
+
+fraig> cirp -n
+
+[0] PI  1 (x)
+[1] PI  2 (y)
+[2] AIG 6 1 2
+[3] AIG 7 !1 !2
+[4] AIG 3 !6 !7
+[5] PO  8 3 (s)
+[6] PO  9 6 (c)
+[7] CONST0
+[8] PO  10 !0
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           3
+  AIG          3
+------------------
+  Total        8
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 8 9 10
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= PI(1)"x", line 2                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2)"y", line 3                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+
+fraig> cirg 5
+
+fraig> cirg 8
+==================================================
+= PO(8)"s", line 4                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 9
+==================================================
+= PO(9)"c", line 5                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 10
+==================================================
+= PO(10), line 6                                 =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 1 -fanin 4
+PI 1
+
+fraig> cirg 1 -fanin 3
+PI 1
+
+fraig> cirg 1 -fanin 2
+PI 1
+
+fraig> cirg 1 -fanin 1
+PI 1
+
+fraig> cirg 1 -fanout 4
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 3
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 2
+PI 1
+  AIG 6
+    !AIG 3
+    PO 9
+  !AIG 7
+    !AIG 3
+
+fraig> cirg 1 -fanout 1
+PI 1
+  AIG 6
+  !AIG 7
+
+fraig> cirg 8 -fanin 4
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 3
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 2
+PO 8
+  AIG 3
+    !AIG 6
+    !AIG 7
+
+fraig> cirg 8 -fanin 1
+PO 8
+  AIG 3
+
+fraig> cirg 8 -fanout 4
+PO 8
+
+fraig> cirg 8 -fanout 3
+PO 8
+
+fraig> cirg 8 -fanout 2
+PO 8
+
+fraig> cirg 8 -fanout 1
+PO 8
+
+fraig> cirg 5 -fanout 4
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 5 -fanout 2
+
+fraig> cirg 5 -fanout 1
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 8
+
+fraig> cirw
+aag 7 2 0 3 3
+2
+4
+6
+12
+1
+12 2 4
+14 3 5
+6 13 15
+i0 x
+i1 y
+o0 s
+o1 c
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirr ok02.aag -replace
+
+fraig> cirp -n
+
+[0] PI  1 (x)
+[1] PI  2 (y)
+[2] AIG 6 1 2
+[3] AIG 9 !1 !2
+[4] AIG 3 !6 !9
+[5] PO  10 3 (s)
+[6] PO  11 6 (c)
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           2
+  AIG          3
+------------------
+  Total        7
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 10 11
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= PI(1)"x", line 2                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2)"y", line 3                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+
+fraig> cirg 5
+
+fraig> cirg 8
+
+fraig> cirg 9
+==================================================
+= AIG(9), line 8                                 =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 10
+==================================================
+= PO(10)"s", line 4                              =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 1 -fanin 4
+PI 1
+
+fraig> cirg 1 -fanin 3
+PI 1
+
+fraig> cirg 1 -fanin 2
+PI 1
+
+fraig> cirg 1 -fanin 1
+PI 1
+
+fraig> cirg 1 -fanout 4
+PI 1
+  AIG 6
+    !AIG 3
+      PO 10
+    PO 11
+  !AIG 9
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 3
+PI 1
+  AIG 6
+    !AIG 3
+      PO 10
+    PO 11
+  !AIG 9
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 2
+PI 1
+  AIG 6
+    !AIG 3
+    PO 11
+  !AIG 9
+    !AIG 3
+
+fraig> cirg 1 -fanout 1
+PI 1
+  AIG 6
+  !AIG 9
+
+fraig> cirg 8 -fanin 4
+
+fraig> cirg 8 -fanin 3
+
+fraig> cirg 8 -fanin 2
+
+fraig> cirg 8 -fanin 1
+
+fraig> cirg 8 -fanout 4
+
+fraig> cirg 8 -fanout 3
+
+fraig> cirg 8 -fanout 2
+
+fraig> cirg 8 -fanout 1
+
+fraig> cirg 5 -fanout 4
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 5 -fanout 2
+
+fraig> cirg 5 -fanout 1
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 10
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 10
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 10
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 10
+
+fraig> cirw
+aag 9 2 0 2 3
+2
+4
+6
+12
+12 2 4
+18 3 5
+6 13 19
+i0 x
+i1 y
+o0 s
+o1 c
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirr ok03.aag -replace
+
+fraig> cirp -n
+
+[0] PI  6 (x)
+[1] PI  2 (y)
+[2] AIG 1 6 2
+[3] AIG 7 !6 !2
+[4] AIG 3 !1 !7
+[5] PO  8 3 (s)
+[6] PO  9 6 (c)
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           2
+  AIG          3
+------------------
+  Total        7
+
+fraig> cirp -pi
+PIs of the circuit: 6 2
+
+fraig> cirp -po
+POs of the circuit: 8 9
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= AIG(1), line 7                                 =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2)"y", line 3                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+
+fraig> cirg 5
+
+fraig> cirg 8
+==================================================
+= PO(8)"s", line 4                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 9
+==================================================
+= PO(9)"c", line 5                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 10
+
+fraig> cirg 1 -fanin 4
+AIG 1
+  PI 6
+  PI 2
+
+fraig> cirg 1 -fanin 3
+AIG 1
+  PI 6
+  PI 2
+
+fraig> cirg 1 -fanin 2
+AIG 1
+  PI 6
+  PI 2
+
+fraig> cirg 1 -fanin 1
+AIG 1
+  PI 6
+  PI 2
+
+fraig> cirg 1 -fanout 4
+AIG 1
+  !AIG 3
+    PO 8
+
+fraig> cirg 1 -fanout 3
+AIG 1
+  !AIG 3
+    PO 8
+
+fraig> cirg 1 -fanout 2
+AIG 1
+  !AIG 3
+    PO 8
+
+fraig> cirg 1 -fanout 1
+AIG 1
+  !AIG 3
+
+fraig> cirg 8 -fanin 4
+PO 8
+  AIG 3
+    !AIG 1
+      PI 6
+      PI 2
+    !AIG 7
+      !PI 6
+      !PI 2
+
+fraig> cirg 8 -fanin 3
+PO 8
+  AIG 3
+    !AIG 1
+      PI 6
+      PI 2
+    !AIG 7
+      !PI 6
+      !PI 2
+
+fraig> cirg 8 -fanin 2
+PO 8
+  AIG 3
+    !AIG 1
+    !AIG 7
+
+fraig> cirg 8 -fanin 1
+PO 8
+  AIG 3
+
+fraig> cirg 8 -fanout 4
+PO 8
+
+fraig> cirg 8 -fanout 3
+PO 8
+
+fraig> cirg 8 -fanout 2
+PO 8
+
+fraig> cirg 8 -fanout 1
+PO 8
+
+fraig> cirg 5 -fanout 4
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 5 -fanout 2
+
+fraig> cirg 5 -fanout 1
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 8
+
+fraig> cirw
+aag 7 2 0 2 3
+12
+4
+6
+12
+2 12 4
+14 13 5
+6 3 15
+i0 x
+i1 y
+o0 s
+o1 c
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirr ok04.aag -replace
+
+fraig> cirp -n
+
+[0] PI  1 (x)
+[1] PI  2 (y)
+[2] AIG 6 1 2
+[3] AIG 7 !1 !2
+[4] AIG 3 !6 !7
+[5] PO  8 3 (s)
+[6] PO  9 6 (c)
+[7] PO  10 !2
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           3
+  AIG          3
+------------------
+  Total        8
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 8 9 10
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= PI(1)"x", line 2                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2)"y", line 3                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+
+fraig> cirg 5
+
+fraig> cirg 8
+==================================================
+= PO(8)"s", line 4                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 9
+==================================================
+= PO(9)"c", line 5                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 10
+==================================================
+= PO(10), line 6                                 =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 1 -fanin 4
+PI 1
+
+fraig> cirg 1 -fanin 3
+PI 1
+
+fraig> cirg 1 -fanin 2
+PI 1
+
+fraig> cirg 1 -fanin 1
+PI 1
+
+fraig> cirg 1 -fanout 4
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 3
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 2
+PI 1
+  AIG 6
+    !AIG 3
+    PO 9
+  !AIG 7
+    !AIG 3
+
+fraig> cirg 1 -fanout 1
+PI 1
+  AIG 6
+  !AIG 7
+
+fraig> cirg 8 -fanin 4
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 3
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 2
+PO 8
+  AIG 3
+    !AIG 6
+    !AIG 7
+
+fraig> cirg 8 -fanin 1
+PO 8
+  AIG 3
+
+fraig> cirg 8 -fanout 4
+PO 8
+
+fraig> cirg 8 -fanout 3
+PO 8
+
+fraig> cirg 8 -fanout 2
+PO 8
+
+fraig> cirg 8 -fanout 1
+PO 8
+
+fraig> cirg 5 -fanout 4
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 5 -fanout 2
+
+fraig> cirg 5 -fanout 1
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 8
+
+fraig> cirw
+aag 7 2 0 3 3
+2
+4
+6
+12
+5
+12 2 4
+14 3 5
+6 13 15
+i0 x
+i1 y
+o0 s
+o1 c
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirr ok05.aag -replace
+
+fraig> cirp -n
+
+[0] PI  1 ( x)
+[1] PI  2 (y)
+[2] AIG 6 1 2
+[3] AIG 7 !1 !2
+[4] AIG 3 !6 !7
+[5] PO  8 3 (s)
+[6] PO  9 6 (c)
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           2
+  AIG          3
+------------------
+  Total        7
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 8 9
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= PI(1)" x", line 2                              =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2)"y", line 3                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+
+fraig> cirg 5
+
+fraig> cirg 8
+==================================================
+= PO(8)"s", line 4                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 9
+==================================================
+= PO(9)"c", line 5                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 10
+
+fraig> cirg 1 -fanin 4
+PI 1
+
+fraig> cirg 1 -fanin 3
+PI 1
+
+fraig> cirg 1 -fanin 2
+PI 1
+
+fraig> cirg 1 -fanin 1
+PI 1
+
+fraig> cirg 1 -fanout 4
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 3
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 2
+PI 1
+  AIG 6
+    !AIG 3
+    PO 9
+  !AIG 7
+    !AIG 3
+
+fraig> cirg 1 -fanout 1
+PI 1
+  AIG 6
+  !AIG 7
+
+fraig> cirg 8 -fanin 4
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 3
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 2
+PO 8
+  AIG 3
+    !AIG 6
+    !AIG 7
+
+fraig> cirg 8 -fanin 1
+PO 8
+  AIG 3
+
+fraig> cirg 8 -fanout 4
+PO 8
+
+fraig> cirg 8 -fanout 3
+PO 8
+
+fraig> cirg 8 -fanout 2
+PO 8
+
+fraig> cirg 8 -fanout 1
+PO 8
+
+fraig> cirg 5 -fanout 4
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 5 -fanout 2
+
+fraig> cirg 5 -fanout 1
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 8
+
+fraig> cirw
+aag 7 2 0 2 3
+2
+4
+6
+12
+12 2 4
+14 3 5
+6 13 15
+i0  x
+i1 y
+o0 s
+o1 c
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirr ok06.aag -replace
+
+fraig> cirp -n
+
+[0] PI  1 (x haha)
+[1] PI  2 (y)
+[2] AIG 6 1 2
+[3] AIG 7 !1 !2
+[4] AIG 3 !6 !7
+[5] PO  8 3 (s)
+[6] PO  9 6 (c)
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           2
+  AIG          3
+------------------
+  Total        7
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 8 9
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= PI(1)"x haha", line 2                          =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2)"y", line 3                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+
+fraig> cirg 5
+
+fraig> cirg 8
+==================================================
+= PO(8)"s", line 4                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 9
+==================================================
+= PO(9)"c", line 5                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 10
+
+fraig> cirg 1 -fanin 4
+PI 1
+
+fraig> cirg 1 -fanin 3
+PI 1
+
+fraig> cirg 1 -fanin 2
+PI 1
+
+fraig> cirg 1 -fanin 1
+PI 1
+
+fraig> cirg 1 -fanout 4
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 3
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 2
+PI 1
+  AIG 6
+    !AIG 3
+    PO 9
+  !AIG 7
+    !AIG 3
+
+fraig> cirg 1 -fanout 1
+PI 1
+  AIG 6
+  !AIG 7
+
+fraig> cirg 8 -fanin 4
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 3
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 2
+PO 8
+  AIG 3
+    !AIG 6
+    !AIG 7
+
+fraig> cirg 8 -fanin 1
+PO 8
+  AIG 3
+
+fraig> cirg 8 -fanout 4
+PO 8
+
+fraig> cirg 8 -fanout 3
+PO 8
+
+fraig> cirg 8 -fanout 2
+PO 8
+
+fraig> cirg 8 -fanout 1
+PO 8
+
+fraig> cirg 5 -fanout 4
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 5 -fanout 2
+
+fraig> cirg 5 -fanout 1
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 8
+
+fraig> cirw
+aag 7 2 0 2 3
+2
+4
+6
+12
+12 2 4
+14 3 5
+6 13 15
+i0 x haha
+i1 y
+o0 s
+o1 c
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirr ok07.aag -replace
+
+fraig> cirp -n
+
+[0] PI  1 (x)
+[1] PI  2 (y)
+[2] AIG 6 1 2
+[3] AIG 7 !1 !2
+[4] AIG 3 !6 !7
+[5] PO  8 3 (s)
+[6] PO  9 6 (c)
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           2
+  AIG          3
+------------------
+  Total        7
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 8 9
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= PI(1)"x", line 2                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2)"y", line 3                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+
+fraig> cirg 5
+
+fraig> cirg 8
+==================================================
+= PO(8)"s", line 4                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 9
+==================================================
+= PO(9)"c", line 5                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 10
+
+fraig> cirg 1 -fanin 4
+PI 1
+
+fraig> cirg 1 -fanin 3
+PI 1
+
+fraig> cirg 1 -fanin 2
+PI 1
+
+fraig> cirg 1 -fanin 1
+PI 1
+
+fraig> cirg 1 -fanout 4
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 3
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 2
+PI 1
+  AIG 6
+    !AIG 3
+    PO 9
+  !AIG 7
+    !AIG 3
+
+fraig> cirg 1 -fanout 1
+PI 1
+  AIG 6
+  !AIG 7
+
+fraig> cirg 8 -fanin 4
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 3
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 2
+PO 8
+  AIG 3
+    !AIG 6
+    !AIG 7
+
+fraig> cirg 8 -fanin 1
+PO 8
+  AIG 3
+
+fraig> cirg 8 -fanout 4
+PO 8
+
+fraig> cirg 8 -fanout 3
+PO 8
+
+fraig> cirg 8 -fanout 2
+PO 8
+
+fraig> cirg 8 -fanout 1
+PO 8
+
+fraig> cirg 5 -fanout 4
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 5 -fanout 2
+
+fraig> cirg 5 -fanout 1
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 8
+
+fraig> cirw
+aag 7 2 0 2 3
+2
+4
+6
+12
+12 2 4
+14 3 5
+6 13 15
+i0 x
+i1 y
+o0 s
+o1 c
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirr ok08.aag -replace
+
+fraig> cirp -n
+
+[0] PI  1 (x)
+[1] PI  2 (y)
+[2] AIG 6 1 2
+[3] AIG 7 !1 !2
+[4] AIG 3 !6 !7
+[5] PO  8 3 (s)
+[6] PO  9 6 (c)
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           2
+  AIG          3
+------------------
+  Total        7
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 8 9
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= PI(1)"x", line 2                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2)"y", line 3                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+
+fraig> cirg 5
+
+fraig> cirg 8
+==================================================
+= PO(8)"s", line 4                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 9
+==================================================
+= PO(9)"c", line 5                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 10
+
+fraig> cirg 1 -fanin 4
+PI 1
+
+fraig> cirg 1 -fanin 3
+PI 1
+
+fraig> cirg 1 -fanin 2
+PI 1
+
+fraig> cirg 1 -fanin 1
+PI 1
+
+fraig> cirg 1 -fanout 4
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 3
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 2
+PI 1
+  AIG 6
+    !AIG 3
+    PO 9
+  !AIG 7
+    !AIG 3
+
+fraig> cirg 1 -fanout 1
+PI 1
+  AIG 6
+  !AIG 7
+
+fraig> cirg 8 -fanin 4
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 3
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 2
+PO 8
+  AIG 3
+    !AIG 6
+    !AIG 7
+
+fraig> cirg 8 -fanin 1
+PO 8
+  AIG 3
+
+fraig> cirg 8 -fanout 4
+PO 8
+
+fraig> cirg 8 -fanout 3
+PO 8
+
+fraig> cirg 8 -fanout 2
+PO 8
+
+fraig> cirg 8 -fanout 1
+PO 8
+
+fraig> cirg 5 -fanout 4
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 5 -fanout 2
+
+fraig> cirg 5 -fanout 1
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 8
+
+fraig> cirw
+aag 7 2 0 2 3
+2
+4
+6
+12
+12 2 4
+14 3 5
+6 13 15
+i0 x
+i1 y
+o0 s
+o1 c
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirr ok09.aag -replace
+
+fraig> cirp -n
+
+[0] PI  1 (x)
+[1] PI  2
+[2] AIG 6 1 2
+[3] AIG 7 !1 !2
+[4] AIG 3 !6 !7
+[5] PO  8 3 (s)
+[6] PO  9 6 (c)
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           2
+  AIG          3
+------------------
+  Total        7
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 8 9
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= PI(1)"x", line 2                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2), line 3                                  =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+
+fraig> cirg 5
+
+fraig> cirg 8
+==================================================
+= PO(8)"s", line 4                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 9
+==================================================
+= PO(9)"c", line 5                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 10
+
+fraig> cirg 1 -fanin 4
+PI 1
+
+fraig> cirg 1 -fanin 3
+PI 1
+
+fraig> cirg 1 -fanin 2
+PI 1
+
+fraig> cirg 1 -fanin 1
+PI 1
+
+fraig> cirg 1 -fanout 4
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 3
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 2
+PI 1
+  AIG 6
+    !AIG 3
+    PO 9
+  !AIG 7
+    !AIG 3
+
+fraig> cirg 1 -fanout 1
+PI 1
+  AIG 6
+  !AIG 7
+
+fraig> cirg 8 -fanin 4
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 3
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 2
+PO 8
+  AIG 3
+    !AIG 6
+    !AIG 7
+
+fraig> cirg 8 -fanin 1
+PO 8
+  AIG 3
+
+fraig> cirg 8 -fanout 4
+PO 8
+
+fraig> cirg 8 -fanout 3
+PO 8
+
+fraig> cirg 8 -fanout 2
+PO 8
+
+fraig> cirg 8 -fanout 1
+PO 8
+
+fraig> cirg 5 -fanout 4
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 5 -fanout 2
+
+fraig> cirg 5 -fanout 1
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 8
+
+fraig> cirw
+aag 7 2 0 2 3
+2
+4
+6
+12
+12 2 4
+14 3 5
+6 13 15
+i0 x
+o0 s
+o1 c
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirr ok10.aag -replace
+
+fraig> cirp -n
+
+[0] PI  1 (x)
+[1] PI  2 (y)
+[2] AIG 6 1 2
+[3] AIG 7 !1 !2
+[4] AIG 3 !6 !7
+[5] PO  8 3 (s)
+[6] PO  9 6 (c)
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           2
+  AIG          3
+------------------
+  Total        7
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 8 9
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= PI(1)"x", line 2                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2)"y", line 3                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+
+fraig> cirg 5
+
+fraig> cirg 8
+==================================================
+= PO(8)"s", line 4                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 9
+==================================================
+= PO(9)"c", line 5                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 10
+
+fraig> cirg 1 -fanin 4
+PI 1
+
+fraig> cirg 1 -fanin 3
+PI 1
+
+fraig> cirg 1 -fanin 2
+PI 1
+
+fraig> cirg 1 -fanin 1
+PI 1
+
+fraig> cirg 1 -fanout 4
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 3
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 2
+PI 1
+  AIG 6
+    !AIG 3
+    PO 9
+  !AIG 7
+    !AIG 3
+
+fraig> cirg 1 -fanout 1
+PI 1
+  AIG 6
+  !AIG 7
+
+fraig> cirg 8 -fanin 4
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 3
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 2
+PO 8
+  AIG 3
+    !AIG 6
+    !AIG 7
+
+fraig> cirg 8 -fanin 1
+PO 8
+  AIG 3
+
+fraig> cirg 8 -fanout 4
+PO 8
+
+fraig> cirg 8 -fanout 3
+PO 8
+
+fraig> cirg 8 -fanout 2
+PO 8
+
+fraig> cirg 8 -fanout 1
+PO 8
+
+fraig> cirg 5 -fanout 4
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 5 -fanout 2
+
+fraig> cirg 5 -fanout 1
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 8
+
+fraig> cirw
+aag 7 2 0 2 3
+2
+4
+6
+12
+12 2 4
+14 3 5
+6 13 15
+i0 x
+i1 y
+o0 s
+o1 c
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirr ok11.aag -replace
+
+fraig> cirp -n
+
+[0] CONST0
+[1] PO  4 0
+[2] PI  1
+[3] PI  2
+[4] AIG 3 1 2
+[5] PO  5 3
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           2
+  AIG          1
+------------------
+  Total        5
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 4 5
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= PI(1), line 2                                  =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2), line 3                                  =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+==================================================
+= PO(4), line 4                                  =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 5
+==================================================
+= PO(5), line 5                                  =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 8
+
+fraig> cirg 9
+
+fraig> cirg 10
+
+fraig> cirg 1 -fanin 4
+PI 1
+
+fraig> cirg 1 -fanin 3
+PI 1
+
+fraig> cirg 1 -fanin 2
+PI 1
+
+fraig> cirg 1 -fanin 1
+PI 1
+
+fraig> cirg 1 -fanout 4
+PI 1
+  AIG 3
+    PO 5
+
+fraig> cirg 1 -fanout 3
+PI 1
+  AIG 3
+    PO 5
+
+fraig> cirg 1 -fanout 2
+PI 1
+  AIG 3
+    PO 5
+
+fraig> cirg 1 -fanout 1
+PI 1
+  AIG 3
+
+fraig> cirg 8 -fanin 4
+
+fraig> cirg 8 -fanin 3
+
+fraig> cirg 8 -fanin 2
+
+fraig> cirg 8 -fanin 1
+
+fraig> cirg 8 -fanout 4
+
+fraig> cirg 8 -fanout 3
+
+fraig> cirg 8 -fanout 2
+
+fraig> cirg 8 -fanout 1
+
+fraig> cirg 5 -fanout 4
+PO 5
+
+fraig> cirg 5 -fanout 3
+PO 5
+
+fraig> cirg 5 -fanout 2
+PO 5
+
+fraig> cirg 5 -fanout 1
+PO 5
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 5
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 5
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 5
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 5
+
+fraig> cirw
+aag 3 2 0 2 1
+2
+4
+0
+6
+6 2 4
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirr good.aag -replace
+
+fraig> cirp -n
+
+[0] PI  1 (x)
+[1] PI  2 (y)
+[2] AIG 6 1 2
+[3] AIG 7 !1 !2
+[4] AIG 3 !6 !7
+[5] PO  8 3 (s)
+[6] PO  9 6 (c)
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           2
+  AIG          3
+------------------
+  Total        7
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 8 9
+
+fraig> cirp -fl
+
+fraig> cirg 1
+==================================================
+= PI(1)"x", line 2                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 2
+==================================================
+= PI(2)"y", line 3                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 4
+
+fraig> cirg 5
+
+fraig> cirg 8
+==================================================
+= PO(8)"s", line 4                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 9
+==================================================
+= PO(9)"c", line 5                               =
+= FECs:                                          =
+= Value: 0000_0000_0000_0000_0000_0000_0000_0000 =
+==================================================
+
+fraig> cirg 10
+
+fraig> cirg 1 -fanin 4
+PI 1
+
+fraig> cirg 1 -fanin 3
+PI 1
+
+fraig> cirg 1 -fanin 2
+PI 1
+
+fraig> cirg 1 -fanin 1
+PI 1
+
+fraig> cirg 1 -fanout 4
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 3
+PI 1
+  AIG 6
+    !AIG 3
+      PO 8
+    PO 9
+  !AIG 7
+    !AIG 3 (*)
+
+fraig> cirg 1 -fanout 2
+PI 1
+  AIG 6
+    !AIG 3
+    PO 9
+  !AIG 7
+    !AIG 3
+
+fraig> cirg 1 -fanout 1
+PI 1
+  AIG 6
+  !AIG 7
+
+fraig> cirg 8 -fanin 4
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 3
+PO 8
+  AIG 3
+    !AIG 6
+      PI 1
+      PI 2
+    !AIG 7
+      !PI 1
+      !PI 2
+
+fraig> cirg 8 -fanin 2
+PO 8
+  AIG 3
+    !AIG 6
+    !AIG 7
+
+fraig> cirg 8 -fanin 1
+PO 8
+  AIG 3
+
+fraig> cirg 8 -fanout 4
+PO 8
+
+fraig> cirg 8 -fanout 3
+PO 8
+
+fraig> cirg 8 -fanout 2
+PO 8
+
+fraig> cirg 8 -fanout 1
+PO 8
+
+fraig> cirg 5 -fanout 4
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 5 -fanout 2
+
+fraig> cirg 5 -fanout 1
+
+fraig> cirg 3 -fanout 4
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 3
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 2
+AIG 3
+  PO 8
+
+fraig> cirg 3 -fanout 1
+AIG 3
+  PO 8
+
+fraig> cirw
+aag 7 2 0 2 3
+2
+4
+6
+12
+12 2 4
+14 3 5
+6 13 15
+i0 x
+i1 y
+o0 s
+o1 c
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> q -f
+

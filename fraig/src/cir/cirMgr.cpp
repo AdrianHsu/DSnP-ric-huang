@@ -189,11 +189,9 @@ lexOptions
    }
    if (nOpts != 0) {
       if (tokens.size() < nOpts) {
-         //errorOption(CMD_OPT_MISSING, "");
          return false;
       }
       if (tokens.size() > nOpts) {
-         //errorOption(CMD_OPT_EXTRA, tokens[nOpts]);
          return false;
       }
    }
@@ -207,9 +205,17 @@ lexOptions
 CirMgr::~CirMgr() {
    size_t s  = gateList.size();
    if(s == 0) return;
+   bool first = 1;
    for(int i = s - 1; i >= 0; i--)
-      if(gateList[i] != NULL) delete gateList[i];
+      if(gateList[i] != NULL) {
+         if(first) {
+            gateList[i]->resetGlobalRef();
+            first = 0;
+         }
+         delete gateList[i];
+      }
    gateList.clear();
+
 }
 bool 
 CirMgr::aigerAddAnd(string& str, unsigned lNo) {
@@ -361,31 +367,25 @@ CirMgr::printSummary() const
       << "------------------\n"
       << "  Total" << setw(9) << right << miloa[1] + miloa[3] + miloa[4] << '\n';
 }
-void
-CirMgr::resetColors() const
-{
-   unsigned _m = miloa[0], _o = miloa[3];
-   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
-      CirGate *g = getGate(i);
-      if (g == 0) continue;
-      g->setColor(0);
-   }
-}
 
 void
 CirMgr::printNetlist() const
 {
    unsigned _m = miloa[0], _o = miloa[3];
    cout << endl;
+   bool first = 1;
    for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PO_GATE) {
+         if(first) {
+            g->setGlobalRef();
+            first = 0;
+         }
          g->printGate();
       }
    }
    CirGate::index = 0;
-   resetColors();
 }
 
 void
@@ -399,8 +399,6 @@ CirMgr::printPIs() const
    }
    cout << endl;
    CirGate::index = 0;
-   resetColors();
-   
 }
 void
 CirMgr::printPOs() const
@@ -466,7 +464,7 @@ CirMgr::printFloatGates() const
 void
 CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv) const
 {
-   if(g->getColor()) return;
+   if(g->isGlobalRef()) return;
    for(unsigned i = 0; i < g->getfinSize(); i++)
       writeDfsVisit(g->getInput(i), aigs, g->isInv(i));
    if(g->getType() == PI_GATE) {
@@ -481,7 +479,7 @@ CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv) const
       if(g->isInv(1))_rhs1++;
       aigs.push_back(_rhs1);
    }
-   g->setColor(1);
+   g->setToGlobalRef();
 }
 void
 CirMgr::writeAag(ostream& outfile) const
@@ -492,10 +490,15 @@ CirMgr::writeAag(ostream& outfile) const
    vector<unsigned> outs;
    vector<unsigned> aigs;
    //vector<string> ins_symbol;
+   bool first = 1;
    for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PO_GATE) {
+         if(first) {
+            g->setGlobalRef();
+            first = 0;
+         }
          writeDfsVisit(g, aigs, g->isInv(0));
          unsigned lit = aiger_var2lit(g->getInput(0)->getId());
          if(g->isInv(0))lit++;
@@ -505,7 +508,6 @@ CirMgr::writeAag(ostream& outfile) const
    outfile << "aag " << _m << " " << _i << " "
       << _l << " " << _o << " " << (aigs.size() / 3) << endl;
    CirGate::index = 0;
-   resetColors();
    for(unsigned i = 0; i < ins.size(); i++)
       outfile << aiger_var2lit(ins[i]) << endl;
    for(unsigned i = 0; i < outs.size(); i++)

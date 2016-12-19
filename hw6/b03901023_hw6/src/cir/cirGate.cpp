@@ -25,6 +25,9 @@ extern CirMgr *cirMgr;
 /**************************************/
 /*   class CirGate member functions   */
 /**************************************/
+unsigned CirGate::index = 0;
+unsigned CirGate::globalRef = 0;
+
 string 
 CirGate::getTypeStr() const 
 {
@@ -40,12 +43,13 @@ CirGate::getTypeStr() const
       return "UNDEF";
    return "UNDEF";
 }
-unsigned CirGate::index = 0;
 string unsToStr(unsigned n) {
    stringstream ss;
    ss << n;
    return ss.str();
 }
+bool orderSort (CirGate* i,CirGate* j) { return (i->getId() < j->getId()); }
+
 void
 CirGate::reportGate() const
 {
@@ -76,14 +80,14 @@ CirGate::faninDfsVisit(int l, bool inv) const
    cout << getTypeStr() << " " << id;
    unsigned size = faninList.size();
    if(l == 0) cout << endl;
-   else if(color) cout << " (*)" << endl;
+   else if( isGlobalRef() ) cout << " (*)" << endl;
    else  { 
       cout << endl;
       for(unsigned i = 0; i < size; i++) {
          index++;
          getInput(i)->faninDfsVisit(l - 1, isInv(i));
       }
-      if(size != 0) setColor(1);
+      if(size != 0) setToGlobalRef();
    }
    index--;
 }
@@ -92,12 +96,10 @@ void
 CirGate::reportFanin(int level) const
 { 
    assert (level >= 0);
+   setGlobalRef();
    faninDfsVisit(level, 0);
-   cirMgr->resetColors();
    index = 0;
 }
-bool orderSort (CirGate* i,CirGate* j) { return (i->getId() < j->getId()); }
-
 void
 CirGate::fanoutDfsVisit(int l, bool inv) const
 {
@@ -107,7 +109,7 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
    cout << getTypeStr() << " " << id;
    unsigned size = fanoutList.size();
    if(l == 0) cout << endl;
-   else if(color) cout << " (*)" << endl;
+   else if(isGlobalRef()) cout << " (*)" << endl;
    else {
       
       vector<CirGate*> order;
@@ -132,7 +134,7 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
             }
          }
       }
-      if(size != 0) setColor(1);
+      if(size != 0) setToGlobalRef();
    }
    index--;
 }
@@ -141,8 +143,8 @@ void
 CirGate::reportFanout(int level) const
 {
    assert (level >= 0);
+   setGlobalRef();
    fanoutDfsVisit(level, 0);
-   cirMgr->resetColors();
    index = 0;
 }
 
@@ -152,20 +154,20 @@ CirPiGate::printGate() const
    //[9] PI  7 (7GAT)
    //for(int i = 0; i < faninList.size(); i++)
    //   faninList[i]->printGate();
-   if(color) return;
+   if(isGlobalRef()) return;
    cout << "[" << index++ << "] " << setw(4) << left << getTypeStr()
       << getId();
    if(!getName().empty())
       cout << " (" << getName() << ")" << endl;
    else
       cout << endl;
-   setColor(1);
+   setToGlobalRef();
 }
 void
 CirPoGate::printGate() const
 {
    //[8] PO  24 !22 (22GAT$PO)
-   if(color) return;
+   if(isGlobalRef()) return;
    for(unsigned i = 0; i < faninList.size(); i++)
       getInput(i)->printGate();
    cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
@@ -181,13 +183,13 @@ CirPoGate::printGate() const
       cout << " (" << getName() << ")" << endl;
    else
       cout << endl;
-   setColor(1);
+   setToGlobalRef();
 }
 void
 CirAigGate::printGate() const
 {
    //[7] AIG 22 !10 !16
-   if(color) return;
+   if(isGlobalRef()) return;
    for(unsigned i = 0; i < faninList.size(); i++)
       getInput(i)->printGate();
    cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
@@ -208,7 +210,7 @@ CirAigGate::printGate() const
    str += unsToStr( rhs1->getId() );
    cout << str;
    cout << endl;
-   setColor(1);
+   setToGlobalRef();
 }
 void
 CirConstGate::printGate() const
@@ -216,10 +218,10 @@ CirConstGate::printGate() const
    //[1] CONST0
    //for(int i = 0; i < faninList.size(); i++)
    //   faninList[i]->printGate();
-   if(color) return;
+   if(isGlobalRef()) return;
    cout << "[" << index++ << "] " << getTypeStr();
    cout << getId() << endl;
-   setColor(1);
+   setToGlobalRef();
 }
 void
 CirUndefGate::printGate() const

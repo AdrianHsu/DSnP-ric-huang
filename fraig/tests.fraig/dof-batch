@@ -1,0 +1,176 @@
+cirr opt01.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr opt02.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr opt03.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr opt04.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr opt05.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr opt06.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr sim01.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr sim02.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr sim03.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr sim04.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr sim05.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr sim06.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr sim07.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr sim08.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr sim09.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi
+cirr sim10.aag -replace
+cirp -n
+cirw
+cirg 1 -fanin 20
+cirg 1 -fanout 20
+cirg 5 -fanin 20
+cirg 5 -fanout 20
+cirg 38 -fanin 20
+cirg 38 -fanout 20
+cirp -fl
+cirp -pi

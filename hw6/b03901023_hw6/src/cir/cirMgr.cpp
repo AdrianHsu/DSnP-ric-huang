@@ -189,11 +189,9 @@ lexOptions
    }
    if (nOpts != 0) {
       if (tokens.size() < nOpts) {
-         //errorOption(CMD_OPT_MISSING, "");
          return false;
       }
       if (tokens.size() > nOpts) {
-         //errorOption(CMD_OPT_EXTRA, tokens[nOpts]);
          return false;
       }
    }
@@ -238,7 +236,7 @@ CirMgr::aigerAddUndef(string& str) {
       var[i] = aiger_lit2var(lit[i]);
    }
    
-   CirAigGate* g1 = static_cast<CirAigGate*>(getGate( var[0] ));
+   CirAigGate* g1 = (CirAigGate*) getGate( var[0] );
    CirGate* g2 = getGate( var[1] );
    if(g2 == 0)
       g2 = gateList[ var[1] ] = new CirUndefGate(var[1], 0);
@@ -330,9 +328,9 @@ CirMgr::readCircuit(const string& fileName)
       unsigned id = myStr2Uns(tmp[0].substr(1));// i13, o271..etc
       char ilo = tmp[0][0];
       if(ilo == 'i')
-         static_cast<CirPiGate*>(getGate(ins[id]))->setName(sym);
+         ((CirPiGate*)getGate(ins[id]))->setName(sym);
       else if(ilo == 'o')
-         static_cast<CirPoGate*>(getGate(id + _m + 1))->setName(sym);
+         ((CirPoGate*)getGate(id + _m + 1))->setName(sym);
    }
    return true;
 }
@@ -360,31 +358,25 @@ CirMgr::printSummary() const
       << "------------------\n"
       << "  Total" << setw(9) << right << miloa[1] + miloa[3] + miloa[4] << '\n';
 }
-void
-CirMgr::resetColors() const
-{
-   unsigned _m = miloa[0], _o = miloa[3];
-   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
-      CirGate *g = getGate(i);
-      if (g == 0) continue;
-      g->setColor(0);
-   }
-}
 
 void
 CirMgr::printNetlist() const
 {
    unsigned _m = miloa[0], _o = miloa[3];
    cout << endl;
+   bool first = 1;
    for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PO_GATE) {
+         if(first) {
+            g->setGlobalRef();
+            first = 0;
+         }
          g->printGate();
       }
    }
    CirGate::index = 0;
-   resetColors();
 }
 
 void
@@ -398,8 +390,6 @@ CirMgr::printPIs() const
    }
    cout << endl;
    CirGate::index = 0;
-   resetColors();
-   
 }
 void
 CirMgr::printPOs() const
@@ -414,7 +404,6 @@ CirMgr::printPOs() const
       }
    }
    cout << endl;
-
 }
 
 void
@@ -466,7 +455,7 @@ CirMgr::printFloatGates() const
 void
 CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv) const
 {
-   if(g->getColor()) return;
+   if(g->isGlobalRef()) return;
    for(unsigned i = 0; i < g->getfinSize(); i++)
       writeDfsVisit(g->getInput(i), aigs, g->isInv(i));
    if(g->getType() == PI_GATE) {
@@ -481,7 +470,7 @@ CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv) const
       if(g->isInv(1))_rhs1++;
       aigs.push_back(_rhs1);
    }
-   g->setColor(1);
+   g->setToGlobalRef();
 }
 void
 CirMgr::writeAag(ostream& outfile) const
@@ -492,10 +481,15 @@ CirMgr::writeAag(ostream& outfile) const
    vector<unsigned> outs;
    vector<unsigned> aigs;
    //vector<string> ins_symbol;
+   bool first = 1;
    for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PO_GATE) {
+         if(first) {
+            g->setGlobalRef();
+            first = 0;
+         }
          writeDfsVisit(g, aigs, g->isInv(0));
          unsigned lit = aiger_var2lit(g->getInput(0)->getId());
          if(g->isInv(0))lit++;
@@ -505,7 +499,6 @@ CirMgr::writeAag(ostream& outfile) const
    outfile << "aag " << _m << " " << _i << " "
       << _l << " " << _o << " " << (aigs.size() / 3) << endl;
    CirGate::index = 0;
-   resetColors();
    for(unsigned i = 0; i < ins.size(); i++)
       outfile << aiger_var2lit(ins[i]) << endl;
    for(unsigned i = 0; i < outs.size(); i++)

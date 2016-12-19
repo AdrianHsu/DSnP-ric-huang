@@ -1,0 +1,4 @@
+cirr my.aag
+cirp -n
+cirg 4 -fanout 3
+q -f
