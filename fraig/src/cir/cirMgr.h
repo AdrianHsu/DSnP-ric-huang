@@ -22,15 +22,40 @@ using namespace std;
 
 extern CirMgr *cirMgr;
 
+#define NEG 0x1
+
+#define aiger_sign(l) \
+  (((unsigned)(l))&1)
+
+#define aiger_var2lit(i) \
+  (((unsigned)(i)) << 1)
+
+#define aiger_lit2var(l) \
+  (((unsigned)(l)) >> 1)
+
 class CirMgr
 {
 public:
-   CirMgr() {}
-   ~CirMgr() {} 
+   CirMgr(){
+      for(int i = 0; i < 5; i++) miloa[i] = 0;
+   }
+   ~CirMgr();
 
    // Access functions
    // return '0' if "gid" corresponds to an undefined gate.
-   CirGate* getGate(unsigned gid) const { return 0; }
+   CirGate* getGate(unsigned gid) const {
+      if(gid > miloa[0] + miloa[3]) return 0;
+      return gateList[gid];
+   }
+
+   // by AH
+   bool aigerAddAnd(string&, unsigned);
+   bool aigerAddUndef(string&);
+   void setComment(string& str){ comment.clear(); comment = str; };
+   string getComment() const { return comment; };
+   void resetColors() const;
+   void writeDfsVisit(CirGate*, vector<unsigned>&, bool) const;
+   IdList ins; 
 
    // Member functions about circuit construction
    bool readCircuit(const string&);
@@ -55,13 +80,17 @@ public:
    void printPIs() const;
    void printPOs() const;
    void printFloatGates() const;
+   
    void printFECPairs() const;
    void writeAag(ostream&) const;
    void writeGate(ostream&, CirGate*) const;
 
 private:
    ofstream           *_simLog;
-
+   // aag M I L O A == aag [0] [1] [2] [3] [4]
+   unsigned miloa[5];
+   GateList gateList;
+   string comment;
 };
 
 #endif // CIR_MGR_H

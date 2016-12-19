@@ -1,4 +1,4 @@
-cirr opt01.aag
+cirr opt02.aag
 cirp
 cirp -pi
 cirp -po
