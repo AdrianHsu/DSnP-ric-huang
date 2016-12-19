@@ -1,4 +1,0 @@
-cirr C432.aag -replace
-cirg 36 -fanout 1
-cirw
-q -f

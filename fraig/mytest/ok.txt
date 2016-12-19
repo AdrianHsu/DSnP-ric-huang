@@ -1,8 +1,0 @@
-const can direct connect to PO
-Some varIDs can be skipped
-PI's varID can be greater than AIG's ID
-PI can directly connect to PO
-symbolic name can contain space char
-symbolic names can be out of order
-symbolic name can be omitted
-Literal ID can contain leading 0's
