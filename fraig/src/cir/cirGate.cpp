@@ -148,3 +148,54 @@ CirGate::printNetDFS() const
    setToGlobalRef();
    printGate();
 }
+void
+CirGate::runColorDFS()
+{
+   if(isGlobalRef()) return;
+   for(size_t i = 0; i < faninList.size(); i++) 
+      getInput(i)->runColorDFS();
+   setToGlobalRef();
+}
+bool
+CirGate::removefinLink(CirGate *fin)
+{
+   size_t fout_size = fin->fanoutList.size();
+   for(int i = fout_size - 1; i >= 0; i--) {
+      CirGate* me = fin->getOutput(i);
+      if(me == this) {
+         fin->removeOutput(i);
+         return true;
+      }
+   }
+   return false;
+}
+bool
+CirGate::removefoutLink(CirGate *fout)
+{
+   size_t fin_size = fout->faninList.size();
+   for(int i = fin_size - 1; i >= 0; i--) {
+      CirGate* me = fout->getInput(i);
+      if(me == this) {
+         fout->removeInput(i);
+         return true;
+      }
+   }
+   return false;
+}
+void
+CirGate::finReset()
+{
+   size_t fin_size = faninList.size();
+   size_t fout_size = fanoutList.size();
+   // gate is UNDEF, AIG
+   for(int i = fin_size - 1; i >= 0; i--) {
+      CirGate *fin = getInput(i);
+      if(removefinLink(fin) )
+         removeInput(i);
+   }
+   for(int i = fout_size - 1; i >= 0; i--) {
+      CirGate *fout = getOutput(i);
+      if( removefoutLink(fout) )
+         removeOutput(i);
+   }
+}

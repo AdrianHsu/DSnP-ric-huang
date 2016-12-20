@@ -43,14 +43,19 @@ class CirGate {
    
    public:
       CirGate(GateType _t, unsigned _id, unsigned _n): type(_t), lineNo(_n), id(_id), color(0) {}
-      virtual ~CirGate() {}
+      virtual ~CirGate(){};
 
       // Printing functions
       virtual void printGate() const = 0;
       void reportGate() const;
       void reportFanin(int level) const;
       void reportFanout(int level) const;
-
+      // Basic access methods
+      string getTypeStr() const;
+      GateType getType() const { return type; }
+      unsigned getLineNo() const { return lineNo; }
+      unsigned getId() const {return id; }
+      // from homework #6
       void addInput(CirGate* g, bool inv = false) {
          if (inv) g = (CirGate*)((size_t)g + 1);
          faninList.push_back(g);
@@ -66,11 +71,6 @@ class CirGate {
       }
       bool isInv(size_t i) const { return ((size_t)faninList[i] & NEG); }
       bool isAig() const { return type == AIG_GATE; }
-      // Basic access methods
-      string getTypeStr() const;
-      GateType getType() const {return type;}
-      unsigned getLineNo() const { return lineNo; }
-      unsigned getId() const {return id; }
       size_t getfinSize(){ return faninList.size(); }
       size_t getfoutSize(){ return fanoutList.size(); }
       void setGlobalRef() const { globalRef++; }
@@ -86,7 +86,23 @@ class CirGate {
          return ss.str();
       };
       static bool orderSort (CirGate* i,CirGate* j) { return (i->getId() < j->getId()); }
-      
+      // fraig
+      void runColorDFS();
+      void finReset();
+      bool removefinLink(CirGate*);
+      bool removefoutLink(CirGate*);
+      void removeInput(size_t i) {
+         if(i >= faninList.size()) return;
+         CirGate *g = (CirGate*)(((size_t)faninList[i]) & ~size_t(NEG));
+         g = 0;
+         faninList.erase(faninList.begin() + i);
+      }
+      void removeOutput(size_t i) {
+         if(i >= fanoutList.size()) return;
+         fanoutList[i] = 0;
+         fanoutList.erase(fanoutList.begin() + i);
+      }
+
       static unsigned index;
       static unsigned globalRef;
 

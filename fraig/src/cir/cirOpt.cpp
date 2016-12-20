@@ -31,8 +31,41 @@ using namespace std;
 // DFS list should NOT be changed
 // UNDEF, float and unused list may be changed
 void
-CirMgr::sweep()
-{
+CirMgr::sweep() {
+   unsigned _m = miloa[0], _o = miloa[3];
+   bool first = 1;
+   for (unsigned i = _m + 1, size = _m + _o + 1; i < size; ++i) {
+      CirGate *g = getGate(i);
+   	if(g == 0) return; // PO error
+   	if(g->getType() == PO_GATE) {
+         if(first) {
+            g->setGlobalRef();
+            first = 0;
+         }
+         g->runColorDFS();
+      }
+   }
+   for(unsigned i = 0; i < _m + 1; ++i) {
+   	CirGate *g = getGate(i);
+   	if(g == 0) continue;
+   	if(!g->isGlobalRef() && g->getType() != PI_GATE && g->getType() != CONST_GATE) {
+   		g->finReset();
+   		cout << "Sweeping: " << g->getTypeStr() << "(" << g->getId() << ") removed..." << endl;
+   		if(g->getType() == AIG_GATE)
+   			miloa[4]--;
+   		new_m--;
+   		deleteGate(i);
+   	}
+   }
+   // DEBUG
+   // for(unsigned i = 0; i < _m + _o + 1; i++) {
+   //    CirGate *g = getGate(i);
+   // 	if(g == 0) {
+   // 		cout << i << endl;
+   // 		continue;
+   // 	}
+   // 	cout << g->getTypeStr() << "," << g->getId() << endl;
+   // }
 }
 
 // Recursively simplifying from POs;

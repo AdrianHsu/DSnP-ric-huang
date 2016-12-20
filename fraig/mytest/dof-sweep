@@ -1,0 +1,9 @@
+cirr sweep.aag
+cirp -s
+cirsw
+cirp -s
+cirp -n
+cirp -pi
+cirp -po
+cirp -fl
+q -f

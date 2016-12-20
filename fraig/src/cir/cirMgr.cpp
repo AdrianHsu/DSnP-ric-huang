@@ -14,7 +14,6 @@
 #include <cassert>
 #include <cstring>
 #include "cirMgr.h"
-#include "cirGate.h"
 #include "util.h"
 
 using namespace std;
@@ -212,7 +211,7 @@ CirMgr::~CirMgr() {
             gateList[i]->resetGlobalRef();
             first = 0;
          }
-         delete gateList[i];
+         delete gateList[i]; gateList[i] = 0; //added in fraig
       }
    gateList.clear();
 
@@ -290,6 +289,7 @@ CirMgr::readCircuit(const string& fileName)
       miloa[i - 1] = myStr2Uns(tmp[i]);
    
    unsigned _m = miloa[0], _i = miloa[1], _o = miloa[3], _a = miloa[4];
+   new_m = _m; // for fraig
    gateList.clear();
    gateList.resize(miloa[0] + miloa[3] + 1, 0);
    // const gate
@@ -451,7 +451,7 @@ CirMgr::printFloatGates() const
    for (unsigned i = 0, size = _m + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
-      if (g->getType() == PI_GATE || g->getType() == AIG_GATE) {
+      if (g->getType() == PI_GATE || g->getType() == AIG_GATE ) {
          if(g->getfoutSize() == 0)
             case2.push_back(g->getId());
       }
@@ -489,7 +489,7 @@ CirMgr::writeAag(ostream& outfile) const
    vector<unsigned> outs;
    vector<unsigned> aigs;
    bool first = 1;
-   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
+   for (unsigned i = _m, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PO_GATE) {

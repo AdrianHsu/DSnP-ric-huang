@@ -19,6 +19,7 @@ using namespace std;
 // TODO: Feel free to define your own classes, variables, or functions.
 
 #include "cirDef.h"
+#include "cirGate.h"
 
 extern CirMgr *cirMgr;
 
@@ -36,7 +37,7 @@ extern CirMgr *cirMgr;
 class CirMgr
 {
 public:
-   CirMgr(){
+   CirMgr(): new_m(0) {
       for(int i = 0; i < 5; i++) miloa[i] = 0;
    }
    ~CirMgr();
@@ -52,9 +53,15 @@ public:
    bool aigerAddAnd(vector<string>&);
    void setComment(string& str){ comment.clear(); comment = str; };
    string getComment() const { return comment; };
-   void resetColors() const;
    void writeDfsVisit(CirGate*, vector<unsigned>&, bool) const;
    IdList ins; 
+   // by AH for fraig
+   void deleteGate(unsigned gid) {
+      if(gid > miloa[0] + miloa[3] || gateList[gid] == 0) return;
+
+      delete gateList[gid];
+      gateList[gid] = 0;
+   }
 
    // Member functions about circuit construction
    bool readCircuit(const string&);
@@ -88,6 +95,7 @@ private:
    ofstream           *_simLog;
    // aag M I L O A == aag [0] [1] [2] [3] [4]
    unsigned miloa[5];
+   unsigned new_m;
    GateList gateList;
    string comment;
 };
