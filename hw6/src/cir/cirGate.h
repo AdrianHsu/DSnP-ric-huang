@@ -12,6 +12,9 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <algorithm>
+#include <sstream>
+
 #include "cirDef.h"
 
 using namespace std;
@@ -40,11 +43,6 @@ class CirGate {
       CirGate(GateType _t, unsigned _id, unsigned _n): type(_t), lineNo(_n), id(_id), color(0) {}
       virtual ~CirGate() {}
 
-      // Basic access methods
-      string getTypeStr() const;
-      GateType getType() const {return type;}
-      unsigned getLineNo() const { return lineNo; }
-      unsigned getId() const {return id; }
       // Printing functions
       virtual void printGate() const = 0;
       void reportGate() const;
@@ -66,20 +64,29 @@ class CirGate {
       }
       bool isInv(size_t i) const { return ((size_t)faninList[i] & NEG); }
       bool isAig() const { return type == AIG_GATE; }
-
+      // Basic access methods
+      string getTypeStr() const;
+      GateType getType() const {return type;}
+      unsigned getLineNo() const { return lineNo; }
+      unsigned getId() const {return id; }
       size_t getfinSize(){ return faninList.size(); }
       size_t getfoutSize(){ return fanoutList.size(); }
       void setGlobalRef() const { globalRef++; }
       void resetGlobalRef() const { globalRef = 0; }
       bool isGlobalRef() const { return color == globalRef; }
       void setToGlobalRef() const {color = globalRef; }
-
       void faninDfsVisit(int, bool) const;
       void fanoutDfsVisit(int, bool) const;
-
+      void printNetDFS() const;
+      string unsToStr(unsigned n) const {
+         stringstream ss;
+         ss << n;
+         return ss.str();
+      };
+      static bool orderSort (CirGate* i,CirGate* j) { return (i->getId() < j->getId()); }
       static unsigned index;
       static unsigned globalRef;
-
+      
    protected:
       GateType type;
       unsigned lineNo;
@@ -95,7 +102,15 @@ class CirPiGate : public CirGate {
          : CirGate(PI_GATE, _id, _n), name("") {}
       virtual ~CirPiGate() {}
 
-      void printGate() const;
+      void printGate() const {
+         //[9] PI  7 (7GAT)
+         cout << "[" << index++ << "] " << setw(4) << left << getTypeStr()
+            << getId();
+         if(!getName().empty())
+            cout << " (" << getName() << ")" << endl;
+         else
+            cout << endl;
+      }
       void setName(string str) { if(name.empty()) name = str; }
       string getName() const { return name; } 
    
@@ -110,7 +125,22 @@ class CirPoGate : public CirGate {
          : CirGate(PO_GATE, _id, _n), name("") {}
       virtual ~CirPoGate() {}
 
-      void printGate() const;
+      void printGate() const {
+         //[8] PO  24 !22 (22GAT$PO)
+         cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
+         CirGate* fin = getInput(0);
+         string str;
+         if(fin->getType() == UNDEF_GATE)
+            str += "*";
+         if(isInv(0)) str += "!";
+         str += unsToStr( fin->getId() );
+         cout << str;
+
+         if(!getName().empty())
+            cout << " (" << getName() << ")" << endl;
+         else
+            cout << endl;
+      }
       void setName(string str) { if(name.empty()) name = str; }
       string getName() const { return name; } 
    
@@ -126,9 +156,29 @@ class CirAigGate : public CirGate {
          : CirGate(AIG_GATE, _id, _n) {}
       virtual ~CirAigGate() {}
 
-      void printGate() const;
+      void printGate() const 
+      {
+         //[7] AIG 22 !10 !16
+         cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
+         CirGate* rhs0 = getInput(0);
+         CirGate* rhs1 = getInput(1);
+          
+         if(rhs0 == NULL || rhs1 == NULL) return; //error
+         string str;
+         if(rhs0->getType() == UNDEF_GATE)
+            str += "*";
+         if(isInv(0)) str += "!";
+         str += unsToStr( rhs0->getId() );
+         cout << str << " ";
+         str.clear();
+         if(rhs1->getType() == UNDEF_GATE)
+            str += "*";
+         if(isInv(1)) str += "!";
+         str += unsToStr( rhs1->getId() );
+         cout << str;
+         cout << endl;
+      }
    protected:
-      //GateList faninList;
       // Aig has no name
 };
 
@@ -139,7 +189,7 @@ class CirUndefGate : public CirGate {
          : CirGate(UNDEF_GATE, _id, _n) {}
       virtual ~CirUndefGate() {}
 
-      void printGate() const;
+      void printGate() const {};
    
    protected:
 };
@@ -151,8 +201,13 @@ class CirConstGate : public CirGate {
          : CirGate(CONST_GATE, 0, _n) {}
       virtual ~CirConstGate() {}
 
-      void printGate() const;
-   
+      void printGate() const
+      {
+         //[1] CONST0
+         cout << "[" << index++ << "] " << getTypeStr();
+         cout << getId() << endl;
+      }
+         
    protected:
 };
 #endif // CIR_GATE_H

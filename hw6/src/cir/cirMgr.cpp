@@ -306,7 +306,7 @@ CirMgr::readCircuit(const string& fileName)
          pre = gateList[ var ] = new CirUndefGate(var, 0);
       gate->addInput(pre, aiger_sign(lit));
       gateList[i + _m + 1] = gate;
-      pre->addOutput(gate); //bug here
+      pre->addOutput(gate);
    }
    
    unsigned i = _i + _o + _a + 1, listSize = cmd.size();
@@ -367,7 +367,7 @@ CirMgr::printNetlist() const
    unsigned _m = miloa[0], _o = miloa[3];
    cout << endl;
    bool first = 1;
-   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
+   for (unsigned i = _m + 1, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
       if (g->getType() == PO_GATE) {
@@ -375,7 +375,7 @@ CirMgr::printNetlist() const
             g->setGlobalRef();
             first = 0;
          }
-         g->printGate();
+         g->printNetDFS();
       }
    }
    CirGate::index = 0;
@@ -391,7 +391,6 @@ CirMgr::printPIs() const
       }
    }
    cout << endl;
-   CirGate::index = 0;
 }
 void
 CirMgr::printPOs() const
@@ -425,7 +424,6 @@ CirMgr::printFloatGates() const
       } else if(g->getType() == AIG_GATE) {
          if(g->getfinSize() != 2) return; // error
          for(unsigned i = 0; i < g->getfinSize(); i++) {
-
             if(g->getInput(i)->getType() == UNDEF_GATE) {
                case1.push_back(g->getId());
                break;
@@ -460,9 +458,7 @@ CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv) const
    if(g->isGlobalRef()) return;
    for(unsigned i = 0; i < g->getfinSize(); i++)
       writeDfsVisit(g->getInput(i), aigs, g->isInv(i));
-   if(g->getType() == PI_GATE) {
-      //ins.push_back( aiger_var2lit( g->getId() ) );
-   } else if(g->getType() == AIG_GATE) {
+   if(g->getType() == AIG_GATE) {
       unsigned _lhs = aiger_var2lit(g->getId());
       aigs.push_back(_lhs); //_lhs must even
       unsigned _rhs0 = aiger_var2lit(g->getInput(0)->getId());
@@ -477,17 +473,15 @@ CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv) const
 void
 CirMgr::writeAag(ostream& outfile) const
 {
-   
    unsigned _m = miloa[0], _i = miloa[1], _l = miloa[2], _o = miloa[3];
-   //vector<unsigned> mins;
    vector<unsigned> outs;
    vector<unsigned> aigs;
-   //vector<string> ins_symbol;
+
    bool first = 1;
-   for (unsigned i = 0, size = _m + _o + 1; i < size; ++i) {
+   for (unsigned i = _m + 1, size = _m + _o + 1; i < size; ++i) {
       CirGate *g = getGate(i);
       if (g == 0) continue;
-      if (g->getType() == PO_GATE) {
+      if (g->getType() == PO_GATE) { //must be PO
          if(first) {
             g->setGlobalRef();
             first = 0;
