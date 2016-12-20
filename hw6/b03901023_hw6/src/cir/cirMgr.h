@@ -47,8 +47,7 @@ public:
    }
 
    // by AH
-   bool aigerAddAnd(string&, unsigned);
-   bool aigerAddUndef(string&);
+   bool aigerAddAnd(vector<string>&);
    void setComment(string& str){ comment.clear(); comment = str; };
    string getComment() const { return comment; };
    void resetColors() const;
@@ -63,7 +62,7 @@ public:
    void printFloatGates() const;
    void writeAag(ostream&) const;
    void writeDfsVisit(CirGate*, vector<unsigned>&, bool) const;
-   vector<unsigned> ins; 
+   IdList ins; 
 
 private:
    // aag M I L O A == aag [0] [1] [2] [3] [4]

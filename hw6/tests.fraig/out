@@ -1,149 +1,149 @@
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.14 seconds
-Total time used  : 0.14 seconds
-Total memory used: 15.86 M Bytes
+Period time used : 0.09 seconds
+Total time used  : 0.09 seconds
+Total memory used: 16.41 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.18 seconds
-Total time used  : 0.32 seconds
-Total memory used: 16.69 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 0.21 seconds
+Total memory used: 18 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 0.49 seconds
-Total memory used: 17.23 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 0.33 seconds
+Total memory used: 18.33 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.18 seconds
-Total time used  : 0.67 seconds
-Total memory used: 17.75 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 0.45 seconds
+Total memory used: 18.39 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.18 seconds
-Total time used  : 0.85 seconds
-Total memory used: 17.75 M Bytes
+Period time used : 0.11 seconds
+Total time used  : 0.56 seconds
+Total memory used: 18.39 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 1.02 seconds
-Total memory used: 17.75 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 0.68 seconds
+Total memory used: 18.77 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.18 seconds
-Total time used  : 1.2 seconds
-Total memory used: 17.75 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 0.8 seconds
+Total memory used: 18.82 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 1.37 seconds
-Total memory used: 17.75 M Bytes
+Period time used : 0.11 seconds
+Total time used  : 0.91 seconds
+Total memory used: 18.82 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 1.54 seconds
-Total memory used: 17.91 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 1.03 seconds
+Total memory used: 18.82 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 1.71 seconds
-Total memory used: 17.91 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 1.15 seconds
+Total memory used: 18.82 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.18 seconds
-Total time used  : 1.89 seconds
-Total memory used: 17.91 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 1.27 seconds
+Total memory used: 18.82 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 2.06 seconds
-Total memory used: 17.91 M Bytes
+Period time used : 0.11 seconds
+Total time used  : 1.38 seconds
+Total memory used: 18.82 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 2.23 seconds
-Total memory used: 17.91 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 1.5 seconds
+Total memory used: 18.82 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.18 seconds
-Total time used  : 2.41 seconds
-Total memory used: 17.91 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 1.62 seconds
+Total memory used: 19.01 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 2.58 seconds
-Total memory used: 17.91 M Bytes
+Period time used : 0.11 seconds
+Total time used  : 1.73 seconds
+Total memory used: 19.01 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 2.75 seconds
-Total memory used: 17.91 M Bytes
+Period time used : 0.13 seconds
+Total time used  : 1.86 seconds
+Total memory used: 19.19 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 2.92 seconds
-Total memory used: 18.16 M Bytes
+Period time used : 0.11 seconds
+Total time used  : 1.97 seconds
+Total memory used: 19.19 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 3.09 seconds
-Total memory used: 18.16 M Bytes
+Period time used : 0.11 seconds
+Total time used  : 2.08 seconds
+Total memory used: 19.19 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 3.26 seconds
-Total memory used: 18.16 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 2.2 seconds
+Total memory used: 19.35 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 3.43 seconds
-Total memory used: 18.16 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 2.32 seconds
+Total memory used: 19.39 M Bytes
 
 cir> cirr sim13.aag -r
 
 cir> usage
-Period time used : 0.17 seconds
-Total time used  : 3.6 seconds
-Total memory used: 18.16 M Bytes
+Period time used : 0.12 seconds
+Total time used  : 2.44 seconds
+Total memory used: 19.39 M Bytes
 
 cir> q -f
 

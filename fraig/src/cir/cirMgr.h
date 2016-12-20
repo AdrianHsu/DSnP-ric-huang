@@ -49,8 +49,7 @@ public:
    }
 
    // by AH
-   bool aigerAddAnd(string&, unsigned);
-   bool aigerAddUndef(string&);
+   bool aigerAddAnd(vector<string>&);
    void setComment(string& str){ comment.clear(); comment = str; };
    string getComment() const { return comment; };
    void resetColors() const;
