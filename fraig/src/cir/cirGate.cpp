@@ -143,18 +143,19 @@ void
 CirGate::printNetDFS() const
 {
    if(isGlobalRef()) return;
-   for(size_t i = 0; i < faninList.size(); i++) 
-      getInput(i)->printNetDFS();
    setToGlobalRef();
+   for(size_t i = 0; i < faninList.size(); i++)
+      getInput(i)->printNetDFS();
+
    printGate();
 }
 void
 CirGate::runColorDFS()
 {
    if(isGlobalRef()) return;
-   for(size_t i = 0; i < faninList.size(); i++) 
-      getInput(i)->runColorDFS();
    setToGlobalRef();
+   for(size_t i = 0; i < faninList.size(); i++)
+      getInput(i)->runColorDFS();
 }
 bool
 CirGate::removefinLink(CirGate *fin)

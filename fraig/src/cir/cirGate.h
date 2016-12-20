@@ -76,7 +76,7 @@ class CirGate {
       void setGlobalRef() const { globalRef++; }
       void resetGlobalRef() const { globalRef = 0; }
       bool isGlobalRef() const { return color == globalRef; }
-      void setToGlobalRef() const {color = globalRef; }
+      void setToGlobalRef() const { color = globalRef; }
       void faninDfsVisit(int, bool) const;
       void fanoutDfsVisit(int, bool) const;
       void printNetDFS() const;

@@ -37,7 +37,7 @@ extern CirMgr *cirMgr;
 class CirMgr
 {
 public:
-   CirMgr(): new_m(0) {
+   CirMgr() {
       for(int i = 0; i < 5; i++) miloa[i] = 0;
    }
    ~CirMgr();
@@ -95,7 +95,6 @@ private:
    ofstream           *_simLog;
    // aag M I L O A == aag [0] [1] [2] [3] [4]
    unsigned miloa[5];
-   unsigned new_m;
    GateList gateList;
    string comment;
 };

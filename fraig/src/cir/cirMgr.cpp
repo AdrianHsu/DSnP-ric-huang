@@ -289,7 +289,6 @@ CirMgr::readCircuit(const string& fileName)
       miloa[i - 1] = myStr2Uns(tmp[i]);
    
    unsigned _m = miloa[0], _i = miloa[1], _o = miloa[3], _a = miloa[4];
-   new_m = _m; // for fraig
    gateList.clear();
    gateList.resize(miloa[0] + miloa[3] + 1, 0);
    // const gate

@@ -1,0 +1,56 @@
+fraig> cirr 9.aag
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           3
+  AIG          2
+------------------
+  Total        7
+
+fraig> cirp -n
+
+[0] CONST0
+[1] PI  1
+[2] PI  2
+[3] AIG 3 1 2
+[4] AIG 4 !0 !3
+[5] PO  21 4
+[6] PO  22 !4
+[7] PO  23 3
+
+fraig> cirsw
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           3
+  AIG          2
+------------------
+  Total        7
+
+fraig> cirp -n
+
+[0] CONST0
+[1] PI  1
+[2] PI  2
+[3] AIG 3 1 2
+[4] AIG 4 !0 !3
+[5] PO  21 4
+[6] PO  22 !4
+[7] PO  23 3
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 21 22 23
+
+fraig> cirp -fl
+
+fraig> q -f
+

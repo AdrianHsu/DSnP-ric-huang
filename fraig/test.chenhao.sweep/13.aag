@@ -1,0 +1,22 @@
+aag 20 2 0 5 5
+2
+4
+6
+10
+8
+12
+14
+6 1 2
+8 1 4
+10 6 8
+12 1 2
+14 1 4
+c
+fecgrps
+[0] 3 6
+[1] 4 7
+
+Fraig: 3 merging 6...              
+Fraig: 4 merging 7...
+Updating by UNSAT... Total #FEC Group = 0
+

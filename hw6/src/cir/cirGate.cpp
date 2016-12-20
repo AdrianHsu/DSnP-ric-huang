@@ -142,8 +142,9 @@ void
 CirGate::printNetDFS() const
 {
    if(isGlobalRef()) return;
+   setToGlobalRef();
+
    for(size_t i = 0; i < faninList.size(); i++) 
       getInput(i)->printNetDFS();
-   setToGlobalRef();
    printGate();
 }

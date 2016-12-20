@@ -53,7 +53,7 @@ CirMgr::sweep() {
    		cout << "Sweeping: " << g->getTypeStr() << "(" << g->getId() << ") removed..." << endl;
    		if(g->getType() == AIG_GATE)
    			miloa[4]--;
-   		new_m--;
+
    		deleteGate(i);
    	}
    }
