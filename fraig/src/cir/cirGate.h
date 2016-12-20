@@ -35,6 +35,12 @@ using namespace std;
 // TODO: Feel free to define your own classes, variables, or functions.
 
 class CirGate;
+// by AH
+class CirAigGate;
+class CirPiGate;
+class CirPoGate;
+class CirUndefGate;
+class CirConstGate;
 
 //------------------------------------------------------------------------
 //   Define classes
@@ -86,7 +92,7 @@ class CirGate {
          return ss.str();
       };
       static bool orderSort (CirGate* i,CirGate* j) { return (i->getId() < j->getId()); }
-      // fraig
+      // sweep()
       void runColorDFS();
       void finReset();
       bool removefinLink(CirGate*);
@@ -102,6 +108,11 @@ class CirGate {
          fanoutList[i] = 0;
          fanoutList.erase(fanoutList.begin() + i);
       }
+      // optimize()
+      bool isConstZero() const {return 0;}
+      bool isConstOne() const {return 0;}
+      bool isSameFanin() const {return 0;}
+      bool isInvertFanin() const {return 0;}
 
       static unsigned index;
       static unsigned globalRef;

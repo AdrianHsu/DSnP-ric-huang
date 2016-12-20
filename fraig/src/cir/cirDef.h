@@ -19,6 +19,12 @@ using namespace std;
 class CirGate;
 class CirMgr;
 class SatSolver;
+// by AH
+class CirAigGate;
+class CirPiGate;
+class CirPoGate;
+class CirUndefGate;
+class CirConstGate;
 
 typedef vector<CirGate*>           GateList;
 typedef vector<unsigned>           IdList;
@@ -34,4 +40,15 @@ enum GateType
    TOT_GATE
 };
 
+// by AH
+enum OptType
+{
+   CONST_ZERO   = 0,
+   CONST_ONE    = 1,
+   SAME_FANIN   = 2,
+   INVERT_FANIN = 3,
+   NO_OPT       = 4,
+   // dummy end
+   OPT_TOT
+};
 #endif // CIR_DEF_H

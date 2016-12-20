@@ -74,8 +74,20 @@ CirMgr::sweep() {
 void
 CirMgr::optimize()
 {
+
 }
 
 /***************************************************/
 /*   Private member functions about optimization   */
 /***************************************************/
+
+OptType
+CirMgr::getOptType(CirGate* g) const
+{  
+   if(g->getType() != AIG_GATE) return NO_OPT;
+   if(g->isConstZero())      return CONST_ZERO;
+   if(g->isConstOne())       return CONST_ONE;
+   if(g->isSameFanin())      return SAME_FANIN;
+   if(g->isInvertFanin())    return INVERT_FANIN;
+   return NO_OPT;
+}

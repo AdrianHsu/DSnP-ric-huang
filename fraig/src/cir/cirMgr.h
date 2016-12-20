@@ -69,6 +69,8 @@ public:
    // Member functions about circuit optimization
    void sweep();
    void optimize();
+   // by AH
+   OptType getOptType(CirGate*) const;
 
    // Member functions about simulation
    void randomSim();
