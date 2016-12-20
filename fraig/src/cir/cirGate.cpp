@@ -76,11 +76,11 @@ CirGate::faninDfsVisit(int l, bool inv) const
    else if( isGlobalRef() ) cout << " (*)" << endl;
    else  { 
       cout << endl;
+      if(size != 0) setToGlobalRef();
       for(unsigned i = 0; i < size; i++) {
          index++;
          getInput(i)->faninDfsVisit(l - 1, isInv(i));
       }
-      if(size != 0) setToGlobalRef();
    }
    index--;
 }
@@ -113,6 +113,7 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
       std::sort (order.begin(), order.end(), orderSort);
 
       cout << endl;
+      if(size != 0) setToGlobalRef();
       for(unsigned i = 0; i < size; i++) {
          index++;
          CirGate* g = order[i];
@@ -127,7 +128,6 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
             }
          }
       }
-      if(size != 0) setToGlobalRef();
    }
    index--;
 }

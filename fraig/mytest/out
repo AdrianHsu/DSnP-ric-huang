@@ -44,5 +44,32 @@ POs of the circuit: 11
 fraig> cirp -fl
 Gates defined but not used  : 1
 
+fraig> cirg 11 -fanin 5
+PO 11
+  AIG 4
+    PI 2
+    PI 3
+
+fraig> cirg 1 -fanout 5
+PI 1
+
+fraig> cirg 2 -fanout 5
+PI 2
+  AIG 4
+    PO 11
+
+fraig> cirg 3 -fanout 5
+PI 3
+  AIG 4
+    PO 11
+
+fraig> cirg 5 -fanout 3
+
+fraig> cirg 4 -fanout 4
+AIG 4
+  PO 11
+
+fraig> cirg 9 -fanin 5
+
 fraig> q -f
 

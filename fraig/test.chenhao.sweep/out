@@ -1,25 +1,14 @@
-fraig> cirr 9.aag
+fraig> cirr 1.aag
 
 fraig> cirp -s
 
 Circuit Statistics
 ==================
-  PI           2
-  PO           3
+  PI           3
+  PO           1
   AIG          2
 ------------------
-  Total        7
-
-fraig> cirp -n
-
-[0] CONST0
-[1] PI  1
-[2] PI  2
-[3] AIG 3 1 2
-[4] AIG 4 !0 !3
-[5] PO  21 4
-[6] PO  22 !4
-[7] PO  23 3
+  Total        6
 
 fraig> cirsw
 
@@ -27,30 +16,67 @@ fraig> cirp -s
 
 Circuit Statistics
 ==================
-  PI           2
-  PO           3
+  PI           3
+  PO           1
   AIG          2
 ------------------
-  Total        7
+  Total        6
 
 fraig> cirp -n
 
-[0] CONST0
-[1] PI  1
-[2] PI  2
-[3] AIG 3 1 2
-[4] AIG 4 !0 !3
-[5] PO  21 4
-[6] PO  22 !4
-[7] PO  23 3
+[0] PI  2
+[1] AIG 4 2 5
+[2] PI  3
+[3] AIG 5 4 3
+[4] PO  11 !5
 
 fraig> cirp -pi
-PIs of the circuit: 1 2
+PIs of the circuit: 1 2 3
 
 fraig> cirp -po
-POs of the circuit: 21 22 23
+POs of the circuit: 11
 
 fraig> cirp -fl
+Gates defined but not used  : 1
+
+fraig> cirg 11 -fanin 5
+PO 11
+  !AIG 5
+    AIG 4
+      PI 2
+      AIG 5 (*)
+    PI 3
+
+fraig> cirg 1 -fanout 5
+PI 1
+
+fraig> cirg 2 -fanout 5
+PI 2
+  AIG 4
+    AIG 5
+      AIG 4 (*)
+      !PO 11
+
+fraig> cirg 3 -fanout 5
+PI 3
+  AIG 5
+    AIG 4
+      AIG 5 (*)
+    !PO 11
+
+fraig> cirg 5 -fanout 3
+AIG 5
+  AIG 4
+    AIG 5 (*)
+  !PO 11
+
+fraig> cirg 4 -fanout 4
+AIG 4
+  AIG 5
+    AIG 4 (*)
+    !PO 11
+
+fraig> cirg 9 -fanin 5
 
 fraig> q -f
 

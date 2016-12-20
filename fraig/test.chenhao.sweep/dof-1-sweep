@@ -1,4 +1,4 @@
-cirr sweep.aag
+cirr 1.aag
 cirp -s
 cirsw
 cirp -s

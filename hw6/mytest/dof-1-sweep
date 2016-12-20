@@ -1,0 +1,5 @@
+cirr 1.aag
+cirp -s
+cirg 11 -fanin 5
+cirg 2 -fanout 5
+q -f
