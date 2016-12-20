@@ -8,7 +8,6 @@
 
 #include <iostream>
 #include <iomanip>
-#include <sstream>
 #include <stdarg.h>
 #include <cassert>
 #include "cirGate.h"
@@ -44,13 +43,6 @@ CirGate::getTypeStr() const
       return "UNDEF";
    return "UNDEF";
 }
-string unsToStr(unsigned n) {
-   stringstream ss;
-   ss << n;
-   return ss.str();
-}
-bool orderSort (CirGate* i,CirGate* j) { return (i->getId() < j->getId()); }
-
 void
 CirGate::reportGate() const
 {
@@ -139,7 +131,6 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
    }
    index--;
 }
-
 void
 CirGate::reportFanout(int level) const
 {
@@ -148,85 +139,12 @@ CirGate::reportFanout(int level) const
    fanoutDfsVisit(level, 0);
    index = 0;
 }
-
 void
-CirPiGate::printGate() const
+CirGate::printNetDFS() const
 {
-   //[9] PI  7 (7GAT)
-   //for(int i = 0; i < faninList.size(); i++)
-   //   faninList[i]->printGate();
    if(isGlobalRef()) return;
-   cout << "[" << index++ << "] " << setw(4) << left << getTypeStr()
-      << getId();
-   if(!getName().empty())
-      cout << " (" << getName() << ")" << endl;
-   else
-      cout << endl;
+   for(size_t i = 0; i < faninList.size(); i++) 
+      getInput(i)->printNetDFS();
    setToGlobalRef();
+   printGate();
 }
-void
-CirPoGate::printGate() const
-{
-   //[8] PO  24 !22 (22GAT$PO)
-   if(isGlobalRef()) return;
-   for(unsigned i = 0; i < faninList.size(); i++)
-      getInput(i)->printGate();
-   cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
-   CirGate* fin = getInput(0);
-   string str;
-   if(fin->getType() == UNDEF_GATE)
-      str += "*";
-   if(isInv(0)) str += "!";
-   str += unsToStr( fin->getId() );
-   cout << str;
-
-   if(!getName().empty())
-      cout << " (" << getName() << ")" << endl;
-   else
-      cout << endl;
-   setToGlobalRef();
-}
-void
-CirAigGate::printGate() const
-{
-   //[7] AIG 22 !10 !16
-   if(isGlobalRef()) return;
-   for(unsigned i = 0; i < faninList.size(); i++)
-      getInput(i)->printGate();
-   cout << "[" << index++ << "] " << setw(4) << left << getTypeStr() << getId() << " ";
-   CirGate* rhs0 = getInput(0);
-   CirGate* rhs1 = getInput(1);
-    
-   if(rhs0 == NULL || rhs1 == NULL) return; //error
-   string str;
-   if(rhs0->getType() == UNDEF_GATE)
-      str += "*";
-   if(isInv(0)) str += "!";
-   str += unsToStr( rhs0->getId() );
-   cout << str << " ";
-   str.clear();
-   if(rhs1->getType() == UNDEF_GATE)
-      str += "*";
-   if(isInv(1)) str += "!";
-   str += unsToStr( rhs1->getId() );
-   cout << str;
-   cout << endl;
-   setToGlobalRef();
-}
-void
-CirConstGate::printGate() const
-{
-   //[1] CONST0
-   //for(int i = 0; i < faninList.size(); i++)
-   //   faninList[i]->printGate();
-   if(isGlobalRef()) return;
-   cout << "[" << index++ << "] " << getTypeStr();
-   cout << getId() << endl;
-   setToGlobalRef();
-}
-void
-CirUndefGate::printGate() const
-{
-   // will not be called
-}
-

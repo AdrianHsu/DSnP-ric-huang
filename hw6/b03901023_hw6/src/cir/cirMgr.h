@@ -48,6 +48,7 @@ public:
 
    // by AH
    bool aigerAddAnd(vector<string>&);
+   // bool aigerAddUndef(string&);
    void setComment(string& str){ comment.clear(); comment = str; };
    string getComment() const { return comment; };
    void resetColors() const;
