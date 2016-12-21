@@ -150,12 +150,13 @@ CirGate::printNetDFS() const
    printGate();
 }
 void
-CirGate::runColorDFS()
+CirGate::runColorDFS(GateList& _dfsList)
 {
    if(isGlobalRef()) return;
    setToGlobalRef();
    for(size_t i = 0; i < faninList.size(); i++)
-      getInput(i)->runColorDFS();
+      getInput(i)->runColorDFS(_dfsList);
+   _dfsList.push_back(this);
 }
 bool
 CirGate::removefinLink(CirGate *fin)
@@ -184,7 +185,7 @@ CirGate::removefoutLink(CirGate *fout)
    return false;
 }
 void
-CirGate::finReset()
+CirGate::finfoutRemove()
 {
    size_t fin_size = faninList.size();
    size_t fout_size = fanoutList.size();

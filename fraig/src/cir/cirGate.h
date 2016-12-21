@@ -93,14 +93,13 @@ class CirGate {
       };
       static bool orderSort (CirGate* i,CirGate* j) { return (i->getId() < j->getId()); }
       // sweep()
-      void runColorDFS();
-      void finReset();
+      void runColorDFS(GateList&);
+      void finfoutRemove();
       bool removefinLink(CirGate*);
       bool removefoutLink(CirGate*);
       void removeInput(size_t i) {
          if(i >= faninList.size()) return;
-         CirGate *g = (CirGate*)(((size_t)faninList[i]) & ~size_t(NEG));
-         g = 0;
+         faninList[i] = 0;
          faninList.erase(faninList.begin() + i);
       }
       void removeOutput(size_t i) {
@@ -108,11 +107,6 @@ class CirGate {
          fanoutList[i] = 0;
          fanoutList.erase(fanoutList.begin() + i);
       }
-      // optimize()
-      bool isConstZero() const {return 0;}
-      bool isConstOne() const {return 0;}
-      bool isSameFanin() const {return 0;}
-      bool isInvertFanin() const {return 0;}
 
       static unsigned index;
       static unsigned globalRef;

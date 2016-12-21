@@ -55,7 +55,7 @@ public:
    string getComment() const { return comment; };
    void writeDfsVisit(CirGate*, vector<unsigned>&, bool) const;
    IdList ins; 
-   // by AH for fraig
+   // by AH for sweep
    void deleteGate(unsigned gid) {
       if(gid > miloa[0] + miloa[3] || gateList[gid] == 0) return;
 
@@ -70,7 +70,8 @@ public:
    void sweep();
    void optimize();
    // by AH
-   OptType getOptType(CirGate*) const;
+   void buildDfsList();
+   OptType getOptType(CirGate*, bool& inv) const;
 
    // Member functions about simulation
    void randomSim();
@@ -92,6 +93,7 @@ public:
    void printFECPairs() const;
    void writeAag(ostream&) const;
    void writeGate(ostream&, CirGate*) const;
+   GateList _dfsList;
 
 private:
    ofstream           *_simLog;

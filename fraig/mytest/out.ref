@@ -1,75 +1,71 @@
-fraig> cirr sweep.aag
+fraig> cirr opt00.aag
 
-fraig> cirp -s
-
-Circuit Statistics
-==================
-  PI           3
-  PO           1
-  AIG          6
-------------------
-  Total       10
-
-fraig> cirsw
-Sweeping: AIG(5) removed...
-Sweeping: UNDEF(6) removed...
-Sweeping: AIG(7) removed...
-Sweeping: AIG(8) removed...
-Sweeping: AIG(9) removed...
-Sweeping: AIG(10) removed...
-
-fraig> cirp -s
+fraig> cirp
 
 Circuit Statistics
 ==================
-  PI           3
+  PI           1
   PO           1
   AIG          1
 ------------------
-  Total        5
+  Total        3
+
+fraig> cirp -pi
+PIs of the circuit: 1
+
+fraig> cirp -po
+POs of the circuit: 3
 
 fraig> cirp -n
 
-[0] PI  2
-[1] PI  3
-[2] AIG 4 2 3
-[3] PO  11 4
-
-fraig> cirp -pi
-PIs of the circuit: 1 2 3
-
-fraig> cirp -po
-POs of the circuit: 11
+[0] CONST0
+[1] AIG 2 !0 !0
+[2] PO  3 2
 
 fraig> cirp -fl
 Gates defined but not used  : 1
 
-fraig> cirg 11 -fanin 5
-PO 11
-  AIG 4
-    PI 2
-    PI 3
+fraig> cirw
+aag 2 1 0 1 1
+2
+4
+4 1 1
+c
+AAG output by Chung-Yang (Ric) Huang
 
-fraig> cirg 1 -fanout 5
-PI 1
+fraig> ciropt
+Simplifying: 0 merging !2...
 
-fraig> cirg 2 -fanout 5
-PI 2
-  AIG 4
-    PO 11
+fraig> cirp
 
-fraig> cirg 3 -fanout 5
-PI 3
-  AIG 4
-    PO 11
+Circuit Statistics
+==================
+  PI           1
+  PO           1
+  AIG          0
+------------------
+  Total        2
 
-fraig> cirg 5 -fanout 3
+fraig> cirp -pi
+PIs of the circuit: 1
 
-fraig> cirg 4 -fanout 4
-AIG 4
-  PO 11
+fraig> cirp -po
+POs of the circuit: 3
 
-fraig> cirg 9 -fanin 5
+fraig> cirp -n
+
+[0] CONST0
+[1] PO  3 !0
+
+fraig> cirp -fl
+Gates defined but not used  : 1
+
+fraig> cirw
+aag 2 1 0 1 0
+2
+1
+c
+AAG output by Chung-Yang (Ric) Huang
 
 fraig> q -f
 
