@@ -201,3 +201,21 @@ CirGate::finfoutRemove()
          removeOutput(i);
    }
 }
+//opt
+void
+CirGate::optMerge(CirGate* tmp, bool& is_inv)
+{
+   for(size_t j = 0; j < getfoutSize(); j++) {
+      CirGate *fout = getOutput(j);
+      for(size_t k = 0; k < fout->getfinSize(); k++) {
+         CirGate* me = fout->getInput(k);
+         if(me == this) {
+            if(fout->isInv(k))
+               is_inv = !is_inv;
+            break;
+         }
+      }
+      tmp->addOutput(fout);
+      fout->addInput(tmp, is_inv);
+   }
+}

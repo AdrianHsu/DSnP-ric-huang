@@ -107,6 +107,8 @@ class CirGate {
          fanoutList[i] = 0;
          fanoutList.erase(fanoutList.begin() + i);
       }
+      // opt()
+      void optMerge(CirGate*, bool&);
 
       static unsigned index;
       static unsigned globalRef;

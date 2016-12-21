@@ -78,7 +78,6 @@ CirMgr::sweep() {
 OptType
 CirMgr::getOptType(CirGate* g, bool& inv) const 
 {
-   
    CirGate* rhs0 = g->getInput(0);
    CirGate* rhs1 = g->getInput(1);
    if(rhs0 == rhs1) {
@@ -91,7 +90,7 @@ CirMgr::getOptType(CirGate* g, bool& inv) const
       } else if (inv_num == 2) {
          inv = 1;
          return SAME_FANIN;
-      } else 
+      } else
          return INVERT_FANIN;
    }
    if(rhs0->getType() == CONST_GATE) { //rhs1 must not CONST_GATE
@@ -130,7 +129,7 @@ CirMgr::optimize()
       if(type == CONST_ZERO || type == INVERT_FANIN) { // inv no use
          tmp = getGate(0);
          is_inv = 0;
-         id = 0 ;
+         id = 0;
       } else if (type == CONST_ONE) {
          // if(!inv) { // it means rhs0 is inv & rhs0 is CONST_GATE
          //    tmp = g->getInput(1);
@@ -158,10 +157,7 @@ CirMgr::optimize()
          cout << "Simplifying: " << id << " merging !" << g->getId() << "..." << endl;
       else 
          cout << "Simplifying: " << id << " merging " << g->getId() << "..." << endl;
-      for(size_t j = 0; j < g->getfoutSize(); j++) {
-         tmp->addOutput(g->getOutput(j));
-         g->getOutput(j)->addInput(tmp, is_inv);
-      }
+      g->optMerge(tmp, is_inv);
       g->finfoutRemove();
       miloa[4]--; // MILO "A"
       deleteGate(g->getId()); 

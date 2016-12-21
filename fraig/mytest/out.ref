@@ -1,69 +1,72 @@
-fraig> cirr opt00.aag
+fraig> cirr opt06.aag
 
 fraig> cirp
 
 Circuit Statistics
 ==================
-  PI           1
+  PI           2
   PO           1
   AIG          1
 ------------------
-  Total        3
+  Total        4
 
 fraig> cirp -pi
-PIs of the circuit: 1
+PIs of the circuit: 1 2
 
 fraig> cirp -po
-POs of the circuit: 3
+POs of the circuit: 5
 
 fraig> cirp -n
 
 [0] CONST0
-[1] AIG 2 !0 !0
-[2] PO  3 2
+[1] PI  2
+[2] AIG 3 !0 !2
+[3] PO  5 !3
 
 fraig> cirp -fl
 Gates defined but not used  : 1
 
 fraig> cirw
-aag 2 1 0 1 1
+aag 4 2 0 1 1
 2
 4
-4 1 1
+7
+6 1 5
 c
 AAG output by Chung-Yang (Ric) Huang
 
 fraig> ciropt
-Simplifying: 0 merging !2...
+Simplifying: 2 merging !3...
 
 fraig> cirp
 
 Circuit Statistics
 ==================
-  PI           1
+  PI           2
   PO           1
   AIG          0
 ------------------
-  Total        2
+  Total        3
 
 fraig> cirp -pi
-PIs of the circuit: 1
+PIs of the circuit: 1 2
 
 fraig> cirp -po
-POs of the circuit: 3
+POs of the circuit: 5
 
 fraig> cirp -n
 
-[0] CONST0
-[1] PO  3 !0
+[0] PI  2
+[1] PO  5 2
 
 fraig> cirp -fl
 Gates defined but not used  : 1
 
 fraig> cirw
-aag 2 1 0 1 0
+aag 4 2 0 1 0
 2
-1
+4
+4
 c
 AAG output by Chung-Yang (Ric) Huang
 

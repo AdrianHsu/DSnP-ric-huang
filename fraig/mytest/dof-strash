@@ -1,11 +1,11 @@
-cirr opt06.aag
+cirr str01.aag
 cirp
 cirp -pi
 cirp -po
 cirp -n
 cirp -fl
 cirw
-ciropt
+cirstr
 cirp
 cirp -pi
 cirp -po
