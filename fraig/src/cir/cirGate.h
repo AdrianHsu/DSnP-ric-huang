@@ -109,6 +109,8 @@ class CirGate {
       }
       // opt()
       void optMerge(CirGate*, bool&);
+      // strash()
+      void strashfoutMerge(CirGate*);
 
       static unsigned index;
       static unsigned globalRef;

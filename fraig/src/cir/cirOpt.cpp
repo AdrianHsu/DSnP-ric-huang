@@ -65,15 +65,6 @@ CirMgr::sweep() {
    		deleteGate(i);
    	}
    }
-   // DEBUG
-   // for(unsigned i = 0; i < _m + _o + 1; i++) {
-   //    CirGate *g = getGate(i);
-   // 	if(g == 0) {
-   // 		cout << i << endl;
-   // 		continue;
-   // 	}
-   // 	cout << g->getTypeStr() << "," << g->getId() << endl;
-   // }
 }
 OptType
 CirMgr::getOptType(CirGate* g, bool& inv) const 
@@ -126,28 +117,15 @@ CirMgr::optimize()
       CirGate *tmp = NULL;
       bool is_inv = 0;
       size_t id = 0;
-      if(type == CONST_ZERO || type == INVERT_FANIN) { // inv no use
+      if(type == CONST_ZERO || type == INVERT_FANIN) {
          tmp = getGate(0);
          is_inv = 0;
          id = 0;
       } else if (type == CONST_ONE) {
-         // if(!inv) { // it means rhs0 is inv & rhs0 is CONST_GATE
-         //    tmp = g->getInput(1);
-         //    is_inv = g->isInv(1);
-           
-         // } else { // it means rhs1 is inv & rhs1 is CONST_GATE
-         //    tmp = g->getInput(0);
-         //    is_inv = g->isInv(0);
-         // }
          tmp = g->getInput(!inv);
          is_inv = g->isInv(!inv);
          id = tmp->getId();
       } else if (type == SAME_FANIN) {
-         // if(inv) { // it means both rhs0,1 are inv
-         //    tmp = getInput(0);
-         // } else { // it means both rhs0,1 are not inv
-         //    tmp = getInput(0);
-         // }
          tmp = g->getInput(0);
          is_inv = inv;
          id = tmp->getId();
@@ -161,7 +139,6 @@ CirMgr::optimize()
       g->finfoutRemove();
       miloa[4]--; // MILO "A"
       deleteGate(g->getId()); 
-      // else do nothing
    }
 }
 

@@ -1,0 +1,14 @@
+cirr sim10.aag
+cirg 497 -fanin 1
+cirg 498 -fanin 1
+cirstr
+cirg 497 -fanin 1
+cirg 498 -fanin 1
+cirr -r sim10.aag
+cirg 497 -fanin 1
+cirg 498 -fanin 1
+ciropt
+cirstr
+cirg 497 -fanin 1
+cirg 498 -fanin 1
+q -f
