@@ -203,11 +203,14 @@ CirGate::finfoutRemove()
 }
 //opt
 void
-CirGate::optMerge(CirGate* tmp, bool& is_inv)
+CirGate::optMerge(CirGate* tmp, bool& is_inv, const size_t& aout)
 {
+   const bool original_inv = is_inv;
    for(size_t i = 0; i < getfoutSize(); i++) {
+      is_inv = original_inv;
       CirGate *fout = getOutput(i);
-      for(size_t k = 0; k < fout->getfinSize(); k++) {
+      size_t k = 0;
+      for(; k < fout->getfinSize(); k++) {
          CirGate* me = fout->getInput(k);
          if(me == this) {
             if(fout->isInv(k))
@@ -215,8 +218,11 @@ CirGate::optMerge(CirGate* tmp, bool& is_inv)
             break;
          }
       }
-      tmp->addOutput(fout);
-      fout->addInput(tmp, is_inv);
+      if( removefoutLink(fout) )
+         removeOutput(i);
+      cerr << aout + i << endl;
+      tmp->insertOutput(fout, aout + i);
+      fout->insertInput(tmp, k, is_inv);
    }
 }
 //strash

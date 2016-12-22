@@ -67,7 +67,7 @@ CirMgr::sweep() {
    }
 }
 OptType
-CirMgr::getOptType(CirGate* g, bool& inv) const 
+CirMgr::getOptType(CirGate* g, bool& inv, size_t& rhs) const //rhs is used to be replaced fin, 0 or 1
 {
    CirGate* rhs0 = g->getInput(0);
    CirGate* rhs1 = g->getInput(1);
@@ -75,6 +75,7 @@ CirMgr::getOptType(CirGate* g, bool& inv) const
       size_t inv_num = 0;
       inv_num += g->isInv(0);
       inv_num += g->isInv(1);
+      rhs = 0; // takes smaller one
       if(inv_num == 0) {
          inv = 0;
          return SAME_FANIN;
@@ -87,15 +88,21 @@ CirMgr::getOptType(CirGate* g, bool& inv) const
    if(rhs0->getType() == CONST_GATE) { //rhs1 must not CONST_GATE
       if(g->isInv(0)) {
          inv = 0;
+         rhs = 1;
          return CONST_ONE;
-      } else 
+      } else {
+         rhs = 0;
          return CONST_ZERO;
+      }
    } else if(rhs1->getType() == CONST_GATE) {
       if(g->isInv(1)) {
          inv = 1;
+         rhs = 0;
          return CONST_ONE;
-      } else 
+      } else {
+         rhs = 1;
          return CONST_ZERO;
+      }
    }
    return NO_OPT;
 }
@@ -112,33 +119,42 @@ CirMgr::optimize()
       if(g->getType() != AIG_GATE) continue;
       if(g->getfinSize() != 2) return; //error
       bool inv = 0;
-      OptType type = getOptType(g, inv);
+      size_t rhs = 0;
+      OptType type = getOptType(g, inv, rhs);
       if(type == NO_OPT) continue;
       CirGate *tmp = NULL;
       bool is_inv = 0;
       size_t id = 0;
-      if(type == CONST_ZERO || type == INVERT_FANIN) {
+      if(type == CONST_ZERO || type == INVERT_FANIN) { //CONST_ZERO rhs = 0 or 1, INVERT_FANIN rhs = 0
          tmp = getGate(0);
          is_inv = 0;
          id = 0;
       } else if (type == CONST_ONE) {
-         tmp = g->getInput(!inv);
-         is_inv = g->isInv(!inv);
+         tmp = g->getInput(rhs);
+         is_inv = g->isInv(rhs);
          id = tmp->getId();
       } else if (type == SAME_FANIN) {
-         tmp = g->getInput(0);
+         tmp = g->getInput(rhs);
          is_inv = inv;
          id = tmp->getId();
       } 
       if(tmp == NULL) continue;
+      size_t j = 0; // a's jth fout
+      for(; j < tmp->getfoutSize(); j++) {
+         if(tmp->getOutput(j) == g)
+            break;
+      }
       if(is_inv)
          cout << "Simplifying: " << id << " merging !" << g->getId() << "..." << endl;
       else 
          cout << "Simplifying: " << id << " merging " << g->getId() << "..." << endl;
-      g->optMerge(tmp, is_inv);
+      g->optMerge(tmp, is_inv, j);
+      if(g->getfoutSize() != 0) 
+         cerr << "ERROR:" << g->getfoutSize() << endl;
       g->finfoutRemove();
       miloa[4]--; // MILO "A"
       deleteGate(g->getId()); 
+      
    }
 }
 

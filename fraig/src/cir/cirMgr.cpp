@@ -466,6 +466,7 @@ void
 CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv) const
 {
    if(g->isGlobalRef()) return;
+   g->setToGlobalRef(); // fraig fixed bug
    for(unsigned i = 0; i < g->getfinSize(); i++)
       writeDfsVisit(g->getInput(i), aigs, g->isInv(i));
    if(g->getType() == AIG_GATE) {
@@ -478,7 +479,6 @@ CirMgr::writeDfsVisit(CirGate* g, vector<unsigned>& aigs, bool inv) const
       if(g->isInv(1))_rhs1++;
       aigs.push_back(_rhs1);
    }
-   g->setToGlobalRef();
 }
 void
 CirMgr::writeAag(ostream& outfile) const

@@ -108,7 +108,15 @@ class CirGate {
          fanoutList.erase(fanoutList.begin() + i);
       }
       // opt()
-      void optMerge(CirGate*, bool&);
+      void optMerge(CirGate*, bool&, const size_t&);
+      void insertInput(CirGate* g, size_t i, bool& is_inv) {
+         if (is_inv) g = (CirGate*)((size_t)g + 1);
+         faninList.insert(faninList.begin() + i, 1, g); // 1 means one element
+
+      }
+      void insertOutput(CirGate* g, size_t i) {
+         fanoutList.insert(fanoutList.begin() + i, 1, g);
+      }
       // strash()
       void strashfoutMerge(CirGate*);
 

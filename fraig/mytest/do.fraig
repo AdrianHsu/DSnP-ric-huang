@@ -1,4 +1,4 @@
-cirr sim09.aag
+cirr opt07.aag
 cirp
 cirp -pi
 cirp -po

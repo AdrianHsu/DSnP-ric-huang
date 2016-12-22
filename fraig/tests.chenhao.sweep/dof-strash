@@ -1,4 +1,4 @@
-cirr sweep.aag
+cirr 1.aag
 cirp -s
 cirp -n
 cirp -pi
@@ -12,7 +12,7 @@ cirg 3 -fanout 5
 cirg 5 -fanout 3
 cirg 4 -fanout 4
 cirg 5 -fanin 5
-cirsw
+cirstra
 cirp -s
 cirp -n
 cirp -pi

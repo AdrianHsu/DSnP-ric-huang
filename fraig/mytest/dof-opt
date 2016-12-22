@@ -1,15 +1,27 @@
 cirr opt06.aag
-cirp
+cirp -s
+cirp -n
 cirp -pi
 cirp -po
-cirp -n
 cirp -fl
 cirw
+cirg 1 -fanout 5
+cirg 2 -fanout 5
+cirg 3 -fanout 5
+cirg 5 -fanout 3
+cirg 4 -fanout 4
+cirg 5 -fanin 5
 ciropt
-cirp
+cirp -s
+cirp -n
 cirp -pi
 cirp -po
-cirp -n
 cirp -fl
 cirw
+cirg 1 -fanout 5
+cirg 2 -fanout 5
+cirg 3 -fanout 5
+cirg 5 -fanout 3
+cirg 4 -fanout 4
+cirg 5 -fanin 5
 q -f

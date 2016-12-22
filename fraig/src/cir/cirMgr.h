@@ -71,7 +71,7 @@ public:
    void optimize();
    // by AH
    void buildDfsList();
-   OptType getOptType(CirGate*, bool& inv) const;
+   OptType getOptType(CirGate*, bool& , size_t&) const;
 
    // Member functions about simulation
    void randomSim();

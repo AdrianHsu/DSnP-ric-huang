@@ -1,81 +1,115 @@
-fraig> cirr str01.aag
+fraig> cirr opt06.aag
 
-fraig> cirp
-
-Circuit Statistics
-==================
-  PI           2
-  PO           2
-  AIG          2
-------------------
-  Total        6
-
-fraig> cirp -pi
-PIs of the circuit: 1 2
-
-fraig> cirp -po
-POs of the circuit: 7 8
-
-fraig> cirp -n
-
-[0] PI  1
-[1] PI  2
-[2] AIG 3 1 2
-[3] PO  7 3
-[4] AIG 4 1 2
-[5] PO  8 4
-
-fraig> cirp -fl
-
-fraig> cirw
-aag 6 2 0 2 2
-2
-4
-6
-8
-6 2 4
-8 2 4
-c
-AAG output by Chung-Yang (Ric) Huang
-
-fraig> cirstr
-Strashing: 3 merging 4...
-
-fraig> cirp
+fraig> cirp -s
 
 Circuit Statistics
 ==================
   PI           2
-  PO           2
+  PO           1
   AIG          1
 ------------------
-  Total        5
+  Total        4
+
+fraig> cirp -n
+
+[0] CONST0
+[1] PI  2
+[2] AIG 3 !0 !2
+[3] PO  5 !3
 
 fraig> cirp -pi
 PIs of the circuit: 1 2
 
 fraig> cirp -po
-POs of the circuit: 7 8
+POs of the circuit: 5
+
+fraig> cirp -fl
+Gates defined but not used  : 1
+
+fraig> cirw
+aag 4 2 0 1 1
+2
+4
+7
+6 1 5
+c
+AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirg 1 -fanout 5
+PI 1
+
+fraig> cirg 2 -fanout 5
+PI 2
+  !AIG 3
+    !PO 5
+
+fraig> cirg 3 -fanout 5
+AIG 3
+  !PO 5
+
+fraig> cirg 5 -fanout 3
+PO 5
+
+fraig> cirg 4 -fanout 4
+
+fraig> cirg 5 -fanin 5
+PO 5
+  !AIG 3
+    !CONST 0
+    !PI 2
+
+fraig> ciropt
+Simplifying: 2 merging !3...
+
+fraig> cirp -s
+
+Circuit Statistics
+==================
+  PI           2
+  PO           1
+  AIG          0
+------------------
+  Total        3
 
 fraig> cirp -n
 
-[0] PI  1
-[1] PI  2
-[2] AIG 3 1 2
-[3] PO  7 3
-[4] PO  8 3
+[0] PI  2
+[1] PO  5 2
+
+fraig> cirp -pi
+PIs of the circuit: 1 2
+
+fraig> cirp -po
+POs of the circuit: 5
 
 fraig> cirp -fl
+Gates defined but not used  : 1
 
 fraig> cirw
-aag 6 2 0 2 1
+aag 4 2 0 1 0
 2
 4
-6
-6
-6 2 4
+4
 c
 AAG output by Chung-Yang (Ric) Huang
+
+fraig> cirg 1 -fanout 5
+PI 1
+
+fraig> cirg 2 -fanout 5
+PI 2
+  PO 5
+
+fraig> cirg 3 -fanout 5
+
+fraig> cirg 5 -fanout 3
+PO 5
+
+fraig> cirg 4 -fanout 4
+
+fraig> cirg 5 -fanin 5
+PO 5
+  PI 2
 
 fraig> q -f
 
