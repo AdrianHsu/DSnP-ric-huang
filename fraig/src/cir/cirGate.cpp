@@ -185,14 +185,14 @@ CirGate::removefoutLink(CirGate *fout)
    return false;
 }
 void
-CirGate::finfoutRemove()
+CirGate::finfoutRemove() //clear all fin fout
 {
    size_t fin_size = faninList.size();
    size_t fout_size = fanoutList.size();
    // gate is UNDEF, AIG
    for(int i = fin_size - 1; i >= 0; i--) {
       CirGate *fin = getInput(i);
-      if(removefinLink(fin) )
+      if( removefinLink(fin) )
          removeInput(i);
    }
    for(int i = fout_size - 1; i >= 0; i--) {

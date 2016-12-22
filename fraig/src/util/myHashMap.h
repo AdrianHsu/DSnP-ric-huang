@@ -28,10 +28,10 @@ public:
 // Cantor pairing function
 // https://hbfs.wordpress.com/2011/09/27/pairing-functions/
    size_t operator() () const { 
-      size_t x = (lhs0 % 1000000);
-      size_t y = (lhs1 % 1000000);
+      size_t x = (lhs0 % 7000003);
+      size_t y = (lhs1 % 7000003);
       if(x < y)
-         swap(x, y); // make x >= y, ordering
+         swap(x, y); // make x >= y,for ordering
       size_t p = 0;
       size_t i = 0;
       while (x || y) {
@@ -44,9 +44,8 @@ public:
       return p;
    }
    bool operator == (const HashKey& k) const { 
-      if(k() == (*this)() ) {
+      if(k() == (*this)() )
          return true; 
-      }
       else
          return false;
    }
