@@ -121,8 +121,12 @@ class CirGate {
       void insertOutput(CirGate* g, size_t i) {
          fanoutList.insert(fanoutList.begin() + i, 1, g);
       }
+      void sortfoutList() {
+         std::sort (fanoutList.begin(), fanoutList.end(), orderSort);
+      }
       // strash()
       void strashfoutMerge(CirGate*);
+
 
       static unsigned index;
       static unsigned globalRef;

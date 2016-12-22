@@ -84,6 +84,9 @@ class CirGate {
          return ss.str();
       };
       static bool orderSort (CirGate* i,CirGate* j) { return (i->getId() < j->getId()); }
+      void sortfoutList() {
+         std::sort (fanoutList.begin(), fanoutList.end(), orderSort);
+      }
       static unsigned index;
       static unsigned globalRef;
       

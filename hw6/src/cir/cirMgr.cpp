@@ -308,6 +308,11 @@ CirMgr::readCircuit(const string& fileName)
       gateList[i + _m + 1] = gate;
       pre->addOutput(gate);
    }
+   for(unsigned i = 0; i < _m + _o + 1; i ++) {
+      CirGate* g = getGate(i);
+      if(g == 0) continue;
+      g->sortfoutList();
+   }
    
    unsigned i = _i + _o + _a + 1, listSize = cmd.size();
    for( ;i < listSize; i++) {

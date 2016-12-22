@@ -290,7 +290,7 @@ CirMgr::readCircuit(const string& fileName)
    
    unsigned _m = miloa[0], _i = miloa[1], _o = miloa[3], _a = miloa[4];
    gateList.clear();
-   gateList.resize(miloa[0] + miloa[3] + 1, 0);
+   gateList.resize(_m + _o + 1, 0);
    // const gate
    gateList[0] = new CirConstGate(0);// dummy lineNo
    ins.clear();
@@ -316,7 +316,12 @@ CirMgr::readCircuit(const string& fileName)
       gateList[i + _m + 1] = gate;
       pre->addOutput(gate);
    }
-   
+   for(unsigned i = 0; i < _m + _o + 1; i ++) {
+      CirGate* g = getGate(i);
+      if(g == 0) continue;
+      g->sortfoutList();
+   }
+
    unsigned i = _i + _o + _a + 1, listSize = cmd.size();
    for( ;i < listSize; i++) {
       string s = cmd[i];

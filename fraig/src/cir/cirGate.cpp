@@ -104,19 +104,11 @@ CirGate::fanoutDfsVisit(int l, bool inv) const
    if(l == 0) cout << endl;
    else if(isGlobalRef()) cout << " (*)" << endl;
    else {
-      
-      vector<CirGate*> order;
-      for(unsigned i = 0; i < size; i++){ 
-         CirGate* g = getOutput(i);
-         order.push_back(g);
-      }
-      std::sort (order.begin(), order.end(), orderSort);
-
       cout << endl;
       if(size != 0) setToGlobalRef();
       for(unsigned i = 0; i < size; i++) {
          index++;
-         CirGate* g = order[i];
+         CirGate* g = getOutput(i);
          bool myinv = 0;
          for(unsigned j = 0; j < g->getfinSize(); j++) {
             CirGate* g2 = g->getInput(j);

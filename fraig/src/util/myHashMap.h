@@ -28,7 +28,7 @@ public:
 // Cantor pairing function
 // https://hbfs.wordpress.com/2011/09/27/pairing-functions/
    size_t operator() () const { 
-      size_t x = (lhs0 % 7000003);
+      size_t x = (lhs0 % 7000003); //getHashSize() max value
       size_t y = (lhs1 % 7000003);
       if(x < y)
          swap(x, y); // make x >= y,for ordering
@@ -277,50 +277,51 @@ private:
 // private:
 // }; 
 // 
-template <class CacheKey, class CacheData>
-class Cache
-{
-typedef pair<CacheKey, CacheData> CacheNode;
 
-public:
-   Cache() : _size(0), _cache(0) {}
-   Cache(size_t s) : _size(0), _cache(0) { init(s); }
-   ~Cache() { reset(); }
+// template <class CacheKey, class CacheData>
+// class Cache
+// {
+// typedef pair<CacheKey, CacheData> CacheNode;
 
-   // NO NEED to implement Cache::iterator class
+// public:
+//    Cache() : _size(0), _cache(0) {}
+//    Cache(size_t s) : _size(0), _cache(0) { init(s); }
+//    ~Cache() { reset(); }
 
-   // TODO: implement these functions
-   //
-   // Initialize _cache with size s
-   void init(size_t s) { reset(); _size = s; _cache = new CacheNode[s]; }
-   void reset() {  _size = 0; if (_cache) { delete [] _cache; _cache = 0; } }
+//    // NO NEED to implement Cache::iterator class
 
-   size_t size() const { return _size; }
+//    // TODO: implement these functions
+//    //
+//    // Initialize _cache with size s
+//    void init(size_t s) { reset(); _size = s; _cache = new CacheNode[s]; }
+//    void reset() {  _size = 0; if (_cache) { delete [] _cache; _cache = 0; } }
 
-   CacheNode& operator [] (size_t i) { return _cache[i]; }
-   const CacheNode& operator [](size_t i) const { return _cache[i]; }
+//    size_t size() const { return _size; }
 
-   // return false if cache miss
-   bool read(const CacheKey& k, CacheData& d) const {
-      size_t i = k() % _size;
-      if (k == _cache[i].first) {
-         d = _cache[i].second;
-         return true;
-      }
-      return false;
-   }
-   // If k is already in the Cache, overwrite the CacheData
-   void write(const CacheKey& k, const CacheData& d) {
-      size_t i = k() % _size;
-      _cache[i].first = k;
-      _cache[i].second = d;
-   }
+//    CacheNode& operator [] (size_t i) { return _cache[i]; }
+//    const CacheNode& operator [](size_t i) const { return _cache[i]; }
 
-private:
-   // Do not add any extra data member
-   size_t         _size;
-   CacheNode*     _cache;
-};
+//    // return false if cache miss
+//    bool read(const CacheKey& k, CacheData& d) const {
+//       size_t i = k() % _size;
+//       if (k == _cache[i].first) {
+//          d = _cache[i].second;
+//          return true;
+//       }
+//       return false;
+//    }
+//    // If k is already in the Cache, overwrite the CacheData
+//    void write(const CacheKey& k, const CacheData& d) {
+//       size_t i = k() % _size;
+//       _cache[i].first = k;
+//       _cache[i].second = d;
+//    }
+
+// private:
+//    // Do not add any extra data member
+//    size_t         _size;
+//    CacheNode*     _cache;
+// };
 
 
 #endif // MY_HASH_H

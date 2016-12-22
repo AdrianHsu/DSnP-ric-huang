@@ -32,4 +32,4 @@ echo "cirg 1 -fanout 5" >> $dofile
 echo "cirg 11 -fanin 5" >> $dofile
 echo "cirg 21 -fanin 5" >> $dofile
 echo "q -f" >> $dofile
-../fraig -f $dofile
+../ref/fraig-mac -f $dofile
