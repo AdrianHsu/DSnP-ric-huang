@@ -213,33 +213,31 @@ CirGate::optMerge(CirGate* tmp, bool& is_inv, const size_t& aout)
       for(; k < fout->getfinSize(); k++) {
          CirGate* me = fout->getInput(k);
          if(me == this) {
-            if(fout->isInv(k))
+            if(fout->isInv(k)) 
                is_inv = !is_inv;
+            tmp->insertOutput(fout, aout + i);
+            fout->insertInput(tmp, k, is_inv);
             break;
          }
       }
-      if( removefoutLink(fout) )
-         removeOutput(i);
-      cerr << aout + i << endl;
-      tmp->insertOutput(fout, aout + i);
-      fout->insertInput(tmp, k, is_inv);
    }
 }
 //strash
 void
 CirGate::strashfoutMerge(CirGate* g)
 {
-   bool inv = 0;
+   bool is_inv = 0;
    for(size_t i = 0; i < getfoutSize(); i++) {
       CirGate *fout = getOutput(i);
-      for(size_t k = 0; k < fout->getfinSize(); k++) {
+      size_t k = 0;
+      for(; k < fout->getfinSize(); k++) {
          CirGate* me = fout->getInput(k);
          if(me == this) {
-            inv = fout->isInv(k);
+            is_inv = fout->isInv(k);
+            g->addOutput(fout);
+            fout->insertInput(g, k, is_inv);
             break;
          }
       }
-      g->addOutput(fout);
-      fout->addInput(g, inv);
    }
 }

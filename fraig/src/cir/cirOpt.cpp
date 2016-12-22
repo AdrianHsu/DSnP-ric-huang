@@ -149,8 +149,6 @@ CirMgr::optimize()
       else 
          cout << "Simplifying: " << id << " merging " << g->getId() << "..." << endl;
       g->optMerge(tmp, is_inv, j);
-      if(g->getfoutSize() != 0) 
-         cerr << "ERROR:" << g->getfoutSize() << endl;
       g->finfoutRemove();
       miloa[4]--; // MILO "A"
       deleteGate(g->getId()); 
