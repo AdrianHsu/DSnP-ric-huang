@@ -30,6 +30,8 @@ public:
    size_t operator() () const { 
       size_t x = (lhs0 % 1000000);
       size_t y = (lhs1 % 1000000);
+      if(x < y)
+         swap(x, y); // make x >= y, ordering
       size_t p = 0;
       size_t i = 0;
       while (x || y) {

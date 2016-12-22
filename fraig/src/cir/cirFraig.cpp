@@ -41,8 +41,8 @@ CirMgr::strash()
       CirGate* g = _dfsList[i];
       if(g->getType() != AIG_GATE) continue;
       if(g->getfinSize() != 2) return; //error
-      HashKey key((size_t)g->getInput(0), (size_t)g->getInput(1));
-      cerr << key() << " " << (size_t)g->getInput(0) << " " << (size_t)g->getInput(1) << endl;
+      HashKey key(g->getInputWithInv(0), (size_t)g->getInputWithInv(1));
+      
       if (map.query(key, g)) { // collision happens!
       	CirGate *tmp = _dfsList[i]; // g is old value, and tmp is new value now
       	// replace tmp with g

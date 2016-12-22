@@ -1,4 +1,4 @@
-cirr sim15.aag
+cirr sim13.aag
 cirp
 cirp -pi
 cirp -po
@@ -8,7 +8,9 @@ ciropt
 cirp
 cirsw
 cirp
+cirg 85069 -fanin 100
 cirstrash
+cirg 85069 -fanin 100
 cirsw
 cirp
 cirp

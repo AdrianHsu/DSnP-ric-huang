@@ -71,6 +71,10 @@ class CirGate {
          if (i >= faninList.size()) return 0;
          return (CirGate*)(((size_t)faninList[i]) & ~size_t(NEG));
       }
+      size_t getInputWithInv(size_t i) const {
+         if (i >= faninList.size()) return 0;
+         return (size_t)faninList[i];
+      }      
       CirGate* getOutput(size_t i) const {
          if (i >= fanoutList.size()) return 0;
          return fanoutList[i];
