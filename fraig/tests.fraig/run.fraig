@@ -20,12 +20,12 @@ echo "cirp -fl" >> $dofile
 echo "ciropt" >> $dofile
 echo "cirp" >> $dofile
 #echo "usage" >> $dofile
-#echo "cirsw" >> $dofile
+echo "cirsw" >> $dofile
 echo "cirp" >> $dofile
 #echo "usage" >> $dofile
-#echo "cirstrash" >> $dofile
+echo "cirstrash" >> $dofile
 #echo "usage" >> $dofile
-#echo "cirsw" >> $dofile
+echo "cirsw" >> $dofile
 echo "cirp" >> $dofile
 #echo "usage" >> $dofile
 #echo "cirsim -random -out .rsim$1.log" >> $dofile
@@ -39,7 +39,7 @@ echo "cirp" >> $dofile
 echo "ciropt" >> $dofile
 echo "cirp" >> $dofile
 #echo "usage" >> $dofile
-#echo "cirsw" >> $dofile
+echo "cirsw" >> $dofile
 echo "cirp" >> $dofile
 #echo "usage" >> $dofile
 echo "cirp -n" >> $dofile

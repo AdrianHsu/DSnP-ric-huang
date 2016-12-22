@@ -25,22 +25,33 @@ class HashKey
 {
 public:
    HashKey(size_t l0, size_t l1): lhs0(l0), lhs1(l1) { }
-
+// Cantor pairing function
+// https://hbfs.wordpress.com/2011/09/27/pairing-functions/
    size_t operator() () const { 
-      size_t k = lhs0 + lhs1;
-      return k;
+      size_t x = (lhs0 % 1000000);
+      size_t y = (lhs1 % 1000000);
+      size_t p = 0;
+      size_t i = 0;
+      while (x || y) {
+         p |= ((size_t)(x & 1) << i);
+         x >>= 1;
+         p |= ((size_t)(y & 1) << (i + 1));
+         y >>= 1;
+         i += 2;
+      }
+      return p;
    }
    bool operator == (const HashKey& k) const { 
-      size_t key = lhs0 + lhs1;
-      if(k() == key)
+      if(k() == (*this)() ) {
          return true; 
+      }
       else
          return false;
    }
 
 private:
-   size_t lhs0;//140316368699952
-   size_t lhs1;//140316368700032
+   size_t lhs0;//140316368 699952
+   size_t lhs1;//140316368 700032
 };
 
 template <class HashKey, class HashData>
@@ -49,7 +60,7 @@ class HashMap
 typedef pair<HashKey, HashData> HashNode;
 
 public:
-   HashMap(size_t b=0) : _numBuckets(0), _buckets(0) { if (b != 0) init(b); }
+   HashMap(size_t b = 0) : _numBuckets(0), _buckets(0) { if (b != 0) init(b); }
    ~HashMap() { reset(); }
 
    // [Optional] TODO: implement the HashMap<HashKey, HashData>::iterator

@@ -35,13 +35,14 @@ void
 CirMgr::strash()
 {
    unsigned _m = miloa[0], _o = miloa[3];
-	HashMap<HashKey, CirGate*> map(_m + _o + 1);
+	HashMap<HashKey, CirGate*> map( getHashSize(_m + _o + 1) );
    buildDfsList();
 	for(size_t i = 0; i < _dfsList.size(); i++) {
       CirGate* g = _dfsList[i];
       if(g->getType() != AIG_GATE) continue;
       if(g->getfinSize() != 2) return; //error
       HashKey key((size_t)g->getInput(0), (size_t)g->getInput(1));
+      cerr << key() << " " << (size_t)g->getInput(0) << " " << (size_t)g->getInput(1) << endl;
       if (map.query(key, g)) { // collision happens!
       	CirGate *tmp = _dfsList[i]; // g is old value, and tmp is new value now
       	// replace tmp with g
