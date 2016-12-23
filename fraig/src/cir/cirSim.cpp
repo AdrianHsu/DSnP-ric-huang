@@ -23,7 +23,6 @@ using namespace std;
 /*******************************/
 /*   Global variable and enum  */
 /*******************************/
-#define BIT_32 32
 /**************************************/
 /*   Static varaibles and functions   */
 /**************************************/
@@ -55,7 +54,7 @@ CirMgr::fileSim(ifstream& patternFile)
       }  
       ins.push_back(str);
    }
-   unsigned div = 0, mod = ins.size() % BIT_32;
+   unsigned div = 0, mod = ins.size() % BIT_32; // div: num of round, e.g. 64 is 2 rounds
    if(mod != 0) {
       div = ins.size() / BIT_32;
       mod = BIT_32 * (div + 1) - ins.size();
@@ -82,12 +81,31 @@ CirMgr::fileSim(ifstream& patternFile)
                cout << "0 patterns simulated." << endl;
                return;
             } 
-            pattern = (pattern << 1) + new_bit;
+            pattern = (pattern << 1) + new_bit; // key!
          }
          _32bitvec.push_back(pattern);
       }
    }
    cout << div * BIT_32 - mod << " patterns simulated." << endl;
+   // start sim
+   // buildDfsList();
+   // unsigned ins_count = 0;
+   // for(unsigned a = 0; a < div; a++) {
+   //    for(unsigned i = 0; i < _dfsList.size(); i++) {
+   //       CirGate* g = _dfsList[i];
+   //       if(g->getType() == PI_GATE) {
+   //          size_t pattern = _32bitvec[a * _i + ins_count];
+   //          ins_count++;
+   //          if(ins_count == _i)
+   //             ins_count = 0;
+   //          g->setLastValue(pattern);
+   //       } else if(g->getType() == AIG_GATE) {
+   //          CirGate* lhs0 = g->getInput(0), lhs1 = g->getInput(1);
+   //          size_t v0 = lhs0->getLastValue(), v1 = lhs1->getLastValue();
+   //          g->setLastValue(v0 & v1);
+   //       }
+   //    }
+   // }
 }
 
 /*************************************************/

@@ -31,6 +31,8 @@ using namespace std;
 
 #define aiger_lit2var(l) \
   (((unsigned)(l)) >> 1)
+#define BIT_32 32
+
 
 // TODO: Feel free to define your own classes, variables, or functions.
 
@@ -48,7 +50,7 @@ class CirConstGate;
 class CirGate {
    
    public:
-      CirGate(GateType _t, unsigned _id, unsigned _n): type(_t), lineNo(_n), id(_id), color(0) {}
+      CirGate(GateType _t, unsigned _id, unsigned _n): type(_t), lineNo(_n), id(_id), color(0), lastValue(0) {}
       virtual ~CirGate(){};
 
       // Printing functions
@@ -126,7 +128,21 @@ class CirGate {
       }
       // strash()
       void strashfoutMerge(CirGate*);
-
+      // file sim()
+      void setLastValue(size_t v) { lastValue = v; }
+      size_t getLastValue() { return lastValue; }
+      string getLastValueStr() {
+         string str = "";
+         for(unsigned i = 0; i < BIT_32; i++) {
+            int new_bit = lastValue & 1;
+            char str_bit = new_bit + '0';
+            if(i % 4 == 0)
+               str += "_";
+            str += str_bit;
+         }
+         return str;
+      }
+      void resetLastValue() { lastValue = 0; }
 
       static unsigned index;
       static unsigned globalRef;
@@ -136,6 +152,7 @@ class CirGate {
       unsigned lineNo;
       unsigned id;
       mutable unsigned color;
+      size_t lastValue;
       GateList faninList;
       GateList fanoutList;
 };
