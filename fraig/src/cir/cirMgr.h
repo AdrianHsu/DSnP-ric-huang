@@ -72,7 +72,20 @@ public:
    // by AH
    void buildDfsList();
    OptType getOptType(CirGate*, bool& , size_t&) const;
-
+   unsigned myStr2Uns(const string& str) {
+     unsigned num = 0;
+     size_t i = 0;
+     //int sign = 1;
+     //if (str[0] == '-')  return false;
+     for (; i < str.size(); ++i) {
+        if (isdigit(str[i])) {
+           num *= 10;
+           num += unsigned(str[i] - '0');
+        }
+        else return 0;
+     }
+     return num;
+   }
    // Member functions about simulation
    void randomSim();
    void fileSim(ifstream&);

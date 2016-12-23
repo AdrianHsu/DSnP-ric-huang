@@ -10,6 +10,7 @@
 #define MY_HASH_MAP_H
 
 #include <vector>
+#include <stddef.h> // for size_t
 
 using namespace std;
 
@@ -21,6 +22,8 @@ using namespace std;
 // To use HashMap ADT, you should define your own HashKey class.
 // It should at least overload the "()" and "==" operators.
 //
+#define MY_MAX INT_MAX
+
 class HashKey
 {
 public:
@@ -28,8 +31,8 @@ public:
 // Cantor pairing function
 // https://hbfs.wordpress.com/2011/09/27/pairing-functions/
    size_t operator() () const { 
-      size_t x = (lhs0 % 7000003); //getHashSize() max value
-      size_t y = (lhs1 % 7000003);
+      size_t x = (lhs0 % MY_MAX); //getHashSize() max value
+      size_t y = (lhs1 % MY_MAX);
       if(x < y)
          swap(x, y); // make x >= y,for ordering
       size_t p = 0;

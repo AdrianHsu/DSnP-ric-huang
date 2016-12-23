@@ -145,25 +145,6 @@ parseError(CirParseError err)
    return false;
 }
 
-// Convert string "str" to unsigned integer "num". Return false if str does not appear
-// to be a number
-unsigned
-myStr2Uns(const string& str)
-{
-   unsigned num = 0;
-   size_t i = 0;
-   //int sign = 1;
-   //if (str[0] == '-')  return false;
-   for (; i < str.size(); ++i) {
-      if (isdigit(str[i])) {
-         num *= 10;
-         num += unsigned(str[i] - '0');
-      }
-      else return 0;
-   }
-   return num;
-}
-
 void getTokens (const string& option, vector<string>& tokens) {
    
    string token;
