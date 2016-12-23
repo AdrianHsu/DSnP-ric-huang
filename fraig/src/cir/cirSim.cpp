@@ -39,6 +39,15 @@ CirMgr::randomSim()
 void
 CirMgr::fileSim(ifstream& patternFile)
 {
+   if(!patternFile.is_open())
+      return false;
+   string str;
+   vector<string> ins;
+   while(getline(patternFile, str, '\n'))
+      ins.push_back(str);
+   for(int i = 0; i < ins.size(); i ++)
+   	cout << ins[i] << endl;
+   
 }
 
 /*************************************************/

@@ -1,4 +1,4 @@
-cirr sim04.aag
+cirr sim01.aag
 cirp
 cirp -pi
 cirp -po
@@ -7,7 +7,7 @@ cirp -fl
 usage
 cirstrash
 usage
-cirsim -file pattern.04
+cirsim -file pattern.01
 usage
 cirp -fec
 usage
