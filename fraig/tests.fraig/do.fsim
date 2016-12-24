@@ -6,4 +6,5 @@ cirp -n
 cirp -fl
 cirstrash
 cirsim -file pattern.15
+cirp -fec
 q -f

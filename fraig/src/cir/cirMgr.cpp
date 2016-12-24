@@ -280,7 +280,7 @@ CirMgr::readCircuit(const string& fileName)
       unsigned lit = myStr2Uns(cmd[i + 1]);
       unsigned var = aiger_lit2var(lit);
       ins.push_back(var);
-      gateList[ var ] = new CirPiGate(var, i + 2);
+      gateList[ var ] = new CirPiGate(var, i + 2, i);
    }
    aigerAddAnd(cmd);
    

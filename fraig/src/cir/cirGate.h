@@ -161,8 +161,8 @@ class CirGate {
 class CirPiGate : public CirGate {
 
    public:
-      CirPiGate(unsigned _id, unsigned _n)
-         : CirGate(PI_GATE, _id, _n), name("") {}
+      CirPiGate(unsigned _id, unsigned _n, unsigned ind)
+         : CirGate(PI_GATE, _id, _n), name(""), pi_index(ind) {}
       virtual ~CirPiGate() {}
 
       void printGate() const {
@@ -176,9 +176,11 @@ class CirPiGate : public CirGate {
       }
       void setName(string str) { if(name.empty()) name = str; }
       string getName() const { return name; } 
+      unsigned getPiIndex() { return pi_index; }
    
    protected:
       string name;
+      const unsigned pi_index;
 };
 
 class CirPoGate : public CirGate {

@@ -15,6 +15,7 @@
 #include "cirGate.h"
 #include "util.h"
 
+
 using namespace std;
 
 // TODO: Keep "CirMgr::randimSim()" and "CirMgr::fileSim()" for cir cmd.
@@ -43,7 +44,7 @@ CirMgr::fileSim(ifstream& patternFile)
    }
    string str;
    size_t _i = miloa[1];
-   vector<string> ins;
+   vector<string> inputs;
    while(patternFile >> str) {
       if(str.size() != _i && str.size() != 0) {
          cerr << "Error: Pattern(" << str <<") length(" << str.size() 
@@ -52,30 +53,30 @@ CirMgr::fileSim(ifstream& patternFile)
          cout << "\r" << "0 patterns simulated." << endl;
          return;
       }  
-      ins.push_back(str);
+      inputs.push_back(str);
    }
-   unsigned div = 0, mod = ins.size() % BIT_32; // div: num of round, e.g. 64 is 2 rounds
+   unsigned div = 0, mod = inputs.size() % BIT_32; // div: num of round, e.g. 64 is 2 rounds
    if(mod != 0) {
-      div = ins.size() / BIT_32;
-      mod = BIT_32 * (div + 1) - ins.size();
+      div = inputs.size() / BIT_32;
+      mod = BIT_32 * (div + 1) - inputs.size();
    }
    for(unsigned j = 0; j < mod; j ++) {
       char zero_str [_i];
       memset(zero_str, '0', sizeof(zero_str));
       zero_str[_i] = '\0';
-      ins.push_back(zero_str);
+      inputs.push_back(zero_str);
    }
-   div = ins.size() / BIT_32;
+   div = inputs.size() / BIT_32;
    vector<size_t> _32bitvec;
    for(unsigned i = 0; i < div; i++) {
       for(unsigned j = 0; j < _i; j++) {
          size_t pattern = 0;
          for(unsigned k = 0; k < BIT_32; k++) {
-            int new_bit = ins[k + i * BIT_32][j] - '0';
+            int new_bit = inputs[k + i * BIT_32][j] - '0';
             if(new_bit != 0 && new_bit != 1) {
-               cerr << "Error: Pattern(" << ins[k + i * BIT_32] 
+               cerr << "Error: Pattern(" << inputs[k + i * BIT_32] 
                     << ") contains a non-0/1 character('" 
-                    << ins[k + i * BIT_32][j] << "')." << endl;
+                    << inputs[k + i * BIT_32][j] << "')." << endl;
                cout << "\r" << "0 patterns simulated." << endl;
                return;
             } 
@@ -86,15 +87,15 @@ CirMgr::fileSim(ifstream& patternFile)
    }
    // start sim
    buildDfsList();
-   unsigned ins_count = 0;
+   unsigned ins_index = 0;
    for(unsigned a = 0; a < div; a++) {
       for(unsigned i = 0; i < _dfsList.size(); i++) {
          CirGate* g = _dfsList[i];
          if(g->getType() == PI_GATE || g->getType() == CONST_GATE) {
-            size_t pattern = _32bitvec[a * _i + ins_count];
-            ins_count++;
-            if(ins_count == _i)
-               ins_count = 0;
+         
+            CirPiGate* pi = (CirPiGate*) g;
+            ins_index = pi->getPiIndex();
+            size_t pattern = _32bitvec[a * _i + ins_index];
             g->setLastValue(pattern);
          } else if(g->getType() == AIG_GATE) {
             CirGate* lhs0 = g->getInput(0);

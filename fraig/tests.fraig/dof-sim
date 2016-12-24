@@ -1,6 +1,6 @@
-cirr sim01.aag
+cirr sim15.aag
 cirp -n
-cirsim -F pattern.01
+cirsim -F pattern.15
 cirg 1
 cirg 2
 cirg 3
