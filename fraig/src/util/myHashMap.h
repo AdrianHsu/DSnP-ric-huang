@@ -24,6 +24,25 @@ using namespace std;
 //
 #define MY_MAX INT_MAX
 
+class FECHashKey
+{
+public:
+   FECHashKey(size_t v): simValue(v) { }
+
+   size_t operator() () const { 
+      return simValue;
+   }
+   bool operator == (const FECHashKey& k) const { 
+      if(k() == (*this)() )
+         return true; 
+      else
+         return false;
+   }
+
+private:
+   size_t simValue;
+};
+
 class HashKey
 {
 public:
@@ -211,7 +230,6 @@ public:
          }
       return false; 
    }
-
    // update the entry in hash that is equal to k (i.e. == return true)
    // if found, update that entry with d and return true;
    // else insert d into hash as a new entry and return false;
@@ -236,6 +254,10 @@ public:
 
       _buckets[n].push_back(HashNode(k, d));
       return true;
+   }
+   void addGate(const HashKey& k, const HashData& d) {
+      size_t n = bucketNum(k);
+      _buckets[n].push_back(HashNode(k, d));
    }
    // return true if removed successfully (i.e. k is in the hash)
    // return fasle otherwise (i.e. nothing is removed)

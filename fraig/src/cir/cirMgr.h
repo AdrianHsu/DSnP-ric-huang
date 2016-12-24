@@ -105,7 +105,10 @@ public:
    void randomSim();
    void fileSim(ifstream&);
    void setSimLog(ofstream *logFile) { _simLog = logFile; }
-
+   // by AH
+   void simulate(unsigned&, vector<size_t>&);
+   void fecGrpsInit(vector<size_t>&);
+   void fecGrpMerge();
    // Member functions about fraig
    void strash();
    void printFEC() const;
@@ -122,6 +125,7 @@ public:
    void writeAag(ostream&) const;
    void writeGate(ostream&, CirGate*) const;
    GateList _dfsList;
+   FecGrps fecGrps;
 
 private:
    ofstream           *_simLog;

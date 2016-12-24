@@ -28,6 +28,8 @@ class CirConstGate;
 
 typedef vector<CirGate*>           GateList;
 typedef vector<unsigned>           IdList;
+typedef HashMap<FECHashKey, CirGate*> FecGrp;
+typedef vector< FecGrp >           FecGrps;
 
 enum GateType
 {

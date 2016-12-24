@@ -87,33 +87,15 @@ CirMgr::fileSim(ifstream& patternFile)
    }
    // start sim
    buildDfsList();
-   unsigned ins_index = 0;
-   for(unsigned a = 0; a < div; a++) {
-      for(unsigned i = 0; i < _dfsList.size(); i++) {
-         CirGate* g = _dfsList[i];
-         if(g->getType() == PI_GATE || g->getType() == CONST_GATE) {
-         
-            CirPiGate* pi = (CirPiGate*) g;
-            ins_index = pi->getPiIndex();
-            size_t pattern = _32bitvec[a * _i + ins_index];
-            g->setLastValue(pattern);
-         } else if(g->getType() == AIG_GATE) {
-            CirGate* lhs0 = g->getInput(0);
-            CirGate* lhs1 = g->getInput(1);
-            size_t v0 = lhs0->getLastValue(), v1 = lhs1->getLastValue();
-            if(g->isInv(0)) v0 = ~v0;
-            if(g->isInv(1)) v1 = ~v1;
-            g->setLastValue(v0 & v1);
-         } else if (g->getType() == UNDEF_GATE) {
-            g->setLastValue(0);
-         } else { // PO_GATE
-            CirGate* lhs = g->getInput(0);
-            size_t v0 = lhs->getLastValue();
-            if(g->isInv(0)) v0 = ~v0;
-            g->setLastValue(v0);
-         }
-      }
+   unsigned a = 0;
+   simulate(a, _32bitvec);
+   fecGrpsInit(_32bitvec);
+   a++;
+   for( ; a < div; a++) {
+      simulate(a, _32bitvec);
+      fecGrpMerge();
    }
+
    // cout << "\rTotal #FEC Group = " << _fecList.numGroups();
    cout << "\r" << div * BIT_32 - mod << " patterns simulated." << endl;
 
@@ -122,3 +104,55 @@ CirMgr::fileSim(ifstream& patternFile)
 /*************************************************/
 /*   Private member functions about Simulation   */
 /*************************************************/
+
+void
+CirMgr::simulate(unsigned& round, vector<size_t>& _32bitvec)
+{
+   unsigned ins_index = 0;
+   unsigned _i = miloa[1];
+   for(unsigned i = 0; i < _dfsList.size(); i++) {
+      CirGate* g = _dfsList[i];
+      if(g->getType() == PI_GATE || g->getType() == CONST_GATE) {
+      
+         CirPiGate* pi = (CirPiGate*) g;
+         ins_index = pi->getPiIndex();
+         size_t pattern = _32bitvec[round * _i + ins_index]; //
+         g->setLastValue(pattern);
+      } else if(g->getType() == AIG_GATE) {
+         CirGate* lhs0 = g->getInput(0);
+         CirGate* lhs1 = g->getInput(1);
+         size_t v0 = lhs0->getLastValue(), v1 = lhs1->getLastValue();
+         if(g->isInv(0)) v0 = ~v0;
+         if(g->isInv(1)) v1 = ~v1;
+         g->setLastValue(v0 & v1);
+      } else if (g->getType() == UNDEF_GATE) {
+         g->setLastValue(0);
+      } else { // PO_GATE
+         CirGate* lhs = g->getInput(0);
+         size_t v0 = lhs->getLastValue();
+         if(g->isInv(0)) v0 = ~v0;
+         g->setLastValue(v0);
+      }
+   }
+}
+void
+CirMgr::fecGrpsInit(vector<size_t>& _32bitvec)
+{
+   unsigned _m = miloa[0], _o = miloa[3];
+   FecGrp fecGrp( getHashSize(_m + _o + 1) );
+   for(unsigned i = 0; i < _dfsList.size(); i++) {
+      CirGate* g = _dfsList[i];
+      FECHashKey key( g->getLastValue() );
+      fecGrp.addGate(key, g);
+   }
+   fecGrps.push_back(fecGrp);
+}
+void
+CirMgr::fecGrpMerge()
+{
+   for(unsigned i = 0; i < _dfsList.size(); i++) {
+      CirGate* g = _dfsList[i];
+      FECHashKey key( g->getLastValue() );
+
+   }
+}
