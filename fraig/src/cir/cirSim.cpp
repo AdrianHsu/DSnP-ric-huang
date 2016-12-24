@@ -139,7 +139,7 @@ CirMgr::fecGrpsInit()
    FecGrp *fecGrp = new FecGrp();
    for(unsigned i = 0; i < _dfsList.size(); i++) {
       CirGate* g = _dfsList[i];
-      fecGrp->addGate(g);
+      if(g->getType() == AIG_GATE) fecGrp->addGate(g);
    }
    fecGrps.push_back(fecGrp);
 }
