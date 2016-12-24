@@ -88,12 +88,10 @@ CirMgr::fileSim(ifstream& patternFile)
    // start sim
    buildDfsList();
    unsigned a = 0;
-   simulate(a, _32bitvec);
-   fecGrpsInit(_32bitvec);
-   a++;
+   fecGrpsInit();
    for( ; a < div; a++) {
       simulate(a, _32bitvec);
-      fecGrpMerge();
+      fecGrpsUpdate();
    }
 
    // cout << "\rTotal #FEC Group = " << _fecList.numGroups();
@@ -136,23 +134,45 @@ CirMgr::simulate(unsigned& round, vector<size_t>& _32bitvec)
    }
 }
 void
-CirMgr::fecGrpsInit(vector<size_t>& _32bitvec)
+CirMgr::fecGrpsInit()
 {
-   unsigned _m = miloa[0], _o = miloa[3];
-   FecGrp fecGrp( getHashSize(_m + _o + 1) );
+   FecGrp *fecGrp = new FecGrp();
    for(unsigned i = 0; i < _dfsList.size(); i++) {
       CirGate* g = _dfsList[i];
-      FECHashKey key( g->getLastValue() );
-      fecGrp.addGate(key, g);
+      fecGrp->addGate(g);
    }
    fecGrps.push_back(fecGrp);
 }
-void
-CirMgr::fecGrpMerge()
-{
-   for(unsigned i = 0; i < _dfsList.size(); i++) {
-      CirGate* g = _dfsList[i];
-      FECHashKey key( g->getLastValue() );
 
+void
+CirMgr::fecGrpsUpdate()
+{
+   unsigned _m = miloa[0], _o = miloa[3];
+   FecMap newFecMap( getHashSize(_m + _o + 1) );
+
+   // for(unsigned i = 0; i < fecGrps.size(); i ++) {
+   FecGrp* fecGrp = fecGrps[0];
+   for(unsigned j = 0; j < fecGrp->getGatesSize(); j++) {
+      CirGate *g = fecGrp->getGate(j);
+      size_t val = g->getLastValue();
+      FecHashKey key(val);
+      FecGrp* tmpGrp = NULL;
+      if(newFecMap.query(key, tmpGrp)) {
+         tmpGrp->addGate(g);
+      } else {
+         // tmpGrp is NULL
+         createNewGroup(newFecMap, g);
+      }
    }
+   // }
+}
+void
+CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g)
+{
+   size_t val = g->getLastValue();
+   FecGrp *fecGrp = new FecGrp(val);
+   fecGrp->addGate(g);
+   fecGrps.push_back(fecGrp);
+   FecHashKey key(val);
+   newFecMap.insert(key, fecGrp);
 }

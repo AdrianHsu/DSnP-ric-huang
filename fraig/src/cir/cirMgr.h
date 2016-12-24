@@ -20,6 +20,8 @@ using namespace std;
 
 #include "cirDef.h"
 #include "cirGate.h"
+// by AH
+#include "fecGrp.h"
 
 extern CirMgr *cirMgr;
 
@@ -107,8 +109,9 @@ public:
    void setSimLog(ofstream *logFile) { _simLog = logFile; }
    // by AH
    void simulate(unsigned&, vector<size_t>&);
-   void fecGrpsInit(vector<size_t>&);
-   void fecGrpMerge();
+   void fecGrpsInit();
+   void fecGrpsUpdate();
+   void createNewGroup(FecMap&, CirGate*);
    // Member functions about fraig
    void strash();
    void printFEC() const;

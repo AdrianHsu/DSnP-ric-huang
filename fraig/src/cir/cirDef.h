@@ -25,11 +25,14 @@ class CirPiGate;
 class CirPoGate;
 class CirUndefGate;
 class CirConstGate;
+// by AH, for sim()
+class FecGrp;
 
-typedef vector<CirGate*>           GateList;
-typedef vector<unsigned>           IdList;
-typedef HashMap<FECHashKey, CirGate*> FecGrp;
-typedef vector< FecGrp >           FecGrps;
+
+typedef vector<CirGate*>             GateList;
+typedef vector<unsigned>             IdList;
+typedef HashMap<FecHashKey, FecGrp*> FecMap;
+typedef vector<FecGrp*>              FecGrps;
 
 enum GateType
 {
