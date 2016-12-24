@@ -64,7 +64,7 @@ CirGate::reportGate() const
       if(g->getName() != "")ss << "\"" << g->getName() << "\"";
    }
    ss << ", line " << getLineNo();
-   cout << setw(49) << left << ss.str() << "=\n";
+   cout << setw(49) << left << ss.str() << "=" << endl;
    ss.str(""); //clear ss
    cout << "= Value: " << getLastValueStr() << " =" << endl; 
    cout << "==================================================\n";

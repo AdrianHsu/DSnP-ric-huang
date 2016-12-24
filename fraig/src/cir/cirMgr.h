@@ -70,7 +70,22 @@ public:
    void sweep();
    void optimize();
    // by AH
-   void buildDfsList();
+   void buildDfsList() {
+      _dfsList.clear();
+      unsigned _m = miloa[0], _o = miloa[3];
+      bool first = 1;
+      for (unsigned i = _m + 1, size = _m + _o + 1; i < size; ++i) {
+         CirGate *g = getGate(i);
+         if(g == 0) return; // PO error
+         if(g->getType() == PO_GATE) {
+            if(first) {
+               g->setGlobalRef();
+               first = 0;
+            }
+            g->runColorDFS(_dfsList);
+         }
+      }
+   }   
    OptType getOptType(CirGate*, bool& , size_t&) const;
    unsigned myStr2Uns(const string& str) {
      unsigned num = 0;

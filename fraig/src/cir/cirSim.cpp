@@ -49,7 +49,7 @@ CirMgr::fileSim(ifstream& patternFile)
          cerr << "Error: Pattern(" << str <<") length(" << str.size() 
               << ") does not match the number of inputs("
               << _i << ") in a circuit!!" << endl;
-         cout << "0 patterns simulated." << endl;
+         cout << "\r" << "0 patterns simulated." << endl;
          return;
       }  
       ins.push_back(str);
@@ -67,7 +67,6 @@ CirMgr::fileSim(ifstream& patternFile)
    }
    div = ins.size() / BIT_32;
    vector<size_t> _32bitvec;
-
    for(unsigned i = 0; i < div; i++) {
       for(unsigned j = 0; j < _i; j++) {
          size_t pattern = 0;
@@ -77,8 +76,7 @@ CirMgr::fileSim(ifstream& patternFile)
                cerr << "Error: Pattern(" << ins[k + i * BIT_32] 
                     << ") contains a non-0/1 character('" 
                     << ins[k + i * BIT_32][j] << "')." << endl;
-
-               cout << "0 patterns simulated." << endl;
+               cout << "\r" << "0 patterns simulated." << endl;
                return;
             } 
             pattern = (pattern << 1) + new_bit; // key!
@@ -86,26 +84,38 @@ CirMgr::fileSim(ifstream& patternFile)
          _32bitvec.push_back(pattern);
       }
    }
-   cout << div * BIT_32 - mod << " patterns simulated." << endl;
    // start sim
-   // buildDfsList();
-   // unsigned ins_count = 0;
-   // for(unsigned a = 0; a < div; a++) {
-   //    for(unsigned i = 0; i < _dfsList.size(); i++) {
-   //       CirGate* g = _dfsList[i];
-   //       if(g->getType() == PI_GATE) {
-   //          size_t pattern = _32bitvec[a * _i + ins_count];
-   //          ins_count++;
-   //          if(ins_count == _i)
-   //             ins_count = 0;
-   //          g->setLastValue(pattern);
-   //       } else if(g->getType() == AIG_GATE) {
-   //          CirGate* lhs0 = g->getInput(0), lhs1 = g->getInput(1);
-   //          size_t v0 = lhs0->getLastValue(), v1 = lhs1->getLastValue();
-   //          g->setLastValue(v0 & v1);
-   //       }
-   //    }
-   // }
+   buildDfsList();
+   unsigned ins_count = 0;
+   for(unsigned a = 0; a < div; a++) {
+      for(unsigned i = 0; i < _dfsList.size(); i++) {
+         CirGate* g = _dfsList[i];
+         if(g->getType() == PI_GATE || g->getType() == CONST_GATE) {
+            size_t pattern = _32bitvec[a * _i + ins_count];
+            ins_count++;
+            if(ins_count == _i)
+               ins_count = 0;
+            g->setLastValue(pattern);
+         } else if(g->getType() == AIG_GATE) {
+            CirGate* lhs0 = g->getInput(0);
+            CirGate* lhs1 = g->getInput(1);
+            size_t v0 = lhs0->getLastValue(), v1 = lhs1->getLastValue();
+            if(g->isInv(0)) v0 = ~v0;
+            if(g->isInv(1)) v1 = ~v1;
+            g->setLastValue(v0 & v1);
+         } else if (g->getType() == UNDEF_GATE) {
+            g->setLastValue(0);
+         } else { // PO_GATE
+            CirGate* lhs = g->getInput(0);
+            size_t v0 = lhs->getLastValue();
+            if(g->isInv(0)) v0 = ~v0;
+            g->setLastValue(v0);
+         }
+      }
+   }
+   // cout << "\rTotal #FEC Group = " << _fecList.numGroups();
+   cout << "\r" << div * BIT_32 - mod << " patterns simulated." << endl;
+
 }
 
 /*************************************************/

@@ -131,14 +131,16 @@ class CirGate {
       // file sim()
       void setLastValue(size_t v) { lastValue = v; }
       size_t getLastValue() { return lastValue; }
-      string getLastValueStr() {
+      string getLastValueStr() const{
          string str = "";
+         size_t val = lastValue;
          for(unsigned i = 0; i < BIT_32; i++) {
-            int new_bit = lastValue & 1;
+            int new_bit = val & 1;
             char str_bit = new_bit + '0';
-            if(i % 4 == 0)
+            if(i % 4 == 0 && i != 0)
                str += "_";
             str += str_bit;
+            val = val >> 1;
          }
          return str;
       }
