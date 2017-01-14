@@ -66,10 +66,24 @@ public:
       return p;
    }
    bool operator == (const HashKey& k) const { 
-      if(k() == (*this)() )
+      // if( (*this)() == k() )
+      if( (*this).sameInput(k) )
          return true; 
       else
          return false;
+   }
+   size_t getlhs0() const {
+      return lhs0;
+   }
+   size_t getlhs1() const {
+      return lhs1;
+   }
+   bool sameInput(const HashKey& k) const {
+      if(lhs0 == k.getlhs0() && lhs1 == k.getlhs1())
+         return true;
+      else if(lhs0 == k.getlhs1() && lhs1 == k.getlhs0())
+         return true;
+      return false;
    }
 
 private:
@@ -212,9 +226,10 @@ public:
    // else return false;
    bool check(const HashKey& k) const { 
       size_t n = bucketNum(k);
-      for(size_t i = 0; i < _buckets[n].size(); i++)
+      for(size_t i = 0; i < _buckets[n].size(); i++) {
          if(_buckets[n][i].first == k)
             return true;
+      }
       return false; 
    }
 
@@ -223,11 +238,12 @@ public:
    // else return false;
    bool query(const HashKey& k, HashData& d) const {
       size_t n = bucketNum(k);
-      for(size_t i = 0; i < _buckets[n].size(); i++)
+      for(size_t i = 0; i < _buckets[n].size(); i++) {
          if(_buckets[n][i].first == k) {
             d = _buckets[n][i].second;
             return true;
          }
+      }
       return false; 
    }
    // update the entry in hash that is equal to k (i.e. == return true)

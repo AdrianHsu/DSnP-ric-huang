@@ -1,4 +1,4 @@
-cirr opt07.aag
+cirr opt02.aag
 cirp
 cirp -pi
 cirp -po
@@ -6,11 +6,7 @@ cirp -n
 cirp -fl
 ciropt
 cirp
-cirp
-cirp
-cirp
 ciropt
-cirp
 cirp
 cirp -n
 cirp -fl

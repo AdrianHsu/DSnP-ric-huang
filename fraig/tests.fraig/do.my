@@ -1,0 +1,10 @@
+cirr sim02.aag
+cirp
+cirp -pi
+cirp -po
+cirp -n
+cirp -fl
+cirstrash
+cirsim -file pattern.02
+cirp -fec
+q -f
