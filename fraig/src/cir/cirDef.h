@@ -11,7 +11,6 @@
 
 #include <vector>
 #include "myHashMap.h"
-
 using namespace std;
 
 // TODO: define your own typedef or enum
@@ -29,10 +28,10 @@ class CirConstGate;
 class FecGrp;
 
 
-typedef vector<CirGate*>             GateList;
-typedef vector<unsigned>             IdList;
-typedef HashMap<FecHashKey, FecGrp*> FecMap;
-typedef vector<FecGrp*>              FecGrps;
+typedef vector<CirGate*>                 GateList;
+typedef vector<unsigned>                 IdList;
+typedef FecHashMap<FecHashKey, FecGrp*>  FecMap;
+typedef vector<FecGrp*>                  ListFecGrps;
 
 enum GateType
 {

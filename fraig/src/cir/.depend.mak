@@ -14,7 +14,7 @@ cirFraig.o: cirFraig.cpp cirMgr.h cirDef.h ../../include/myHashMap.h \
 cirGate.o: cirGate.cpp cirGate.h cirDef.h ../../include/myHashMap.h \
   ../../include/sat.h ../../include/Solver.h ../../include/SolverTypes.h \
   ../../include/Global.h ../../include/VarOrder.h ../../include/Heap.h \
-  ../../include/Proof.h ../../include/File.h cirMgr.h fecGrp.h \
+  ../../include/Proof.h ../../include/File.h fecGrp.h cirMgr.h \
   ../../include/util.h ../../include/rnGen.h ../../include/myUsage.h
 cirMgr.o: cirMgr.cpp cirMgr.h cirDef.h ../../include/myHashMap.h \
   cirGate.h ../../include/sat.h ../../include/Solver.h \

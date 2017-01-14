@@ -21,7 +21,7 @@ using namespace std;
 #include "cirDef.h"
 #include "cirGate.h"
 // by AH
-#include "fecGrp.h"
+// #include "fecGrp.h"
 
 extern CirMgr *cirMgr;
 
@@ -35,6 +35,8 @@ extern CirMgr *cirMgr;
 
 #define aiger_lit2var(l) \
   (((unsigned)(l)) >> 1)
+
+class FecGrp;
 
 class CirMgr
 {
@@ -108,10 +110,19 @@ public:
    void fileSim(ifstream&);
    void setSimLog(ofstream *logFile) { _simLog = logFile; }
    // by AH
-   void simulate(unsigned&, vector<size_t>&);
+   void simulate(unsigned&, vector<unsigned>&);
    void fecGrpsInit();
-   void fecGrpsUpdate();
-   void createNewGroup(FecMap&, CirGate*);
+   void fecGrpsIdentify();
+   void createNewGroup(FecMap&, CirGate*, bool&);
+   void collectValidFecGrp(FecMap&, FecGrp*, unsigned&);
+
+   // static bool grpOrderSort (FecGrp* i,FecGrp* j) { 
+   //    return (i->get1stId() < j->get1stId()); 
+   // }
+
+   void sortListFecGrps() {
+      // std::sort (_listFecGrps.begin(), _listFecGrps.end(), grpOrderSort);
+   }
    // Member functions about fraig
    void strash();
    void printFEC() const;
@@ -128,7 +139,7 @@ public:
    void writeAag(ostream&) const;
    void writeGate(ostream&, CirGate*) const;
    GateList _dfsList;
-   FecGrps fecGrps;
+   ListFecGrps _listFecGrps;
 
 private:
    ofstream           *_simLog;

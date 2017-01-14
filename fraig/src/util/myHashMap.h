@@ -17,9 +17,9 @@ using namespace std;
 // TODO: (Optionally) Implement your own HashMap and Cache classes.
 
 //-----------------------
-// Define HashMap classes
+// Define FecHashMap classes
 //-----------------------
-// To use HashMap ADT, you should define your own HashKey class.
+// To use FecHashMap ADT, you should define your own FecHashKey class.
 // It should at least overload the "()" and "==" operators.
 //
 #define MY_MAX INT_MAX
@@ -27,21 +27,203 @@ using namespace std;
 class FecHashKey
 {
 public:
-   FecHashKey(size_t v): simValue(v) { }
+   FecHashKey(unsigned v): simValue(v) { }
 
-   size_t operator() () const { 
-      return simValue;
+   size_t operator() () const {
+      size_t k = 0;
+      for(unsigned i = 0; i < 4; ++i)
+         k ^= (simValue << (i*8));
+      return k;
    }
+   size_t operator~ () const {
+      return ~simValue;
+   } 
    bool operator == (const FecHashKey& k) const { 
-      if(k() == (*this)() )
+      if( simValue == k.getSimValue() )
          return true; 
       else
          return false;
    }
+   unsigned getSimValue() const {
+      return simValue;
+   }
 
 private:
-   size_t simValue;
+   unsigned simValue;
 };
+
+template <class FecHashKey, class FecHashData>
+class FecHashMap
+{
+typedef pair<FecHashKey, FecHashData> FecHashNode;
+
+public:
+   FecHashMap(size_t b = 0) : _numBuckets(0), _buckets(0) { if (b != 0) init(b); }
+   ~FecHashMap() { reset(); }
+
+   // [Optional] TODO: implement the FecHashMap<FecHashKey, FecHashData>::iterator
+   // o An iterator should be able to go through all the valid FecHashNodes
+   //   in the FecHashMap
+   // o Functions to be implemented:
+   //   - constructor(s), destructor
+   //   - operator '*': return the FecHashNode
+   //   - ++/--iterator, iterator++/--
+   //   - operators '=', '==', !="
+   //
+   class iterator
+   {
+      friend class FecHashMap<FecHashKey, FecHashData>;
+   
+   public:
+      iterator(vector<FecHashNode>* b, size_t num, size_t n) 
+         : _nb(num), _n(n), _i(0), _buckets(b) { }
+      ~iterator(){}
+      const FecHashNode& operator * () const { return _buckets[_n][_i]; }
+      FecHashNode& operator *() { return _buckets[_n][_i]; }
+      iterator& operator++() {
+         if(_n == _nb) return *this;
+         else if(_i < _buckets[_n].size() - 1) ++_i;
+         else {
+            while(++_n < _nb)
+               if(!_buckets[_n].empty())
+                  break;
+            _i = 0;
+         }
+         return *this;
+      }
+      iterator operator++(int) {
+         iterator tmp = iterator(*this);
+         ++(*this);
+         return tmp;
+      }
+      iterator& operator--() {
+         if(_i > 0) {
+            --_i;
+            return (*this);
+         }
+         size_t t = _n;
+         while(t > 0) {
+            --t;
+            if(!_buckets[t].empty()) {
+               _i = _buckets[t].size() - 1;
+               _n = t;
+               break;
+            }
+         }
+         return (*this);
+      }
+      iterator operator--(int) {
+         iterator tmp = iterator(*this);
+         --(*this);
+         return tmp;
+      }
+      iterator& operator = (const iterator& i) {
+         _nb = i._nb;
+         _n = i._n;
+         _i = i._i;
+         _buckets = i._buckets;
+         return *this;
+      }
+      bool operator == (const iterator& i) const {
+         return((_i == i._i) && (_n == i._n));
+      }
+      bool operator != (const iterator& i) const {
+         return !(*this == i);
+      }
+
+
+   private:
+      size_t   _nb;
+      size_t   _n, _i;
+      vector<FecHashNode>*  _buckets;
+   };
+
+   void init(size_t b) {
+      reset(); _numBuckets = b; _buckets = new vector<FecHashNode>[b];
+   }
+   void reset() {
+      _numBuckets = 0;
+      if (_buckets) { delete [] _buckets; _buckets = 0; }
+   }
+   void clear() {
+      for (size_t i = 0; i < _numBuckets; ++i) _buckets[i].clear();
+   }
+   size_t numBuckets() const { return _numBuckets; }
+
+   vector<FecHashNode>& operator [] (size_t i) { return _buckets[i]; }
+   const vector<FecHashNode>& operator [](size_t i) const { return _buckets[i]; }
+
+   // TODO: implement these functions
+   //
+   // Point to the first valid data
+   iterator begin() const { 
+      for(size_t n = 0; n < _numBuckets; n++)
+         if(!_buckets[n].empty()) {
+            return iterator(_buckets, _numBuckets, n);
+         }
+      return end();
+   }
+   // Pass the end
+   iterator end() const {
+      size_t n = _numBuckets;
+      return iterator(_buckets, _numBuckets, n);
+   }
+   // return true if no valid data
+   bool empty() const { 
+      for (size_t n = 0; n < _numBuckets; n++)
+         if (!_buckets[n].empty())  return false;
+      return true;
+   }
+   // number of valid data
+   size_t size() const { 
+      size_t s = 0;
+      for(size_t n = 0; n < _numBuckets; n++)
+         s += _buckets[n].size(); 
+      return s; 
+   }
+   bool check(const FecHashKey& k, FecHashData& d, bool& inv) const {
+      // find same simValue (not inverse)
+      size_t n = bucketNum(k);
+      for(size_t i = 0; i < _buckets[n].size(); i++) {
+         if(_buckets[n][i].first == k) {
+            inv = 0;
+            d = _buckets[n][i].second;
+            return true;
+         }
+      }
+      // same simValue not found, let's try inv value!
+      n = bucketNum(~k);
+      for(size_t i = 0; i < _buckets[n].size(); i++) {
+         if(_buckets[n][i].first == ~k) {
+            inv = 1;
+            d = _buckets[n][i].second;
+            return true;
+         }
+      }
+      return false; 
+   }
+
+   bool insert(const FecHashKey& k, const FecHashData& d) {
+      size_t n = bucketNum(k);
+      for(size_t i = 0; i < _buckets[n].size(); i++)
+         if(_buckets[n][i].first == k || _buckets[n][i].first == ~k)
+            return false;
+
+      _buckets[n].push_back(FecHashNode(k, d));
+      return true;
+   }
+
+private:
+
+   // Do not add any extra data member
+   size_t                   _numBuckets;
+   vector<FecHashNode>*        _buckets;
+
+   size_t bucketNum(const FecHashKey& k) const {
+      return (k() % _numBuckets); }
+
+};
+
 
 class HashKey
 {
@@ -221,18 +403,6 @@ public:
       return s; 
    }
 
-   // check if k is in the hash...
-   // if yes, return true;
-   // else return false;
-   bool check(const HashKey& k) const { 
-      size_t n = bucketNum(k);
-      for(size_t i = 0; i < _buckets[n].size(); i++) {
-         if(_buckets[n][i].first == k)
-            return true;
-      }
-      return false; 
-   }
-
    // query if k is in the hash...
    // if yes, replace d with the data in the hash and return true;
    // else return false;
@@ -249,16 +419,16 @@ public:
    // update the entry in hash that is equal to k (i.e. == return true)
    // if found, update that entry with d and return true;
    // else insert d into hash as a new entry and return false;
-   bool update(const HashKey& k, HashData& d) { 
-      size_t n = bucketNum(k);
-      for(size_t i = 0; i < _buckets[n].size(); i++)
-         if(_buckets[n][i].first == k) {
-            _buckets[n][i].second = d;
-            return true;
-         }
-      _buckets[n].push_back(HashNode(k, d));
-      return false;
-   }
+   // bool update(const HashKey& k, HashData& d) { 
+   //    size_t n = bucketNum(k);
+   //    for(size_t i = 0; i < _buckets[n].size(); i++)
+   //       if(_buckets[n][i].first == k) {
+   //          _buckets[n][i].second = d;
+   //          return true;
+   //       }
+   //    _buckets[n].push_back(HashNode(k, d));
+   //    return false;
+   // }
 
    // return true if inserted d successfully (i.e. k is not in the hash)
    // return false is k is already in the hash ==> will not insert
@@ -272,18 +442,18 @@ public:
       return true;
    }
    // return true if removed successfully (i.e. k is in the hash)
-   // return fasle otherwise (i.e. nothing is removed)
-   bool remove(const HashKey& k) { 
-      size_t n = bucketNum(k);
-      size_t s = _buckets[n].size();
-      for(size_t i = 0; i < _buckets[n].size(); i++)
-         if(_buckets[n][i].frst == k) {
-            _buckets[n][i] = _buckets[n].back();
-            _buckets[n].resize(s - 1);
-            return true;
-         }
-      return false;
-   }
+   // return false otherwise (i.e. nothing is removed)
+   // bool remove(const HashKey& k) { 
+   //    size_t n = bucketNum(k);
+   //    size_t s = _buckets[n].size();
+   //    for(size_t i = 0; i < _buckets[n].size(); i++)
+   //       if(_buckets[n][i].first == k) {
+   //          _buckets[n][i] = _buckets[n].back();
+   //          _buckets[n].resize(s - 1);
+   //          return true;
+   //       }
+   //    return false;
+   // }
 
 private:
    // Do not add any extra data member
@@ -359,6 +529,5 @@ private:
 //    size_t         _size;
 //    CacheNode*     _cache;
 // };
-
 
 #endif // MY_HASH_H

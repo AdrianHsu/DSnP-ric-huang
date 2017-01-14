@@ -15,7 +15,7 @@
 #include <cstring>
 #include "cirMgr.h"
 #include "util.h"
-
+// #include "fecGrp.h"
 using namespace std;
 
 // TODO: Implement memeber functions for class CirMgr

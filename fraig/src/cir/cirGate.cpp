@@ -13,7 +13,7 @@
 #include "cirGate.h"
 #include "cirMgr.h"
 #include "util.h"
-
+#include "fecGrp.h"
 using namespace std;
 
 // TODO: Keep "CirGate::reportGate()", "CirGate::reportFanin()" and
@@ -66,7 +66,11 @@ CirGate::reportGate() const
    ss << ", line " << getLineNo();
    cout << setw(49) << left << ss.str() << "=" << endl;
    ss.str(""); //clear ss
-   cout << "= Value: " << getLastValueStr() << " =" << endl; 
+   string fec = getFecStr();
+   ss << "= FECs: " << fec;
+   cout << setw(49) << left << ss.str() << "=" << endl;
+   ss.str(""); //clear ss
+   cout << "= Value: " << getSimValueStr() << " =" << endl; 
    cout << "==================================================\n";
 }
 void

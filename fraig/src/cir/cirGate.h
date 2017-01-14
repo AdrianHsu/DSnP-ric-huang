@@ -18,9 +18,10 @@
 
 #include "cirDef.h"
 #include "sat.h"
+// AH
+#include "fecGrp.h"
 
 using namespace std;
-
 #define NEG 0x1
 
 #define aiger_sign(l) \
@@ -31,26 +32,21 @@ using namespace std;
 
 #define aiger_lit2var(l) \
   (((unsigned)(l)) >> 1)
+
 #define BIT_32 32
 
 
 // TODO: Feel free to define your own classes, variables, or functions.
 
-class CirGate;
-// by AH
-class CirAigGate;
-class CirPiGate;
-class CirPoGate;
-class CirUndefGate;
-class CirConstGate;
-
 //------------------------------------------------------------------------
 //   Define classes
 //------------------------------------------------------------------------
+
 class CirGate {
    
    public:
-      CirGate(GateType _t, unsigned _id, unsigned _n): type(_t), lineNo(_n), id(_id), color(0), lastValue(0) {}
+      CirGate(GateType _t, unsigned _id, unsigned _n)
+      : type(_t), lineNo(_n), id(_id), color(0), simValue(0), _myFecGrp(0), fecInv(0) {}
       virtual ~CirGate(){};
 
       // Printing functions
@@ -62,7 +58,7 @@ class CirGate {
       string getTypeStr() const;
       GateType getType() const { return type; }
       unsigned getLineNo() const { return lineNo; }
-      unsigned getId() const {return id; }
+      unsigned getId() const { return id; }
       // from homework #6
       void addInput(CirGate* g, bool inv = false) {
          if (inv) g = (CirGate*)((size_t)g + 1);
@@ -118,7 +114,6 @@ class CirGate {
       void insertInput(CirGate* g, size_t i, bool& is_inv) {
          if (is_inv) g = (CirGate*)((size_t)g + 1);
          faninList.insert(faninList.begin() + i, 1, g); // 1 means one element
-
       }
       void insertOutput(CirGate* g, size_t i) {
          fanoutList.insert(fanoutList.begin() + i, 1, g);
@@ -129,11 +124,11 @@ class CirGate {
       // strash()
       void strashfoutMerge(CirGate*);
       // file sim()
-      void setLastValue(size_t v) { lastValue = v; }
-      size_t getLastValue() { return lastValue; }
-      string getLastValueStr() const{
+      void setSimValue(size_t v) { simValue = v; }
+      size_t getSimValue() { return simValue; }
+      string getSimValueStr() const {
          string str = "";
-         size_t val = lastValue;
+         size_t val = simValue;
          for(unsigned i = 0; i < BIT_32; i++) {
             int new_bit = val & 1;
             char str_bit = new_bit + '0';
@@ -144,7 +139,32 @@ class CirGate {
          }
          return str;
       }
-      void resetLastValue() { lastValue = 0; }
+      string getFecStr() const {
+         string str = "";
+         unsigned s = _myFecGrp->getSize();
+         bool last = false;
+         if(_myFecGrp->getGate(s - 1) == this) 
+            last = true;
+         for(unsigned i = 0; i < s; i++) {
+            if(_myFecGrp->getGate(i) != this) {
+               CirGate* g = _myFecGrp->getGate(i);
+               bool inv = _myFecGrp->isInv(i) ^ fecInv; // exclusive OR
+               if(inv)
+                  str += "!";
+               str += g->getId();
+               if(i < s - 2)
+                  str += " ";
+               else if (i == s - 2) {
+                  if(!last)
+                     str += " ";
+               }
+            }
+         }
+         return str;
+      }
+      void resetSimValue() { simValue = 0; }
+      void setMyFecGrp(FecGrp* grp, bool& i) { _myFecGrp = grp; fecInv = i; }
+      void clearMyFecGrp() {_myFecGrp = NULL;}
 
       static unsigned index;
       static unsigned globalRef;
@@ -154,7 +174,9 @@ class CirGate {
       unsigned lineNo;
       unsigned id;
       mutable unsigned color;
-      size_t lastValue;
+      size_t simValue; // 32bit, 00100010011 etc
+      FecGrp* _myFecGrp;
+      bool fecInv;
       GateList faninList;
       GateList fanoutList;
 };
@@ -276,4 +298,5 @@ class CirConstGate : public CirGate {
 
    protected:
 };
+
 #endif // CIR_GATE_H

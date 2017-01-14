@@ -14,9 +14,10 @@
 #include "cirMgr.h"
 #include "cirGate.h"
 #include "util.h"
-
-
+// #include "fecGrp.h"
 using namespace std;
+
+
 
 // TODO: Keep "CirMgr::randimSim()" and "CirMgr::fileSim()" for cir cmd.
 //       Feel free to define your own variables or functions
@@ -67,10 +68,10 @@ CirMgr::fileSim(ifstream& patternFile)
       inputs.push_back(zero_str);
    }
    div = inputs.size() / BIT_32;
-   vector<size_t> _32bitvec;
+   vector<unsigned> _32bitvec;
    for(unsigned i = 0; i < div; i++) {
       for(unsigned j = 0; j < _i; j++) {
-         size_t pattern = 0;
+         unsigned pattern = 0;
          for(unsigned k = 0; k < BIT_32; k++) {
             int new_bit = inputs[k + i * BIT_32][j] - '0';
             if(new_bit != 0 && new_bit != 1) {
@@ -86,12 +87,12 @@ CirMgr::fileSim(ifstream& patternFile)
       }
    }
    // start sim
-   buildDfsList();
    unsigned a = 0;
-   fecGrpsInit();
+   buildDfsList();
+   fecGrpsInit(); //first time build map
    for( ; a < div; a++) {
       simulate(a, _32bitvec);
-      fecGrpsUpdate();
+      fecGrpsIdentify();
    }
 
    // cout << "\rTotal #FEC Group = " << _fecList.numGroups();
@@ -104,75 +105,119 @@ CirMgr::fileSim(ifstream& patternFile)
 /*************************************************/
 
 void
-CirMgr::simulate(unsigned& round, vector<size_t>& _32bitvec)
+CirMgr::simulate(unsigned& round, vector<unsigned>& _32bitvec)
 {
+// All-gate simulation:
+// Perform simulation for each gate on the DFS list
    unsigned ins_index = 0;
    unsigned _i = miloa[1];
    for(unsigned i = 0; i < _dfsList.size(); i++) {
       CirGate* g = _dfsList[i];
-      if(g->getType() == PI_GATE || g->getType() == CONST_GATE) {
-      
+      if(g->getType() == PI_GATE) {
          CirPiGate* pi = (CirPiGate*) g;
          ins_index = pi->getPiIndex();
-         size_t pattern = _32bitvec[round * _i + ins_index]; //
-         g->setLastValue(pattern);
+         unsigned pattern = _32bitvec[round * _i + ins_index]; //
+         g->setSimValue(pattern);
+      } else if (g->getType() == CONST_GATE) {
+         g->setSimValue(0);
       } else if(g->getType() == AIG_GATE) {
          CirGate* lhs0 = g->getInput(0);
          CirGate* lhs1 = g->getInput(1);
-         size_t v0 = lhs0->getLastValue(), v1 = lhs1->getLastValue();
+         unsigned v0 = lhs0->getSimValue(), v1 = lhs1->getSimValue();
          if(g->isInv(0)) v0 = ~v0;
          if(g->isInv(1)) v1 = ~v1;
-         g->setLastValue(v0 & v1);
+         g->setSimValue(v0 & v1);
       } else if (g->getType() == UNDEF_GATE) {
-         g->setLastValue(0);
+         g->setSimValue(0);
       } else { // PO_GATE
          CirGate* lhs = g->getInput(0);
-         size_t v0 = lhs->getLastValue();
+         unsigned v0 = lhs->getSimValue();
          if(g->isInv(0)) v0 = ~v0;
-         g->setLastValue(v0);
+         g->setSimValue(v0);
       }
    }
 }
+
 void
 CirMgr::fecGrpsInit()
 {
-   FecGrp *fecGrp = new FecGrp();
+   // simValue are already given in 1st round
+   // Initial: put all the signals in ONE FEC group.
+   FecGrp *fecGrp = new FecGrp(0);
    for(unsigned i = 0; i < _dfsList.size(); i++) {
       CirGate* g = _dfsList[i];
-      if(g->getType() == AIG_GATE) fecGrp->addGate(g);
-   }
-   fecGrps.push_back(fecGrp);
-}
-
-void
-CirMgr::fecGrpsUpdate()
-{
-   unsigned _m = miloa[0], _o = miloa[3];
-   FecMap newFecMap( getHashSize(_m + _o + 1) );
-
-   // for(unsigned i = 0; i < fecGrps.size(); i ++) {
-   FecGrp* fecGrp = fecGrps[0];
-   for(unsigned j = 0; j < fecGrp->getGatesSize(); j++) {
-      CirGate *g = fecGrp->getGate(j);
-      size_t val = g->getLastValue();
-      FecHashKey key(val);
-      FecGrp* tmpGrp = NULL;
-      if(newFecMap.query(key, tmpGrp)) {
-         tmpGrp->addGate(g);
-      } else {
-         // tmpGrp is NULL
-         createNewGroup(newFecMap, g);
+      if(g->getType() == AIG_GATE) {
+         bool b = false;
+         fecGrp->addGate(g, b);
+         g->setMyFecGrp(fecGrp, b);
       }
    }
-   // }
+   //Add this FEC group into fecGrps (list of FEC groups)
+   _listFecGrps.push_back(fecGrp);
+}
+
+void
+CirMgr::fecGrpsIdentify()
+{
+
+// LET'S DO THE MOST IMPORTANT PART!
+// for_each(fecGrp, fecGrps): 
+//    Hash<SimValue, FECGroup> newFecGrps; 
+//    for_each(gate, fecGrp)
+//       grp = newFecGrps.check(gate);
+//       if (grp != 0) // existed
+//          grp.add(gate);
+//       else 
+//          createNewGroup(newFecGrps,gate);
+// CollectValidFecGrp(newFecGrps, fecGrp,fecGrps);
+
+   unsigned listSize = _listFecGrps.size(); // listSize = 1
+   unsigned _a = miloa[4];
+   FecGrp* fecGrp = 0;
+   for(unsigned i = 0; i < listSize; i ++) {
+      FecMap newFecMap( getHashSize(_a + 1) );
+      fecGrp = _listFecGrps[i];
+      for(unsigned j = 0; j < fecGrp->getSize(); j++) {
+         CirGate* gate = fecGrp->getGate(j);
+         FecGrp* grp = NULL;
+         FecHashKey key(gate->getSimValue());
+         bool inv = 0;
+         bool isChecked = newFecMap.check(key, grp, inv);
+         if(isChecked) {
+            grp->addGate(gate, inv);
+            gate->setMyFecGrp(grp, inv);
+         } else
+            createNewGroup(newFecMap, gate, inv);
+      }
+      collectValidFecGrp(newFecMap, fecGrp, i);
+   }
+   sortListFecGrps();
 }
 void
-CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g)
+CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g, bool& inv)
 {
-   size_t val = g->getLastValue();
-   FecGrp *fecGrp = new FecGrp(val);
-   fecGrp->addGate(g);
-   fecGrps.push_back(fecGrp);
-   FecHashKey key(val);
+   FecGrp *fecGrp = new FecGrp(g->getSimValue());
+   fecGrp->addGate(g, inv);
+   g->setMyFecGrp(fecGrp, inv);
+   FecHashKey key(g->getSimValue());
    newFecMap.insert(key, fecGrp);
+}
+void
+CirMgr::collectValidFecGrp(FecMap& newFecMap, FecGrp* fecGrp, unsigned& i){
+   // "fecGrps" in pdf, is _listFecGrps
+
+   //delete original fecGrp
+   unsigned s = _listFecGrps.size();
+   _listFecGrps[i] = _listFecGrps.back();
+   _listFecGrps.resize(s - 1);
+   FecMap::iterator it = newFecMap.begin();
+   for(; it != newFecMap.end(); it++) {
+      FecGrp* tmp = (*it).second;
+      tmp->sortInsideGrp();
+      if(tmp->getSize() > 1) 
+         _listFecGrps.push_back(tmp); // valid
+      else {
+         tmp->getGate(0)->clearMyFecGrp(); // invalid
+      }
+   }
 }

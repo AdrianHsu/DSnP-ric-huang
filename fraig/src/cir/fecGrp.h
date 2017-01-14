@@ -13,29 +13,49 @@
 #include <string>
 #include <iostream>
 
+#include "cirDef.h"
+#define NEG 0x1
+
 using namespace std;
 
 // TODO: Feel free to define your own classes, variables, or functions.
 
-#include "cirDef.h"
-#include "cirGate.h"
-
 class FecGrp
 {
 public:
-	FecGrp(size_t s = 0): simValue(s) {};
-	void addGate(CirGate* g) { gates.push_back(g); }
-	CirGate* getGate(size_t i) { 
-		if(i >= gates.size() ) return NULL;
-		return gates[i]; 
-	}
-	size_t getGatesSize() { return gates.size(); }
-	void setSimValue(size_t s) { simValue = s; }
-	size_t getSimValue() { return simValue; }
+  FecGrp(size_t s = 0): simValue(s) {};
+  ~FecGrp(){};
+
+  void addGate(CirGate* g, bool inv = false) {
+     if (inv) g = (CirGate*)((size_t)g + 1);
+     _gateList.push_back(g);
+  }
+
+    CirGate* getGate(unsigned i) const {
+       if (i >= _gateList.size()) return 0;
+       return (CirGate*)(((size_t)_gateList[i]) & ~size_t(NEG));
+    }
+    bool isInv(size_t i) const { return ((size_t)_gateList[i] & NEG); }
+  size_t getSize() { return _gateList.size(); }
+
+  static bool orderInsideSort (CirGate* i, CirGate* j) { return (i->getId() < j->getId()); }  
+  void sortInsideGrp() {
+        std::sort (_gateList.begin(), _gateList.end(), orderInsideSort);
+  }
+    unsigned get1stId() { 
+    if(_gateList.size() > 0) {
+      CirGate* g = getGate(0);
+      return g->getId();
+    }
+    return 0; // no gates
+  }
+  void setSimValue(size_t s) { simValue = s; }
+  size_t getSimValue() { return simValue; }
 
 private:
-	vector<CirGate*> gates;
-	size_t simValue;
+  vector<CirGate*> _gateList;
+  size_t simValue;
 };
 
-#endif // CIR_MGR_H
+
+#endif
