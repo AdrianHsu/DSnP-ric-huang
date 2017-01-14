@@ -116,12 +116,12 @@ public:
    void createNewGroup(FecMap&, CirGate*, bool&);
    void collectValidFecGrp(FecMap&, FecGrp*, unsigned&);
 
-   // static bool grpOrderSort (FecGrp* i,FecGrp* j) { 
-   //    return (i->get1stId() < j->get1stId()); 
-   // }
+   static bool grpOrderSort (FecGrp* i,FecGrp* j) { 
+      return (i->get1stGate()->getId() < j->get1stGate()->getId()); 
+   }
 
    void sortListFecGrps() {
-      // std::sort (_listFecGrps.begin(), _listFecGrps.end(), grpOrderSort);
+      std::sort (_listFecGrps.begin(), _listFecGrps.end(), grpOrderSort);
    }
    // Member functions about fraig
    void strash();

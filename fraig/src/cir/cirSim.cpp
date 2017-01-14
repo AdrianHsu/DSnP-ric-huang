@@ -202,6 +202,7 @@ CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g, bool& inv)
    FecHashKey key(g->getSimValue());
    newFecMap.insert(key, fecGrp);
 }
+bool orderInsideSort (CirGate* i, CirGate* j) { return (i->getId() < j->getId()); }  
 void
 CirMgr::collectValidFecGrp(FecMap& newFecMap, FecGrp* fecGrp, unsigned& i){
    // "fecGrps" in pdf, is _listFecGrps
@@ -213,7 +214,7 @@ CirMgr::collectValidFecGrp(FecMap& newFecMap, FecGrp* fecGrp, unsigned& i){
    FecMap::iterator it = newFecMap.begin();
    for(; it != newFecMap.end(); it++) {
       FecGrp* tmp = (*it).second;
-      tmp->sortInsideGrp();
+      std::sort (tmp->getList().begin(), tmp->getList().end(), orderInsideSort);
       if(tmp->getSize() > 1) 
          _listFecGrps.push_back(tmp); // valid
       else {
