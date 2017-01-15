@@ -1,0 +1,3 @@
+cirr sim05.aag
+cirsim -f pattern.05 -o my.log.ref
+q -f

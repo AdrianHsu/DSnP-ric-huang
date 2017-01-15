@@ -56,6 +56,7 @@ CirMgr::fileSim(ifstream& patternFile)
       }  
       inputs.push_back(str);
    }
+   unsigned inputSize = inputs.size();
    unsigned div = 0, mod = inputs.size() % BIT_32; // div: num of round, e.g. 64 is 2 rounds
    if(mod != 0) {
       div = inputs.size() / BIT_32;
@@ -86,6 +87,15 @@ CirMgr::fileSim(ifstream& patternFile)
          _32bitvec.push_back(pattern);
       }
    }
+   startSim(div, mod, _32bitvec, inputs, inputSize);
+}
+
+/*************************************************/
+/*   Private member functions about Simulation   */
+/*************************************************/
+void
+CirMgr::startSim(unsigned& div, unsigned& mod, vector<unsigned>& _32bitvec, vector<string>& inputs, unsigned& inputSize)
+{
    // start sim
    unsigned a = 0;
    buildDfsList();
@@ -99,19 +109,31 @@ CirMgr::fileSim(ifstream& patternFile)
          fecGrpsIdentify(_tmpListFecGrps, _listFecGrps);
          cout << "\rTotal #FEC Group = " << _listFecGrps.size();
       }
+
+      if(_simLog) { //writeLog
+         unsigned _o = miloa[3], _m = miloa[0];
+         for(unsigned i = a * BIT_32; i < BIT_32 * (a + 1); i ++) {
+            if(i < inputSize) {
+               *_simLog << inputs[i] << " ";
+               for(unsigned j = 0; j < _o; j ++) {
+                  CirGate* g = gateList[_m + j + 1];
+                  unsigned index = BIT_32 - ( i % BIT_32 ) - 1;
+                  string c = g->get1BitSimValueChar(index);
+                  *_simLog << c;
+               }
+               *_simLog << endl;
+            }
+         }
+      }
    }
    if(div % 2 == 1) {
       _listFecGrps.clear();
       _listFecGrps = _tmpListFecGrps;
       _tmpListFecGrps.clear();
    } //else do nothing
-
    cout << "\r" << div * BIT_32 - mod << " patterns simulated." << endl;
-}
 
-/*************************************************/
-/*   Private member functions about Simulation   */
-/*************************************************/
+}
 
 void
 CirMgr::simulate(unsigned& round, vector<unsigned>& _32bitvec)
@@ -194,7 +216,7 @@ CirMgr::fecGrpsIdentify(ListFecGrps& fecGrps, ListFecGrps& tmpGrps)
       fecGrp = fecGrps[i];
       unsigned grpSize = fecGrp->getSize();
       FecMap newFecMap( getHashSize(grpSize + 1) );
-      for(unsigned j = 0; j < grpSize; j++) {
+      for(unsigned j = 0; j < grpSize; j++) { // slow!
          CirGate* gate = fecGrp->getGate(j);
          FecGrp* grp = NULL;
          FecHashKey key(gate->getSimValue());

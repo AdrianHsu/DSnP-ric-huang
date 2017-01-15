@@ -110,6 +110,7 @@ public:
    void fileSim(ifstream&);
    void setSimLog(ofstream *logFile) { _simLog = logFile; }
    // by AH
+   void startSim(unsigned&, unsigned&, vector<unsigned>&, vector<string>&, unsigned&);
    void simulate(unsigned&, vector<unsigned>&);
    void fecGrpsInit();
    void fecGrpsIdentify(ListFecGrps&, ListFecGrps&);

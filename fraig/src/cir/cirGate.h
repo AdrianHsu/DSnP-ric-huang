@@ -124,11 +124,11 @@ class CirGate {
       // strash()
       void strashfoutMerge(CirGate*);
       // file sim()
-      void setSimValue(size_t v) { simValue = v; }
-      size_t getSimValue() { return simValue; }
+      void setSimValue(unsigned v) { simValue = v; }
+      unsigned getSimValue() { return simValue; }
       string getSimValueStr() const {
          string str = "";
-         size_t val = simValue;
+         unsigned val = simValue;
          for(unsigned i = 0; i < BIT_32; i++) {
             int new_bit = val & 1;
             char str_bit = new_bit + '0';
@@ -137,6 +137,17 @@ class CirGate {
             str += str_bit;
             val = val >> 1;
          }
+         return str;
+      }
+      string get1BitSimValueChar(unsigned& index) const {
+         if(index >= BIT_32) return ""; //error
+
+         unsigned val = simValue;
+         string str = "";
+         val = val >> index;
+         int new_bit = val & 1;
+         char c = new_bit + '0';
+         str += c;
          return str;
       }
       string getFecStr() const {
@@ -172,7 +183,7 @@ class CirGate {
       unsigned lineNo;
       unsigned id;
       mutable unsigned color;
-      size_t simValue; // 32bit, 00100010011 etc
+      unsigned simValue; // 32bit, 00100010011 etc
       FecGrp* _myFecGrp;
       GateList faninList;
       GateList fanoutList;
