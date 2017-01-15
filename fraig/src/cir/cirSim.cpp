@@ -92,9 +92,19 @@ CirMgr::fileSim(ifstream& patternFile)
    fecGrpsInit(); //first time build map
    for( ; a < div; a++) {
       simulate(a, _32bitvec);
-      fecGrpsIdentify();
-      cout << "\rTotal #FEC Group = " << _listFecGrps.size();
+      if(a % 2 == 0) {
+         fecGrpsIdentify(_listFecGrps, _tmpListFecGrps);
+         cout << "\rTotal #FEC Group = " << _tmpListFecGrps.size();
+      } else {
+         fecGrpsIdentify(_tmpListFecGrps, _listFecGrps);
+         cout << "\rTotal #FEC Group = " << _listFecGrps.size();
+      }
    }
+   if(div % 2 == 1) {
+      _listFecGrps.clear();
+      _listFecGrps = _tmpListFecGrps;
+      _tmpListFecGrps.clear();
+   } //else do nothing
 
    cout << "\r" << div * BIT_32 - mod << " patterns simulated." << endl;
 }
@@ -141,6 +151,9 @@ CirMgr::fecGrpsInit()
 {
    // simValue are already given in 1st round
    // Initial: put all the signals in ONE FEC group.
+   _tmpListFecGrps.clear();
+   _listFecGrps.clear();
+
    FecGrp *fecGrp = new FecGrp(0);
    bool fal = false;
    CirGate* g = gateList[0];
@@ -160,7 +173,7 @@ CirMgr::fecGrpsInit()
 }
 
 void
-CirMgr::fecGrpsIdentify()
+CirMgr::fecGrpsIdentify(ListFecGrps& fecGrps, ListFecGrps& tmpGrps)
 {
 
 // LET'S DO THE MOST IMPORTANT PART!
@@ -174,13 +187,14 @@ CirMgr::fecGrpsIdentify()
 //          createNewGroup(newFecGrps,gate);
 // CollectValidFecGrp(newFecGrps, fecGrp,fecGrps);
 
-   unsigned listSize = _listFecGrps.size(); // listSize = 1
+   unsigned listSize = fecGrps.size(); // listSize = 1
    unsigned _a = miloa[4];
    FecGrp* fecGrp = 0;
    for(unsigned i = 0; i < listSize; i ++) {
       FecMap newFecMap( getHashSize(_a + 1) );
-      fecGrp = _listFecGrps[i];
-      for(unsigned j = 0; j < fecGrp->getSize(); j++) {
+      fecGrp = fecGrps[i];
+      unsigned grpSize = fecGrp->getSize();
+      for(unsigned j = 0; j < grpSize; j++) {
          CirGate* gate = fecGrp->getGate(j);
          FecGrp* grp = NULL;
          FecHashKey key(gate->getSimValue());
@@ -192,10 +206,11 @@ CirMgr::fecGrpsIdentify()
          } else
             createNewGroup(newFecMap, gate, inv);
       }
-      collectValidFecGrp(newFecMap, fecGrp, i);
-   }
-   sortListFecGrps();
 
+      collectValidFecGrp(newFecMap, i, tmpGrps);
+   }
+   fecGrps.clear();
+   sortListFecGrps(tmpGrps);
 }
 void
 CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g, bool& inv)
@@ -207,47 +222,41 @@ CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g, bool& inv)
    newFecMap.insert(key, fecGrp);
 }
 void quickSort(FecGrp* grp, int left, int right) {
-      int i = left, j = right;
-      unsigned mid = (left + right) / 2;
-      CirGate* pivot = grp->getGate(mid);
- 
-      /* partition */
-      while (i <= j) {
-            while (grp->getGate(i)->getId() < pivot->getId())
-                  i++;
-            while (grp->getGate(j)->getId() > pivot->getId())
-                  j--;
-            if (i <= j) {
-               CirGate* tmp = grp->getList()[i];               
-               grp->setGate(grp->getList()[j], i);
-               grp->setGate(tmp, j);
+   int i = left, j = right;
+   unsigned mid = (left + right) / 2;
+   CirGate* pivot = grp->getGate(mid);
+
+   /* partition */
+   while (i <= j) {
+         while (grp->getGate(i)->getId() < pivot->getId())
                i++;
+         while (grp->getGate(j)->getId() > pivot->getId())
                j--;
-            }
-      }
- 
-      /* recursion */
-      if (left < j)
-            quickSort(grp, left, j);
-      if (i < right)
-            quickSort(grp, i, right);
+         if (i <= j) {
+            CirGate* tmp = grp->getList()[i];               
+            grp->setGate(grp->getList()[j], i);
+            grp->setGate(tmp, j);
+            i++;
+            j--;
+         }
+   }
+   /* recursion */
+   if (left < j)
+         quickSort(grp, left, j);
+   if (i < right)
+         quickSort(grp, i, right);
 }
 
 
 void
-CirMgr::collectValidFecGrp(FecMap& newFecMap, FecGrp* fecGrp, unsigned& i){
-   // "fecGrps" in pdf, is _listFecGrps
+CirMgr::collectValidFecGrp(FecMap& newFecMap, unsigned& i, ListFecGrps& tmpGrps){
 
-   //delete original fecGrp
-   unsigned s = _listFecGrps.size();
-   _listFecGrps[i] = _listFecGrps.back();
-   _listFecGrps.resize(s - 1);
    FecMap::iterator it = newFecMap.begin();
    for(; it != newFecMap.end(); it++) {
       FecGrp* tmp = (*it).second;
       quickSort(tmp, 0, tmp->getSize() - 1);
       if(tmp->getSize() > 1) 
-         _listFecGrps.push_back(tmp); // valid
+         tmpGrps.push_back(tmp); // valid
       else {
          tmp->getGate(0)->clearMyFecGrp(); // invalid
       }

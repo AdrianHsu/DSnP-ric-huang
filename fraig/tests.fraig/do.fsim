@@ -1,10 +1,10 @@
-cirr sim09.aag
+cirr sim12.aag
 cirp
 cirp -pi
 cirp -po
 cirp -n
 cirp -fl
-cirsim -file pattern.09
+cirsim -file pattern.12
 cirp -fec
 cirg 0
 cirg 1

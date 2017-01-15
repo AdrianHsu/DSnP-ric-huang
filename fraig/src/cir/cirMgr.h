@@ -112,16 +112,16 @@ public:
    // by AH
    void simulate(unsigned&, vector<unsigned>&);
    void fecGrpsInit();
-   void fecGrpsIdentify();
+   void fecGrpsIdentify(ListFecGrps&, ListFecGrps&);
    void createNewGroup(FecMap&, CirGate*, bool&);
-   void collectValidFecGrp(FecMap&, FecGrp*, unsigned&);
+   void collectValidFecGrp(FecMap&, unsigned&, ListFecGrps&);
 
    static bool grpOrderSort (FecGrp* i,FecGrp* j) { 
       return (i->get1stGate()->getId() < j->get1stGate()->getId()); 
    }
 
-   void sortListFecGrps() {
-      std::sort (_listFecGrps.begin(), _listFecGrps.end(), grpOrderSort);
+   void sortListFecGrps(ListFecGrps& _l) {
+      std::sort (_l.begin(), _l.end(), grpOrderSort);
    }
    // Member functions about fraig
    void strash();
@@ -140,6 +140,7 @@ public:
    void writeGate(ostream&, CirGate*) const;
    GateList _dfsList;
    ListFecGrps _listFecGrps;
+   ListFecGrps _tmpListFecGrps;
 
 private:
    ofstream           *_simLog;
