@@ -46,7 +46,7 @@ class CirGate {
    
    public:
       CirGate(GateType _t, unsigned _id, unsigned _n)
-      : type(_t), lineNo(_n), id(_id), color(0), simValue(0), _myFecGrp(0) {}
+      : type(_t), lineNo(_n), id(_id), color(0), simValue(0), _myFecGrp(0), fecInv(0) {}
       virtual ~CirGate(){};
 
       // Printing functions
@@ -152,8 +152,9 @@ class CirGate {
       }
       string getFecStr() const {
          string str = "";
-         if(_myFecGrp == 0)
+         if(_myFecGrp == 0) {
             return str; //e.g. CONST_GATE
+         }
          unsigned s = _myFecGrp->getSize();
          for(unsigned i = 0; i < s; i++) {
             if(_myFecGrp->getGate(i) != this) {
@@ -169,11 +170,11 @@ class CirGate {
       }
       void resetSimValue() { simValue = 0; }
       void setMyFecGrp(FecGrp* grp, bool& is_inv) { 
-         if (is_inv) grp = (FecGrp*)((size_t)grp + 1);
+         fecInv = is_inv;
          _myFecGrp = grp;
       }
-      bool isFecInv() const { return ((size_t)_myFecGrp & NEG); }
-      void clearMyFecGrp() {_myFecGrp = NULL;}
+      bool isFecInv() const { return fecInv; }
+      void clearMyFecGrp() {_myFecGrp = NULL; fecInv = 0;}
 
       static unsigned index;
       static unsigned globalRef;
@@ -185,6 +186,7 @@ class CirGate {
       mutable unsigned color;
       unsigned simValue; // 32bit, 00100010011 etc
       FecGrp* _myFecGrp;
+      bool fecInv;
       GateList faninList;
       GateList fanoutList;
 };

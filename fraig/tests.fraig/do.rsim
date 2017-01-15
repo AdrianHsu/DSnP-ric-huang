@@ -1,4 +1,4 @@
-cirr sim13.aag
+cirr sim12.aag
 cirsim -r -o tmp.log
 cirp -fec
 q -f

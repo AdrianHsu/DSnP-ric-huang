@@ -1,20 +1,11 @@
-cirr sim10.aag
+cirr sim15.aag
 cirp
 cirp -pi
 cirp -po
 cirp -n
 cirp -fl
-cirsim -file pattern.10
+cirstrash
+cirsim -file pattern.15 -out .fsim15.log
+cirsim -file pattern.15
 cirp -fec
-cirg 0
-cirg 1
-cirg 2
-cirg 3
-cirg 4
-cirg 5
-cirg 6
-cirg 7
-cirg 8
-cirg 9
-cirg 10
 q -f

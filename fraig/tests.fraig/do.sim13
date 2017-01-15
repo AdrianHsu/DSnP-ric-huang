@@ -1,0 +1,14 @@
+cirr sim13.aag
+cirsim -f pattern.13
+cirp -fec
+cirg 23316
+cirg 22246
+cirg 3
+cirg 4
+cirg 5
+cirg 6
+cirg 7
+cirg 8
+cirg 9
+cirg 10
+q -f
