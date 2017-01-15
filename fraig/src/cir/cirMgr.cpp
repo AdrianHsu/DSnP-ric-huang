@@ -538,7 +538,50 @@ CirMgr::printFECPairs() const
    }
 }
 void
-CirMgr::writeGate(ostream& os, CirGate* gate) const
+CirMgr::writeGate(ostream& outfile, CirGate* g) const
 {
+   // Max variable has bug in ref program!!!
+   unsigned _m0 = miloa[0];
+   unsigned _m = g->getId(), _o = 1, _i = 0, _l = 0;
+   //small dfs
+   vector<unsigned> ins;
+   vector<string> ins_message;
+   vector<unsigned> aigs;
+   // g must be AIG_GATE
+   g->setGlobalRef();
+   writeDfsVisit(g, aigs, g->isInv(0));
+   writeDfsVisit(g, aigs, g->isInv(1));
+
+   for(unsigned i = 0, size = _m0 + 1; i < size; ++i) {
+      CirGate* g = getGate(i);
+      if(g->getType() == PI_GATE && g->isGlobalRef()) {
+         unsigned s = g->getId();
+         ins.push_back(s);
+         string mes = "";
+         CirPiGate* pi = (CirPiGate*) g;
+         if(pi->getName() != "") {
+            string st = pi->unsToStr(pi->getPiIndex());
+            mes += "i" + st + " " + pi->getName();
+            ins_message.push_back(mes);
+         }
+         _i++;
+      }
+   }
+   outfile << "aag " << _m << " " << _i << " "
+      << _l << " " << _o << " " << (aigs.size() / 3) << endl;
+   CirGate::index = 0;
    
+   for(unsigned i = 0; i < ins.size(); i++)
+      outfile << aiger_var2lit(ins[i]) << endl;
+   // for(unsigned i = 0; i < outs.size(); i++)
+   outfile << aiger_var2lit(_m) << endl;
+   for(unsigned j = 0; j < aigs.size(); j++) {
+      outfile << aigs[j] << " ";
+      outfile << aigs[++j] << " ";
+      outfile << aigs[++j] << endl;
+   }
+   for(unsigned i = 0; i < ins_message.size(); i++)
+      outfile << ins_message[i] << endl;
+   outfile << "o0 " << _m << endl; 
+   cout << "c\nWrite gate (" << _m  <<") by Chung-Yang (Ric) Huang" << endl;
 }

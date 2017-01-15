@@ -1,0 +1,5 @@
+cirr sim13.aag
+cirw 18111
+cirw 18902
+q -f
+

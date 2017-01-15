@@ -1,0 +1,13 @@
+cirr sim01.aag
+cirw 0
+cirw 1
+cirw 2
+cirw 3
+cirw 4
+cirw 5
+cirw 6
+cirw 7
+cirw 8
+cirw 9
+q -f
+
