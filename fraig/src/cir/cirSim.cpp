@@ -188,12 +188,12 @@ CirMgr::fecGrpsIdentify(ListFecGrps& fecGrps, ListFecGrps& tmpGrps)
 // CollectValidFecGrp(newFecGrps, fecGrp,fecGrps);
 
    unsigned listSize = fecGrps.size(); // listSize = 1
-   unsigned _a = miloa[4];
+   // unsigned _a = miloa[4];
    FecGrp* fecGrp = 0;
    for(unsigned i = 0; i < listSize; i ++) {
-      FecMap newFecMap( getHashSize(_a + 1) );
       fecGrp = fecGrps[i];
       unsigned grpSize = fecGrp->getSize();
+      FecMap newFecMap( getHashSize(grpSize + 1) );
       for(unsigned j = 0; j < grpSize; j++) {
          CirGate* gate = fecGrp->getGate(j);
          FecGrp* grp = NULL;
@@ -206,7 +206,7 @@ CirMgr::fecGrpsIdentify(ListFecGrps& fecGrps, ListFecGrps& tmpGrps)
          } else
             createNewGroup(newFecMap, gate, inv);
       }
-
+      // cerr << i << endl;
       collectValidFecGrp(newFecMap, i, tmpGrps);
    }
    fecGrps.clear();
