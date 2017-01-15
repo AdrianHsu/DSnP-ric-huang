@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <cassert>
+#include <cstdlib> //srand
 #include <cmath>
 #include "cirMgr.h"
 #include "cirGate.h"
@@ -26,40 +27,95 @@ using namespace std;
 /*******************************/
 /*   Global variable and enum  */
 /*******************************/
-#define RAND_BRUTE_FORCE 16 //  2^4
 
+#define MY_RAND_MAX INT_MAX // 4294967295 (2^32-1), type unsigned long int
+#define MAGIC_NUMBER 3.5
 /**************************************/
 /*   Static varaibles and functions   */
 /**************************************/
-
+static unsigned MAX_FAILS = 0;
+static unsigned CURRENT_FAILS = 0;
+static bool IS_RANDSIM = 0;
 /************************************************/
 /*   Public member functions about Simulation   */
 /************************************************/
 void
 CirMgr::randomSim()
 {
+   srand(time(0));
+   IS_RANDSIM = 1;
    unsigned _i = miloa[1];
-   unsigned div = 0, mod = 0;
-   vector<unsigned> _32bitvec;
-   vector<string> inputs;
-   if(_i <= RAND_BRUTE_FORCE) {
-      for(unsigned i = 0; i < pow(2.0, (double)_i ); i++ ) {
-         string str = "";
-         unsigned val = i;
-         for(unsigned j = 0; j < _i; j++) {
-            int new_bit = val & 1;
-            char str_bit = new_bit + '0';
-            str += str_bit;
-            val = val >> 1;
-         }
-         inputs.push_back(str);
-         _32bitvec.push_back(i);
-      }
-   } else {
+   // unsigned _a = miloa[4];
+   // double aig = (double) _a;
+   double in = (double)_i;
 
-   }
+   // MAX_FAILS = BIT_32 * log(aig);
+   MAX_FAILS = (size_t)(MAGIC_NUMBER * sqrt(in));
+   if(MAX_FAILS == 0) MAX_FAILS++;
+   cout << "MAX_FAILS = " << MAX_FAILS << endl;
+   startRandSim();
+   
+   IS_RANDSIM = 0;
+   CURRENT_FAILS = 0;
 }
+void
+CirMgr::startRandSim()
+{
+   unsigned _i = miloa[1], _o = miloa[3], _m = miloa[0];
+   unsigned a = 0;
+   buildDfsList();
+   fecGrpsInit(); //first time build map
+   vector<unsigned> _32bitvec;
+   
+   for(; ; a++) {
+      if(CURRENT_FAILS >= MAX_FAILS)
+         break;
+      _32bitvec.clear();
+      for(unsigned i = 0; i < _i; i++) {
+         unsigned val = 2 * rnGen(MY_RAND_MAX);
+         _32bitvec.push_back(val);
+      }
+      unsigned r = 0; // must be 0
+      simulate(r , _32bitvec);
+      if(a % 2 == 0) {
+         fecGrpsIdentify(_listFecGrps, _tmpListFecGrps);
+         cout << "\rTotal #FEC Group = " << _tmpListFecGrps.size();
+      } else {
+         fecGrpsIdentify(_tmpListFecGrps, _listFecGrps);
+         cout << "\rTotal #FEC Group = " << _listFecGrps.size();
+      }
+      if(_simLog) { //writeLog
+         for(unsigned i = a * BIT_32; i < BIT_32 * (a + 1); i ++) {
+            for(unsigned j = 0; j < _m + 1; j ++) { // PI
+               CirGate* g = gateList[j];
+               if(g == 0) continue;
+               if(g->getType() == PI_GATE) {
+                  unsigned index = BIT_32 - ( i % BIT_32 ) - 1;
+                  string c = g->get1BitSimValueChar(index);
+                  *_simLog << c;
+               }
+            }
+            *_simLog << " ";
+            for(unsigned j = 0; j < _o; j ++) { // PO
+               CirGate* g = gateList[_m + j + 1];
+               if(g == 0) continue;
+               unsigned index = BIT_32 - ( i % BIT_32 ) - 1;
+               string c = g->get1BitSimValueChar(index);
+               *_simLog << c;
+            }
+            *_simLog << endl;
+         }
+      }
+   }
+   if(a % 2 == 1) {
+      _listFecGrps.clear();
+      _listFecGrps = _tmpListFecGrps;
+      _tmpListFecGrps.clear();
+   } //else do nothing
+   unsigned mod = 0;
+   cout << "\r" << a * BIT_32 - mod << " patterns simulated." << endl;
 
+}
 void
 CirMgr::fileSim(ifstream& patternFile)
 {
@@ -132,7 +188,6 @@ CirMgr::startSim(unsigned& div, unsigned& mod, vector<unsigned>& _32bitvec, vect
          fecGrpsIdentify(_tmpListFecGrps, _listFecGrps);
          cout << "\rTotal #FEC Group = " << _listFecGrps.size();
       }
-
       if(_simLog) { //writeLog
          unsigned _o = miloa[3], _m = miloa[0];
          for(unsigned i = a * BIT_32; i < BIT_32 * (a + 1); i ++) {
@@ -146,15 +201,15 @@ CirMgr::startSim(unsigned& div, unsigned& mod, vector<unsigned>& _32bitvec, vect
                }
                *_simLog << endl;
             }
-         }
+         }    
       }
    }
-   if(div % 2 == 1) {
+   if(a % 2 == 1) {
       _listFecGrps.clear();
       _listFecGrps = _tmpListFecGrps;
       _tmpListFecGrps.clear();
    } //else do nothing
-   cout << "\r" << div * BIT_32 - mod << " patterns simulated." << endl;
+   cout << "\r" << a * BIT_32 - mod << " patterns simulated." << endl;
 
 }
 
@@ -170,7 +225,7 @@ CirMgr::simulate(unsigned& round, vector<unsigned>& _32bitvec)
       if(g->getType() == PI_GATE) {
          CirPiGate* pi = (CirPiGate*) g;
          ins_index = pi->getPiIndex();
-         unsigned pattern = _32bitvec[round * _i + ins_index]; //
+         unsigned pattern = _32bitvec[round * _i + ins_index];
          g->setSimValue(pattern);
       } else if (g->getType() == CONST_GATE) {
          g->setSimValue(0);
@@ -254,6 +309,9 @@ CirMgr::fecGrpsIdentify(ListFecGrps& fecGrps, ListFecGrps& tmpGrps)
       // cerr << i << endl;
       collectValidFecGrp(newFecMap, i, tmpGrps);
    }
+   if(IS_RANDSIM && _listFecGrps.size() == _tmpListFecGrps.size())
+      CURRENT_FAILS++;
+
    fecGrps.clear();
    sortListFecGrps(tmpGrps);
 }

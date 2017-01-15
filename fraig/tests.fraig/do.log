@@ -1,3 +1,0 @@
-cirr sim02.aag
-cirsim -f pattern.02 -o my.log
-q -f

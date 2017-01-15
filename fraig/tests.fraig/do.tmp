@@ -1,0 +1,5 @@
+cirr sim06.aag
+cirsim -r
+cirp -fec
+q -f
+
