@@ -93,11 +93,10 @@ CirMgr::fileSim(ifstream& patternFile)
    for( ; a < div; a++) {
       simulate(a, _32bitvec);
       fecGrpsIdentify();
+      cout << "\rTotal #FEC Group = " << _listFecGrps.size();
    }
 
-   // cout << "\rTotal #FEC Group = " << _fecList.numGroups();
    cout << "\r" << div * BIT_32 - mod << " patterns simulated." << endl;
-
 }
 
 /*************************************************/
@@ -214,7 +213,8 @@ CirMgr::collectValidFecGrp(FecMap& newFecMap, FecGrp* fecGrp, unsigned& i){
    FecMap::iterator it = newFecMap.begin();
    for(; it != newFecMap.end(); it++) {
       FecGrp* tmp = (*it).second;
-      std::sort (tmp->getList().begin(), tmp->getList().end(), orderInsideSort);
+      GateList list = tmp->getList();
+      std::sort (list.begin(), list.end(), orderInsideSort);
       if(tmp->getSize() > 1) 
          _listFecGrps.push_back(tmp); // valid
       else {

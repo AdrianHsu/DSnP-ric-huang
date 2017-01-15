@@ -67,7 +67,7 @@ CirGate::reportGate() const
    cout << setw(49) << left << ss.str() << "=" << endl;
    ss.str(""); //clear ss
    string fec = getFecStr();
-   ss << "= FECs: " << fec;
+   ss << "= FECs:" << fec;
    cout << setw(49) << left << ss.str() << "=" << endl;
    ss.str(""); //clear ss
    cout << "= Value: " << getSimValueStr() << " =" << endl; 

@@ -36,9 +36,11 @@ class FecGrp
          return (CirGate*)(((size_t)_gateList[i]) & ~size_t(NEG));
       }
       bool isInv(size_t i) const { return ((size_t)_gateList[i] & NEG); }
-      size_t getSize() { return _gateList.size(); }
+      size_t getSize() { 
+        return _gateList.size(); 
+      }
 
-      vector<CirGate*> getList(){return _gateList;}
+      GateList getList(){ return _gateList; }
       CirGate* get1stGate() { 
          if(_gateList.size() > 0) {
             CirGate* g = getGate(0);
@@ -50,7 +52,7 @@ class FecGrp
       size_t getSimValue() { return simValue; }
 
    private:
-      vector<CirGate*> _gateList;
+      GateList _gateList;
       size_t simValue;
 };
 

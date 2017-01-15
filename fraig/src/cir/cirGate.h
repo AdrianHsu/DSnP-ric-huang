@@ -141,23 +141,17 @@ class CirGate {
       }
       string getFecStr() const {
          string str = "";
+         if(_myFecGrp == 0)
+            return str; //e.g. CONST_GATE
          unsigned s = _myFecGrp->getSize();
-         bool last = false;
-         if(_myFecGrp->getGate(s - 1) == this) 
-            last = true;
          for(unsigned i = 0; i < s; i++) {
             if(_myFecGrp->getGate(i) != this) {
                CirGate* g = _myFecGrp->getGate(i);
                bool inv = _myFecGrp->isInv(i) ^ fecInv; // exclusive OR
+               str += " ";
                if(inv)
                   str += "!";
-               str += g->getId();
-               if(i < s - 2)
-                  str += " ";
-               else if (i == s - 2) {
-                  if(!last)
-                     str += " ";
-               }
+               str += unsToStr(g->getId());
             }
          }
          return str;

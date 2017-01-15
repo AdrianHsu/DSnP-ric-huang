@@ -4,7 +4,11 @@ cirp -pi
 cirp -po
 cirp -n
 cirp -fl
-cirstrash
 cirsim -file pattern.01
 cirp -fec
+cirg 0
+cirg 1
+cirg 4
+cirg 8
+cirg 9
 q -f

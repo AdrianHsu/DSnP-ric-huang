@@ -523,7 +523,19 @@ CirMgr::writeAag(ostream& outfile) const
 void 
 CirMgr::printFECPairs() const
 {
-
+   for(unsigned i = 0; i < _listFecGrps.size(); i++) {
+      FecGrp* grp = _listFecGrps[i];
+      cout << "[" << i << "]";
+      for(unsigned j = 0; j < grp->getSize(); j++) {
+         CirGate* g = grp->getGate(j);
+         bool inv = grp->isInv(j);
+         cout << " ";
+         if(inv)
+            cout << "!";
+         cout << g->getId();
+      }
+   }
+   cout << endl;
 }
 void
 CirMgr::writeGate(ostream& os, CirGate* gate) const
