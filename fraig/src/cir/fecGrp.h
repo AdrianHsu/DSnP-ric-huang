@@ -19,7 +19,6 @@
 using namespace std;
 
 // TODO: Feel free to define your own classes, variables, or functions.
-
 class FecGrp
 {
    public:
@@ -30,20 +29,22 @@ class FecGrp
          if (inv) g = (CirGate*)((size_t)g + 1);
          _gateList.push_back(g);
       }
-
       CirGate* getGate(unsigned i) const {
          if (i >= _gateList.size()) return 0;
          return (CirGate*)(((size_t)_gateList[i]) & ~size_t(NEG));
       }
-      bool isInv(size_t i) const { return ((size_t)_gateList[i] & NEG); }
+      void setGate(CirGate* g, unsigned i) {
+         _gateList[i] = g;
+      }      
+      bool isInv(unsigned i) const { return ((size_t)_gateList[i] & NEG); }
       size_t getSize() { 
         return _gateList.size(); 
       }
-
       GateList getList(){ return _gateList; }
       CirGate* get1stGate() { 
          if(_gateList.size() > 0) {
-            CirGate* g = getGate(0);
+            unsigned i = 0;
+            CirGate* g = _gateList[i];
             return g;
          }
          return 0; // no gates

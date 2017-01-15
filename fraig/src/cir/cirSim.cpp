@@ -48,7 +48,7 @@ CirMgr::fileSim(ifstream& patternFile)
    vector<string> inputs;
    while(patternFile >> str) {
       if(str.size() != _i && str.size() != 0) {
-         cerr << "Error: Pattern(" << str <<") length(" << str.size() 
+         cerr << "\nError: Pattern(" << str <<") length(" << str.size() 
               << ") does not match the number of inputs("
               << _i << ") in a circuit!!" << endl;
          cout << "\r" << "0 patterns simulated." << endl;
@@ -75,7 +75,7 @@ CirMgr::fileSim(ifstream& patternFile)
          for(unsigned k = 0; k < BIT_32; k++) {
             int new_bit = inputs[k + i * BIT_32][j] - '0';
             if(new_bit != 0 && new_bit != 1) {
-               cerr << "Error: Pattern(" << inputs[k + i * BIT_32] 
+               cerr << "\nError: Pattern(" << inputs[k + i * BIT_32] 
                     << ") contains a non-0/1 character('" 
                     << inputs[k + i * BIT_32][j] << "')." << endl;
                cout << "\r" << "0 patterns simulated." << endl;
@@ -136,22 +136,26 @@ CirMgr::simulate(unsigned& round, vector<unsigned>& _32bitvec)
       }
    }
 }
-
 void
 CirMgr::fecGrpsInit()
 {
    // simValue are already given in 1st round
    // Initial: put all the signals in ONE FEC group.
    FecGrp *fecGrp = new FecGrp(0);
+   bool fal = false;
+   CirGate* g = gateList[0];
+   fecGrp->addGate(g, fal);
+   g->setMyFecGrp(fecGrp, fal);
    for(unsigned i = 0; i < _dfsList.size(); i++) {
-      CirGate* g = _dfsList[i];
+      g = _dfsList[i];
       if(g->getType() == AIG_GATE) {
-         bool b = false;
-         fecGrp->addGate(g, b);
-         g->setMyFecGrp(fecGrp, b);
+         fecGrp->addGate(g, fal);
+         g->setMyFecGrp(fecGrp, fal);
       }
    }
    //Add this FEC group into fecGrps (list of FEC groups)
+   GateList list = fecGrp->getList();
+   //don't need to sort for init
    _listFecGrps.push_back(fecGrp);
 }
 
@@ -191,6 +195,7 @@ CirMgr::fecGrpsIdentify()
       collectValidFecGrp(newFecMap, fecGrp, i);
    }
    sortListFecGrps();
+
 }
 void
 CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g, bool& inv)
@@ -201,7 +206,34 @@ CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g, bool& inv)
    FecHashKey key(g->getSimValue());
    newFecMap.insert(key, fecGrp);
 }
-bool orderInsideSort (CirGate* i, CirGate* j) { return (i->getId() < j->getId()); }  
+void quickSort(FecGrp* grp, int left, int right) {
+      int i = left, j = right;
+      unsigned mid = (left + right) / 2;
+      CirGate* pivot = grp->getGate(mid);
+ 
+      /* partition */
+      while (i <= j) {
+            while (grp->getGate(i)->getId() < pivot->getId())
+                  i++;
+            while (grp->getGate(j)->getId() > pivot->getId())
+                  j--;
+            if (i <= j) {
+               CirGate* tmp = grp->getList()[i];               
+               grp->setGate(grp->getList()[j], i);
+               grp->setGate(tmp, j);
+               i++;
+               j--;
+            }
+      }
+ 
+      /* recursion */
+      if (left < j)
+            quickSort(grp, left, j);
+      if (i < right)
+            quickSort(grp, i, right);
+}
+
+
 void
 CirMgr::collectValidFecGrp(FecMap& newFecMap, FecGrp* fecGrp, unsigned& i){
    // "fecGrps" in pdf, is _listFecGrps
@@ -213,8 +245,7 @@ CirMgr::collectValidFecGrp(FecMap& newFecMap, FecGrp* fecGrp, unsigned& i){
    FecMap::iterator it = newFecMap.begin();
    for(; it != newFecMap.end(); it++) {
       FecGrp* tmp = (*it).second;
-      GateList list = tmp->getList();
-      std::sort (list.begin(), list.end(), orderInsideSort);
+      quickSort(tmp, 0, tmp->getSize() - 1);
       if(tmp->getSize() > 1) 
          _listFecGrps.push_back(tmp); // valid
       else {

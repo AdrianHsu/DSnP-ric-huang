@@ -534,8 +534,8 @@ CirMgr::printFECPairs() const
             cout << "!";
          cout << g->getId();
       }
+      cout << endl;
    }
-   cout << endl;
 }
 void
 CirMgr::writeGate(ostream& os, CirGate* gate) const
