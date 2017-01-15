@@ -1,0 +1,4 @@
+cirr sim14.aag
+cirw 100
+q -f
+

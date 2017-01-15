@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include "cirMgr.h"
 #include "cirGate.h"
 #include "util.h"
@@ -25,6 +26,8 @@ using namespace std;
 /*******************************/
 /*   Global variable and enum  */
 /*******************************/
+#define RAND_BRUTE_FORCE 16 //  2^4
+
 /**************************************/
 /*   Static varaibles and functions   */
 /**************************************/
@@ -35,6 +38,26 @@ using namespace std;
 void
 CirMgr::randomSim()
 {
+   unsigned _i = miloa[1];
+   unsigned div = 0, mod = 0;
+   vector<unsigned> _32bitvec;
+   vector<string> inputs;
+   if(_i <= RAND_BRUTE_FORCE) {
+      for(unsigned i = 0; i < pow(2.0, (double)_i ); i++ ) {
+         string str = "";
+         unsigned val = i;
+         for(unsigned j = 0; j < _i; j++) {
+            int new_bit = val & 1;
+            char str_bit = new_bit + '0';
+            str += str_bit;
+            val = val >> 1;
+         }
+         inputs.push_back(str);
+         _32bitvec.push_back(i);
+      }
+   } else {
+
+   }
 }
 
 void
@@ -44,7 +67,7 @@ CirMgr::fileSim(ifstream& patternFile)
       return;
    }
    string str;
-   size_t _i = miloa[1];
+   unsigned _i = miloa[1];
    vector<string> inputs;
    while(patternFile >> str) {
       if(str.size() != _i && str.size() != 0) {
