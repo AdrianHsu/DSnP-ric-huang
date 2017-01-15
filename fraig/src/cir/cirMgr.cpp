@@ -583,5 +583,5 @@ CirMgr::writeGate(ostream& outfile, CirGate* g) const
    for(unsigned i = 0; i < ins_message.size(); i++)
       outfile << ins_message[i] << endl;
    outfile << "o0 " << _m << endl; 
-   cout << "c\nWrite gate (" << _m  <<") by Chung-Yang (Ric) Huang" << endl;
+   outfile << "c\nWrite gate (" << _m  <<") by Chung-Yang (Ric) Huang" << endl;
 }
