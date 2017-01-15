@@ -246,11 +246,8 @@ void quickSort(FecGrp* grp, int left, int right) {
    if (i < right)
          quickSort(grp, i, right);
 }
-
-
 void
-CirMgr::collectValidFecGrp(FecMap& newFecMap, unsigned& i, ListFecGrps& tmpGrps){
-
+CirMgr::collectValidFecGrp(FecMap& newFecMap, unsigned& i, ListFecGrps& tmpGrps) {
    FecMap::iterator it = newFecMap.begin();
    for(; it != newFecMap.end(); it++) {
       FecGrp* tmp = (*it).second;
