@@ -1,4 +1,4 @@
-cirr sim15.aag
+cirr sim01.aag
 cirp
 cirp -pi
 cirp -po
@@ -11,6 +11,9 @@ cirp
 cirstrash
 cirsw
 cirp
+cirsim -random
+cirp -fec
+cirfraig
 cirp
 ciropt
 cirp
@@ -18,4 +21,5 @@ cirsw
 cirp
 cirp -n
 cirp -fl
+cirp -fec
 q -f

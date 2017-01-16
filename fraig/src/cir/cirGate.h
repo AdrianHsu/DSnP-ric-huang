@@ -174,8 +174,11 @@ class CirGate {
          _myFecGrp = grp;
       }
       bool isFecInv() const { return fecInv; }
+      FecGrp* getGrp() { return _myFecGrp; }
       void clearMyFecGrp() {_myFecGrp = NULL; fecInv = 0;}
-
+      // fraig
+      Var getVar() const { return _var; }
+      void setVar(const Var& v) { _var = v; }
       static unsigned index;
       static unsigned globalRef;
 
@@ -187,6 +190,7 @@ class CirGate {
       unsigned simValue; // 32bit, 00100010011 etc
       FecGrp* _myFecGrp;
       bool fecInv;
+      Var _var;
       GateList faninList;
       GateList fanoutList;
 };

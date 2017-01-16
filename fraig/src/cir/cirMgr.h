@@ -129,6 +129,10 @@ public:
    void strash();
    void printFEC() const;
    void fraig();
+   // fraig by AH
+   void genProofModel(GateList&, SatSolver&);
+   void reportResult(CirGate*, CirGate*, SatSolver&, bool);
+   void prove(GateList&, SatSolver&);
 
    // Member functions about circuit reporting
    void printSummary() const;
@@ -140,6 +144,11 @@ public:
    void printFECPairs() const;
    void writeAag(ostream&) const;
    void writeGate(ostream&, CirGate*) const;
+   void clearListFecGrps() {
+      // for(unsigned i = 0; i < _listFecGrps.size(); i++)
+      //   _listFecGrps[i].clear();
+      _listFecGrps.clear();
+   }
    GateList _dfsList;
    ListFecGrps _listFecGrps;
    ListFecGrps _tmpListFecGrps;

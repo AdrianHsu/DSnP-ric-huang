@@ -33,6 +33,11 @@ class FecGrp
          if (i >= _gateList.size()) return 0;
          return (CirGate*)(((size_t)_gateList[i]) & ~size_t(NEG));
       }
+      void removeGate(unsigned i) {
+         if (i >= _gateList.size()) return;
+         _gateList[i] = 0;
+         _gateList.erase(_gateList.begin() + i);
+      }
       void setGate(CirGate* g, unsigned i) {
          _gateList[i] = g;
       }      
@@ -51,6 +56,12 @@ class FecGrp
       }
       void setSimValue(size_t s) { simValue = s; }
       size_t getSimValue() { return simValue; }
+      // void clear() {
+      //   for(unsigned i = 0; i < _gateList.size(); i++)
+      //      getGate(i)->clearMyFecGrp();
+      //   _gateList.clear();
+      //   simValue = 0;
+      // }
 
    private:
       GateList _gateList;

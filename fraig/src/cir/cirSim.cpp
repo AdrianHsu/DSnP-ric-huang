@@ -87,7 +87,7 @@ CirMgr::startRandSim()
       if(_simLog) { //writeLog
          for(unsigned i = a * BIT_32; i < BIT_32 * (a + 1); i ++) {
             for(unsigned j = 0; j < _m + 1; j ++) { // PI
-               CirGate* g = gateList[j];
+               CirGate* g = getGate(j);
                if(g == 0) continue;
                if(g->getType() == PI_GATE) {
                   unsigned index = BIT_32 - ( i % BIT_32 ) - 1;
@@ -97,7 +97,7 @@ CirMgr::startRandSim()
             }
             *_simLog << " ";
             for(unsigned j = 0; j < _o; j ++) { // PO
-               CirGate* g = gateList[_m + j + 1];
+               CirGate* g = getGate(_m + j + 1);
                if(g == 0) continue;
                unsigned index = BIT_32 - ( i % BIT_32 ) - 1;
                string c = g->get1BitSimValueChar(index);
@@ -194,7 +194,7 @@ CirMgr::startSim(unsigned& div, unsigned& mod, vector<unsigned>& _32bitvec, vect
             if(i < inputSize) {
                *_simLog << inputs[i] << " ";
                for(unsigned j = 0; j < _o; j ++) {
-                  CirGate* g = gateList[_m + j + 1];
+                  CirGate* g = getGate(_m + j + 1);
                   unsigned index = BIT_32 - ( i % BIT_32 ) - 1;
                   string c = g->get1BitSimValueChar(index);
                   *_simLog << c;
@@ -256,7 +256,7 @@ CirMgr::fecGrpsInit()
 
    FecGrp *fecGrp = new FecGrp(0);
    bool fal = false;
-   CirGate* g = gateList[0];
+   CirGate* g = getGate(0);
    fecGrp->addGate(g, fal);
    g->setMyFecGrp(fecGrp, fal);
    for(unsigned i = 0; i < _dfsList.size(); i++) {

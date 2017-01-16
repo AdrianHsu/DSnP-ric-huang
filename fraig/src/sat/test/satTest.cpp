@@ -4,11 +4,11 @@
 
 using namespace std;
 
-class Gate
+class CirGate
 {
 public:
-   Gate(unsigned i = 0): _gid(i) {}
-   ~Gate() {}
+   CirGate(unsigned i = 0): _gid(i) {}
+   ~CirGate() {}
 
    Var getVar() const { return _var; }
    void setVar(const Var& v) { _var = v; }
@@ -30,22 +30,22 @@ private:
 //[8] AIG 8 !7 1
 //[9] PO  10 8
 //
-vector<Gate *> gates;
+vector<CirGate *> gateList;
 
 void
 initCircuit()
 {
-   // Init gates
-   gates.push_back(new Gate(1));  // gates[0]
-   gates.push_back(new Gate(2));  // gates[1]
-   gates.push_back(new Gate(4));  // gates[2]
-   gates.push_back(new Gate(3));  // gates[3]
-   gates.push_back(new Gate(5));  // gates[4]
-   gates.push_back(new Gate(6));  // gates[5]
-   gates.push_back(new Gate(9));  // gates[6]
-   gates.push_back(new Gate(7));  // gates[7]
-   gates.push_back(new Gate(8));  // gates[8]
-   gates.push_back(new Gate(10)); // gates[9]
+   // Init gateList
+   gateList.push_back(new CirGate(1));  // gateList[0] 0
+   gateList.push_back(new CirGate(2));  // gateList[1] 0
+   gateList.push_back(new CirGate(4));  // gateList[2] 0
+   gateList.push_back(new CirGate(3));  // gateList[3] 1
+   gateList.push_back(new CirGate(5));  // gateList[4] 0
+   gateList.push_back(new CirGate(6));  // gateList[5] 1
+   gateList.push_back(new CirGate(9));  // gateList[6] 0
+   gateList.push_back(new CirGate(7));  // gateList[7] 0
+   gateList.push_back(new CirGate(8));  // gateList[8] 0
+   gateList.push_back(new CirGate(10)); // gateList[9] 0
 
    // POs are not needed in this demo example
 }
@@ -54,27 +54,27 @@ void
 genProofModel(SatSolver& s)
 {
    // Allocate and record variables; No Var ID for POs
-   for (size_t i = 0, n = gates.size(); i < n; ++i) {
+   for (size_t i = 0, n = gateList.size(); i < n; ++i) {
       Var v = s.newVar();
-      gates[i]->setVar(v);
+      gateList[i]->setVar(v);
    }
 
    // Hard code the model construction here...
    // [2] AIG 4 1 2 ==> [2] = [0] & [1]
-   s.addAigCNF(gates[2]->getVar(), gates[0]->getVar(), false,
-               gates[1]->getVar(), false);
+   s.addAigCNF(gateList[2]->getId(), gateList[0]->getId(), false,
+               gateList[1]->getId(), false);
    // [4] AIG 5 1 3 ==> [4] = [0] & [3]
-   s.addAigCNF(gates[4]->getVar(), gates[0]->getVar(), false,
-               gates[3]->getVar(), false);
+   s.addAigCNF(gateList[4]->getId(), gateList[0]->getId(), false,
+               gateList[3]->getId(), false);
    // [5] AIG 6 !4 !5 ==> [5] = ![2] & ![4]
-   s.addAigCNF(gates[5]->getVar(), gates[2]->getVar(), true,
-               gates[4]->getVar(), true);
+   s.addAigCNF(gateList[5]->getId(), gateList[2]->getId(), true,
+               gateList[4]->getId(), true);
    // [7] AIG 7 !2 !3 ==> [7] = ![1] & ![3]
-   s.addAigCNF(gates[7]->getVar(), gates[1]->getVar(), true,
-               gates[3]->getVar(), true);
+   s.addAigCNF(gateList[7]->getId(), gateList[1]->getId(), true,
+               gateList[3]->getId(), true);
    // [8] AIG 8 !7 1 ==> [8] = ![7] & [0]
-   s.addAigCNF(gates[8]->getVar(), gates[7]->getVar(), true,
-               gates[0]->getVar(), false);
+   s.addAigCNF(gateList[8]->getId(), gateList[7]->getId(), true,
+               gateList[0]->getId(), false);
 }
 
 void reportResult(const SatSolver& solver, bool result)
@@ -82,8 +82,8 @@ void reportResult(const SatSolver& solver, bool result)
    solver.printStats();
    cout << (result? "SAT" : "UNSAT") << endl;
    if (result) {
-      for (size_t i = 0, n = gates.size(); i < n; ++i)
-         cout << solver.getValue(gates[i]->getVar()) << endl;
+      for (size_t i = 0, n = gateList.size(); i < n; ++i)
+         cout << solver.getValue(gateList[i]->getId()) << endl;
    }
 }
 
@@ -98,9 +98,9 @@ int main()
    genProofModel(solver);
 
    bool result;
-   // k = Solve(Gate(5) ^ !Gate(8))
+   // k = Solve(CirGate(5) ^ !CirGate(8))
    Var newV = solver.newVar();
-   solver.addXorCNF(newV, gates[5]->getVar(), false, gates[8]->getVar(), true);
+   solver.addXorCNF(newV, gateList[5]->getId(), false, gateList[8]->getId(), true);
    solver.assumeRelease();  // Clear assumptions
    solver.assumeProperty(newV, true);  // k = 1
    result = solver.assumpSolve();
@@ -108,9 +108,9 @@ int main()
 
    cout << endl << endl << "======================" << endl;
 
-   // k = Solve(Gate(3) & !Gate(7))
+   // k = Solve(CirGate(3) & !CirGate(7))
    newV = solver.newVar();
-   solver.addAigCNF(newV, gates[3]->getVar(), false, gates[7]->getVar(), true);
+   solver.addAigCNF(newV, gateList[3]->getId(), false, gateList[7]->getId(), true);
    solver.assumeRelease();  // Clear assumptions
    solver.assumeProperty(newV, true);  // k = 1
    result = solver.assumpSolve();
