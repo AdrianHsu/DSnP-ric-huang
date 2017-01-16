@@ -13,8 +13,9 @@ cirsw
 cirp
 cirsim -random
 cirp -fec
+cirp -n
 cirfraig
-cirp
+cirp -n
 ciropt
 cirp
 cirsw

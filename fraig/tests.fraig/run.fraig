@@ -33,8 +33,9 @@ echo "cirsim -random" >> $dofile
 #echo "usage" >> $dofile
 echo "cirp -fec" >> $dofile
 #echo "usage" >> $dofile
+echo "cirp -n" >> $dofile
 echo "cirfraig" >> $dofile
-echo "cirp" >> $dofile
+echo "cirp -n" >> $dofile
 #echo "usage" >> $dofile
 echo "ciropt" >> $dofile
 echo "cirp" >> $dofile

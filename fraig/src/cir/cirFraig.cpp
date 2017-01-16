@@ -71,8 +71,8 @@ CirMgr::genProofModel(GateList& fecAigList, SatSolver& solver)
    for(unsigned i = 0; i < _dfsList.size(); i++) {
       CirGate* g = getGate(i);
       // if(g == 0) continue;
-      if(g->getType() == AIG_GATE && g->getGrp() != 0) { // in dfs list & has its own Grp
-         g->setVar(solver.newVar());
+      g->setVar(solver.newVar());
+      if(g->getType() == AIG_GATE) { // in dfs list & has its own Grp
          fecAigList.push_back(g);
          // Construct proof model
          solver.addAigCNF
@@ -82,29 +82,12 @@ CirMgr::genProofModel(GateList& fecAigList, SatSolver& solver)
       }
    }
 }
-void 
-CirMgr::reportResult(CirGate* g, CirGate* tmp, SatSolver& solver, bool result)
-{
-   cout << "\rProving (" << g->getId() << ", "
-              << (tmp->isFecInv()? "!" : "")
-              << tmp->getId() << ")...";
-   if(!result) {
-      // replace tmp with g
-      cout << "Fraig: " << g->getId() << " merging " 
-           << (tmp->isFecInv()? "!" : "") << tmp->getId() << endl;
-      tmp->strashfoutMerge(g);
-      tmp->finfoutRemove();
-      miloa[4]--; // MILO "A"
-      deleteGate(tmp->getId());
-   } else {
-      // do nothing
-   }
-}
 void
 CirMgr::prove(GateList& fecAigList, SatSolver& s)
 {
    unsigned n = _listFecGrps.size();
    bool result = false;
+   cout << "\r                                   ";
    for(unsigned i = 0; i < fecAigList.size(); i++) {
       CirGate* g = fecAigList[i];
       if(g == 0) continue;
@@ -114,26 +97,42 @@ CirMgr::prove(GateList& fecAigList, SatSolver& s)
       if(f == 0 || f->getSize() == 0) continue;
       for(unsigned j = 0; j < f->getSize(); j++) {
          CirGate* tmp = f->getGate(j);
-         if(tmp->getType() == CONST_GATE) continue;
+         if(tmp->getType() == CONST_GATE || tmp == g) continue;
          Var newV = s.newVar();
-
+      
          s.addXorCNF(newV, g->getVar(), g->isFecInv(), tmp->getVar(), tmp->isFecInv());
          s.assumeRelease();
          s.assumeProperty(gateList[0]->getVar(), false);
          s.assumeProperty(newV,true);
          result = s.assumpSolve();
-         reportResult(g, tmp, s, result);
+         cout << "\rProving (" << g->getId() << ", "
+              << (tmp->isFecInv()? "!" : "")
+              << tmp->getId() << ")..."  << (result ? "SAT" : "UNSAT") << "!!";
+
          if(!result) {
+            // replace tmp with g
+            cout << "\r                                   "
+                 << "\rFraig: " << g->getId() << " merging " 
+                 << (tmp->isFecInv()? "!" : "") << tmp->getId() << "..." << endl;
+            tmp->fraigMerge(g, tmp->isFecInv() ^ g->isFecInv()); 
+            tmp->finfoutRemove();
+            miloa[4]--; // MILO "A"
+            deleteGate(tmp->getId());
             finalResult = result;
             f->removeGate(j);
+            j--;
          } else {
 
          }
       }
-      if(finalResult)
-         cout << "\rUpdating by UNSAT... Total #FEC Group = " << --n << endl;
+      if(f->getSize() == 1) {
+         f->getGate(0)->clearMyFecGrp(); // invalid
+         f->removeGate(0);
+      }
+      if(!finalResult)
+         cout << "Updating by UNSAT... Total #FEC Group = " << --n << endl;
       else
-         cout << "\rUpdating by SAT... Total #FEC Group = " << --n << endl;
+         cout << "Updating by SAT... Total #FEC Group = " << --n << endl;
 
    }
    clearListFecGrps();

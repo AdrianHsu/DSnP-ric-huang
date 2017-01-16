@@ -131,7 +131,6 @@ public:
    void fraig();
    // fraig by AH
    void genProofModel(GateList&, SatSolver&);
-   void reportResult(CirGate*, CirGate*, SatSolver&, bool);
    void prove(GateList&, SatSolver&);
 
    // Member functions about circuit reporting

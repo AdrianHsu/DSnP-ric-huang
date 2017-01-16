@@ -179,6 +179,7 @@ class CirGate {
       // fraig
       Var getVar() const { return _var; }
       void setVar(const Var& v) { _var = v; }
+      void fraigMerge(CirGate*, bool);
       static unsigned index;
       static unsigned globalRef;
 
