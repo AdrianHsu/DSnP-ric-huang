@@ -131,21 +131,29 @@ CirMgr::prove(GateList& fecAigList, SatSolver& s)
          // s.assumeProperty(gateList[0]->getVar(), false);
          s.assumeProperty(newV, true);
          result = s.assumpSolve();
-         
 
          cout << "\r                                   ";
-         if(g->getId() == 0)
-            cout << "\rProving " << tmp->getId() << " = "
-                         <<  tmp->isFecInv() << "..." << flush;
+         if(tmp->getId() == 0)
+            cout << "\rProving " << g->getId() << " = "
+                         << !g->isFecInv() << "..." << flush;
          else
             cout << "\rProving (" << g->getId() << ", " << (tmp->isFecInv() ? "!" : "")
                          << tmp->getId() << ")..." << flush;
+         
          if(!result) {
             cout << "UNSAT!!";
-            live.push_back(g);
-            die.push_back(tmp);
-            f->removeGate(j);
-            tmp->setDead();
+            if(tmp->getId() == 0) {
+               live.push_back(tmp);
+               die.push_back(g);
+               tmp->setDead(); // 0 set dead
+               cerr << f->getGate(0)->getId() << endl;
+               f->removeGate(0);
+            } else {
+               live.push_back(g);
+               die.push_back(tmp);
+               tmp->setDead();
+               f->removeGate(j);
+            }
             j--;
          } else {
             cout << "SAT!!";
