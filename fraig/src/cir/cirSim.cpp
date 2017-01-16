@@ -324,7 +324,8 @@ CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g, bool& inv)
    FecHashKey key(g->getSimValue());
    newFecMap.insert(key, fecGrp);
 }
-void quickSort(FecGrp* grp, int left, int right) {
+void 
+quickSort(FecGrp* grp, int left, int right) {
    int i = left, j = right;
    unsigned mid = (left + right) / 2;
    CirGate* pivot = grp->getGate(mid);

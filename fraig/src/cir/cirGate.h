@@ -46,7 +46,7 @@ class CirGate {
    
    public:
       CirGate(GateType _t, unsigned _id, unsigned _n)
-      : type(_t), lineNo(_n), id(_id), color(0), simValue(0), _myFecGrp(0), fecInv(0) {}
+      : type(_t), lineNo(_n), id(_id), color(0), simValue(0), _myFecGrp(0), fecInv(0), dead(0) {}
       virtual ~CirGate(){};
 
       // Printing functions
@@ -180,6 +180,8 @@ class CirGate {
       Var getVar() const { return _var; }
       void setVar(const Var& v) { _var = v; }
       void fraigMerge(CirGate*, bool);
+      void setDead(){ dead = 1; }
+      bool isDead(){return dead;}
       static unsigned index;
       static unsigned globalRef;
 
@@ -191,6 +193,7 @@ class CirGate {
       unsigned simValue; // 32bit, 00100010011 etc
       FecGrp* _myFecGrp;
       bool fecInv;
+      bool dead;
       Var _var;
       GateList faninList;
       GateList fanoutList;

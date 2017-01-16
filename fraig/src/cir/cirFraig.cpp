@@ -69,7 +69,7 @@ CirMgr::genProofModel(GateList& fecAigList, SatSolver& solver)
 {
    gateList[0]->setVar(solver.newVar());
    for(unsigned i = 0; i < _dfsList.size(); i++) {
-      CirGate* g = getGate(i);
+      CirGate* g = _dfsList[i];
       // if(g == 0) continue;
       g->setVar(solver.newVar());
       if(g->getType() == AIG_GATE) { // in dfs list & has its own Grp
@@ -82,22 +82,48 @@ CirMgr::genProofModel(GateList& fecAigList, SatSolver& solver)
       }
    }
 }
+void 
+quickSort(GateList& live, GateList& die, int left, int right) {
+   int i = left, j = right;
+   unsigned mid = (left + right) / 2;
+   CirGate* pivot = die[mid];
+
+   /* partition */
+   while (i <= j) {
+         while (die[i]->getId() < pivot->getId())
+               i++;
+         while (die[j]->getId() > pivot->getId())
+               j--;
+         if (i <= j) {
+            swap(die[i], die[j]);
+            swap(live[i], live[j]); // accordingly
+            i++;
+            j--;
+         }
+   }
+   /* recursion */
+   if (left < j)
+         quickSort(live, die, left, j);
+   if (i < right)
+         quickSort(live, die, i, right);
+}
 void
 CirMgr::prove(GateList& fecAigList, SatSolver& s)
 {
-   unsigned n = _listFecGrps.size();
+   // unsigned n = _listFecGrps.size();
    bool result = false;
-   cout << "\r                                   ";
+   GateList live;
+   GateList die;
+
    for(unsigned i = 0; i < fecAigList.size(); i++) {
       CirGate* g = fecAigList[i];
-      if(g == 0) continue;
+      if(g->isDead()) continue;
       FecGrp* f = g->getGrp();
       result = false;
-      bool finalResult = false;
       if(f == 0 || f->getSize() == 0) continue;
       for(unsigned j = 0; j < f->getSize(); j++) {
          CirGate* tmp = f->getGate(j);
-         if(tmp->getType() == CONST_GATE || tmp == g) continue;
+         if(tmp == g) continue;
          Var newV = s.newVar();
       
          s.addXorCNF(newV, g->getVar(), g->isFecInv(), tmp->getVar(), tmp->isFecInv());
@@ -105,36 +131,46 @@ CirMgr::prove(GateList& fecAigList, SatSolver& s)
          s.assumeProperty(gateList[0]->getVar(), false);
          s.assumeProperty(newV,true);
          result = s.assumpSolve();
-         cout << "\rProving (" << g->getId() << ", "
-              << (tmp->isFecInv()? "!" : "")
-              << tmp->getId() << ")..."  << (result ? "SAT" : "UNSAT") << "!!";
-
+         cout << "\r                                   ";
+         if(g->getId() == 0)
+            cout << "\rProving " << tmp->getId() << " = "
+                         << tmp->isFecInv() << "..." << flush;
+         else
+            cout << "\rProving (" << g->getId() << ", " << (tmp->isFecInv() ? "!" : "")
+                         << tmp->getId() << ")..." << flush;
          if(!result) {
-            // replace tmp with g
-            cout << "\r                                   "
-                 << "\rFraig: " << g->getId() << " merging " 
-                 << (tmp->isFecInv()? "!" : "") << tmp->getId() << "..." << endl;
-            tmp->fraigMerge(g, tmp->isFecInv() ^ g->isFecInv()); 
-            tmp->finfoutRemove();
-            miloa[4]--; // MILO "A"
-            deleteGate(tmp->getId());
-            finalResult = result;
+            cout << "UNSAT!!";
+            live.push_back(g);
+            die.push_back(tmp);
             f->removeGate(j);
+            tmp->setDead();
             j--;
          } else {
-
+            cout << "SAT!!";
          }
+
       }
       if(f->getSize() == 1) {
          f->getGate(0)->clearMyFecGrp(); // invalid
          f->removeGate(0);
       }
-      if(!finalResult)
-         cout << "Updating by UNSAT... Total #FEC Group = " << --n << endl;
-      else
-         cout << "Updating by SAT... Total #FEC Group = " << --n << endl;
-
    }
+   quickSort(live, die, 0, live.size() - 1);
+   for(unsigned j = 0; j < live.size(); j++) {
+      // replace tmp with g
+      CirGate *g1 = live[j];
+      CirGate *tmp = die[j];
+      cout << "Fraig: "<< g1->getId() <<" merging " 
+      << (g1->isFecInv() ^ tmp->isFecInv() ? "!" : "") << tmp->getId() << "..." << endl;
+      tmp->fraigMerge(g1, tmp->isFecInv() ^ g1->isFecInv()); 
+      tmp->finfoutRemove();
+      miloa[4]--; // MILO "A"
+      deleteGate(tmp->getId());
+   }
+   // if(!finalResult)
+      cout << "Updating by UNSAT... Total #FEC Group = " << 0 << endl;
+   // else
+   //    cout << "Updating by SAT... Total #FEC Group = " << --n << endl;
    clearListFecGrps();
 }
 void
