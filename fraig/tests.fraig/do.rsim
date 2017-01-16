@@ -1,4 +1,4 @@
 cirr sim12.aag
-cirsim -r -o tmp.log
+cirsim -f pattern.12
 cirp -fec
 q -f

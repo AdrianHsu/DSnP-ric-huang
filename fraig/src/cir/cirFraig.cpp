@@ -125,16 +125,18 @@ CirMgr::prove(GateList& fecAigList, SatSolver& s)
          CirGate* tmp = f->getGate(j);
          if(tmp == g) continue;
          Var newV = s.newVar();
-      
+
          s.addXorCNF(newV, g->getVar(), g->isFecInv(), tmp->getVar(), tmp->isFecInv());
          s.assumeRelease();
-         s.assumeProperty(gateList[0]->getVar(), false);
-         s.assumeProperty(newV,true);
+         // s.assumeProperty(gateList[0]->getVar(), false);
+         s.assumeProperty(newV, true);
          result = s.assumpSolve();
+         
+
          cout << "\r                                   ";
          if(g->getId() == 0)
             cout << "\rProving " << tmp->getId() << " = "
-                         << tmp->isFecInv() << "..." << flush;
+                         <<  tmp->isFecInv() << "..." << flush;
          else
             cout << "\rProving (" << g->getId() << ", " << (tmp->isFecInv() ? "!" : "")
                          << tmp->getId() << ")..." << flush;

@@ -79,11 +79,12 @@ CirMgr::startRandSim()
       simulate(r , _32bitvec);
       if(a % 2 == 0) {
          fecGrpsIdentify(_listFecGrps, _tmpListFecGrps);
-         cout << "\rTotal #FEC Group = " << _tmpListFecGrps.size();
+         cout << "\rTotal #FEC Group = " << _tmpListFecGrps.size() << flush;
       } else {
          fecGrpsIdentify(_tmpListFecGrps, _listFecGrps);
-         cout << "\rTotal #FEC Group = " << _listFecGrps.size();
+         cout << "\rTotal #FEC Group = " << _listFecGrps.size() << flush;
       }
+      cout << "\r                              ";
       if(_simLog) { //writeLog
          for(unsigned i = a * BIT_32; i < BIT_32 * (a + 1); i ++) {
             for(unsigned j = 0; j < _m + 1; j ++) { // PI
@@ -324,8 +325,7 @@ CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g, bool& inv)
    FecHashKey key(g->getSimValue());
    newFecMap.insert(key, fecGrp);
 }
-void 
-quickSort(FecGrp* grp, int left, int right) {
+void quickSort(FecGrp* grp, int left, int right) {
    int i = left, j = right;
    unsigned mid = (left + right) / 2;
    CirGate* pivot = grp->getGate(mid);
