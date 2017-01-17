@@ -1,4 +1,4 @@
-cirr sim06.aag
+cirr sim12.aag
 cirp
 cirp -pi
 cirp -po
@@ -11,16 +11,10 @@ cirp
 cirstrash
 cirsw
 cirp
-cirsim -random
+cirsim -f pattern.12
 cirp -fec
 cirp -n
 cirfraig
-cirp -n
-ciropt
-cirp
-cirsw
-cirp
-cirp -n
-cirp -fl
 cirp -fec
+cirp -n
 q -f

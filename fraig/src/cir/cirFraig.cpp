@@ -65,7 +65,7 @@ CirMgr::strash()
 	}
 }
 void
-CirMgr::genProofModel(GateList& fecAigList, SatSolver& solver)
+CirMgr::genProofModel(SatSolver& solver)
 {
    gateList[0]->setVar(solver.newVar());
    for(unsigned i = 0; i < _dfsList.size(); i++) {
@@ -74,6 +74,7 @@ CirMgr::genProofModel(GateList& fecAigList, SatSolver& solver)
       g->setVar(solver.newVar());
       if(g->getType() == AIG_GATE) { // in dfs list & has its own Grp
          fecAigList.push_back(g);
+
          // Construct proof model
          solver.addAigCNF
          (g->getVar(),
@@ -109,9 +110,9 @@ CirMgr::dfsSort(GateList& live, GateList& die, vector<bool>& boolVec)
    boolVec = memboolVec;
 }
 void
-CirMgr::prove(GateList& fecAigList, SatSolver& s)
+CirMgr::prove(SatSolver& s)
 {
-   // unsigned n = _listFecGrps.size();
+   int n = _listFecGrps.size();
    bool result = false;
    GateList live;
    GateList die;
@@ -119,59 +120,114 @@ CirMgr::prove(GateList& fecAigList, SatSolver& s)
 
    for(unsigned i = 0; i < fecAigList.size(); i++) {
       CirGate* g = fecAigList[i];
-      if(g->isDead()) continue;
+      if(g == 0 || g->isDead()) continue;
       FecGrp* f = g->getGrp();
+
       result = false;
       if(f == 0 || f->getSize() == 0) continue;
+      bool sat = 0;
       for(unsigned j = 0; j < f->getSize(); j++) {
          CirGate* tmp = f->getGate(j);
-         if(tmp == g) continue;
-         Var newV = s.newVar();
-         s.addXorCNF(newV, g->getVar(), g->isFecInv(), tmp->getVar(), tmp->isFecInv());
-         s.assumeRelease();
-         // s.assumeProperty(gateList[0]->getVar(), false);
-         s.assumeProperty(newV, true);
-         result = s.assumpSolve();
-         if(tmp->getId() == 0)
-            result = false;
-         cout << "\r                                   ";
-         bool inv = 0;
-         inv = g->isFecInv() ^ tmp->isFecInv();
-         if(tmp->getId() == 0) {
-            cout << "\rProving " << g->getId() << " = "
-                         << !g->isFecInv() << "..." << flush;
+         if(tmp == 0 || tmp == g) continue;
+         if(tmp->getId() != 0) {
+            Var newV = s.newVar();
+            s.addXorCNF(newV, g->getVar(), g->isFecInv(), tmp->getVar(), tmp->isFecInv());
+            s.assumeRelease();
+            s.assumeProperty(gateList[0]->getVar(), false);
+            s.assumeProperty(newV, true);
+            result = s.assumpSolve();
+            
+            cout << "\r                                   ";
+            bool inv = 0;
+            inv = g->isFecInv() ^ tmp->isFecInv();
+            cout << "\rProving (" << (g->isFecInv() ? "!" : "") << g->getId() << ", "
+                     << (tmp->isFecInv() ? "!" : "") << tmp->getId() << ")..." << flush;
+    
+            if(!result) {
+               cout << "UNSAT!!";
+
+               boolVec.push_back(inv);
+               live.push_back(g);
+               die.push_back(tmp);
+               tmp->setDead();
+               f->removeGate(j);
+               j--;
+            } else {
+
+               cout << "SAT!!";
+
+               for(int k = f->getSize() - 1; k >= 0; k--)
+                  if(f->getGate(k) == g)
+                     f->removeGate(k);
+               sat = 1;
+               break;
+            }
+
          }
          else {
-            cout << "\rProving (" << g->getId() << ", " << (inv ? "!" : "")
-                         << tmp->getId() << ")..." << flush;
-         }
-         
-         if(!result) {
-            cout << "UNSAT!!";
-            boolVec.push_back(inv);
-            if(tmp->getId() == 0) {
+            s.assumeRelease();
+            s.assumeProperty(g->getVar(), !(g->isFecInv()));
+            s.assumeProperty(gateList[0]->getVar(), false);
+            result = s.assumpSolve();
+            cout << "\r                                   ";
+            bool inv = 0;
+            inv = g->isFecInv() ^ tmp->isFecInv();
+
+            cout << "\rProving " << g->getId() << " = "
+                         << !g->isFecInv() << "..." << flush;
+            // result = !g->isFecInv();
+            if(!result) {
+               cout << "UNSAT!!";
+
+               boolVec.push_back(inv);
                live.push_back(tmp);
                die.push_back(g);
                for(int k = f->getSize() - 1; k >= 0; k--)
                   if(f->getGate(k) == g)
                      f->removeGate(k);
+               
+               // f->removeGate(j);
+               j--;
                break;
             } else {
-               live.push_back(g);
-               die.push_back(tmp);
-               tmp->setDead();
-               f->removeGate(j);
-            }
-            j--;
-         } else {
-            cout << "SAT!!";
-         }
+               cout << "SAT!!";
 
+               // for(int k = f->getSize() - 1; k >= 0; k--)
+               //    if(f->getGate(k) == g)
+               //       f->removeGate(k);
+               // j--;
+               sat = 1;
+            }
+            break;
+         }
       }
       if(f->getSize() == 1) {
          f->getGate(0)->clearMyFecGrp(); // invalid
          f->removeGate(0);
       }
+      // if(sat)--n;
+      // if(g->getId() == 790 || g->getId() == 1627) {
+      //    cout << "\r                                   \r";
+      //    dfsSort(live, die, boolVec);
+      //    for(unsigned j = 0; j < live.size(); j++) {
+      //       // replace tmp with g
+      //       CirGate *g1 = live[j];
+      //       CirGate *tmp = die[j];
+      //       bool inv = boolVec[j];
+      //       cout << "Fraig: "<< g1->getId() <<" merging " 
+      //       << (inv ? "!" : "") << tmp->getId() << "..." << endl;
+      //       tmp->fraigMerge(g1, inv); 
+      //       tmp->finfoutRemove();
+      //       miloa[4]--; // MILO "A"
+      //       deleteGate(tmp->getId());
+      //    }
+      //    cout << "Updating by UNSAT... Total #FEC Group = " << n << endl;
+      //    cout << "Updating by SAT... Total #FEC Group = " << n << endl;
+
+      //    live.clear();
+      //    die.clear();
+      //    boolVec.clear();
+      // }
    }
    cout << "\r                                   \r";
 
@@ -188,10 +244,11 @@ CirMgr::prove(GateList& fecAigList, SatSolver& s)
       miloa[4]--; // MILO "A"
       deleteGate(tmp->getId());
    }
-   // if(!finalResult)
-      cout << "Updating by UNSAT... Total #FEC Group = " << 0 << endl;
-   // else
-   //    cout << "Updating by SAT... Total #FEC Group = " << --n << endl;
+   // n--;
+   n = 0;
+   cout << "Updating by UNSAT... Total #FEC Group = " << n << endl;
+   cout << "Updating by SAT... Total #FEC Group = " << n << endl;
+
    clearListFecGrps();
 }
 void
@@ -200,12 +257,12 @@ CirMgr::fraig()
    //initCircuit()
    if(_listFecGrps.size() == 0)
       return;
-   GateList fecAigList;
    buildDfsList(); //setGlobalRef()
    SatSolver solver;
    solver.initialize();
-   genProofModel(fecAigList, solver);
-   prove(fecAigList, solver);
+   genProofModel(solver);
+   prove(solver);
+   strash();
    buildDfsList();
 }
 

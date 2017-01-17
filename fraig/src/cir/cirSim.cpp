@@ -69,7 +69,7 @@ CirMgr::startRandSim()
    buildDfsList();
    fecGrpsInit(); //first time build map
    vector<unsigned> _32bitvec;
-   
+
    for(; ; a++) {
       if(CURRENT_FAILS >= MAX_FAILS)
          break;
@@ -314,8 +314,9 @@ CirMgr::fecGrpsIdentify(ListFecGrps& fecGrps, ListFecGrps& tmpGrps)
             grp->addGate(gate, inv);
             gate->setMyFecGrp(grp);
             if(IS_FIRST_SIM) gate->setMyFecInv(inv);
-         } else
+         } else {
             createNewGroup(newFecMap, gate, inv);
+         }
       }
       // cerr << i << endl;
       collectValidFecGrp(newFecMap, i, tmpGrps);

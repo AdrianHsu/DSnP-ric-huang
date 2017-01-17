@@ -130,8 +130,8 @@ public:
    void printFEC() const;
    void fraig();
    // fraig by AH
-   void genProofModel(GateList&, SatSolver&);
-   void prove(GateList&, SatSolver&);
+   void genProofModel(SatSolver&);
+   void prove(SatSolver&);
    void dfsSort(GateList&, GateList&, vector<bool>& );
 
 
@@ -153,6 +153,7 @@ public:
    GateList _dfsList;
    ListFecGrps _listFecGrps;
    ListFecGrps _tmpListFecGrps;
+   GateList fecAigList;
 
 private:
    ofstream           *_simLog;
