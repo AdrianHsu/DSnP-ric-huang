@@ -255,7 +255,6 @@ CirGate::fraigMerge(CirGate* g, bool is_inv)
                is_inv = !fout->isInv(k);
             else
                is_inv = fout->isInv(k);
-            
 
             g->addOutput(fout);
             fout->insertInput(g, k, is_inv);

@@ -117,7 +117,8 @@ CirMgr::prove(SatSolver& s)
    GateList live;
    GateList die;
    vector<bool> boolVec;
-
+   bool sat = 0;
+   bool unsat = 0;
    for(unsigned i = 0; i < fecAigList.size(); i++) {
       CirGate* g = fecAigList[i];
       if(g == 0 || g->isDead()) continue;
@@ -125,7 +126,6 @@ CirMgr::prove(SatSolver& s)
 
       result = false;
       if(f == 0 || f->getSize() == 0) continue;
-      bool sat = 0;
       for(unsigned j = 0; j < f->getSize(); j++) {
          CirGate* tmp = f->getGate(j);
          if(tmp == 0 || tmp == g) continue;
@@ -152,6 +152,7 @@ CirMgr::prove(SatSolver& s)
                tmp->setDead();
                f->removeGate(j);
                j--;
+               unsat = 1;
             } else {
 
                cout << "SAT!!";
@@ -188,15 +189,15 @@ CirMgr::prove(SatSolver& s)
                
                // f->removeGate(j);
                j--;
+               unsat = 1;
                break;
             } else {
                cout << "SAT!!";
-
+               sat = 1;
                // for(int k = f->getSize() - 1; k >= 0; k--)
                //    if(f->getGate(k) == g)
                //       f->removeGate(k);
                // j--;
-               sat = 1;
             }
             break;
          }
@@ -205,29 +206,7 @@ CirMgr::prove(SatSolver& s)
          f->getGate(0)->clearMyFecGrp(); // invalid
          f->removeGate(0);
       }
-      // if(sat)--n;
-      // if(g->getId() == 790 || g->getId() == 1627) {
-      //    cout << "\r                                   \r";
-      //    dfsSort(live, die, boolVec);
-      //    for(unsigned j = 0; j < live.size(); j++) {
-      //       // replace tmp with g
-      //       CirGate *g1 = live[j];
-      //       CirGate *tmp = die[j];
-      //       bool inv = boolVec[j];
-      //       cout << "Fraig: "<< g1->getId() <<" merging " 
-      //       << (inv ? "!" : "") << tmp->getId() << "..." << endl;
-      //       tmp->fraigMerge(g1, inv); 
-      //       tmp->finfoutRemove();
-      //       miloa[4]--; // MILO "A"
-      //       deleteGate(tmp->getId());
-      //    }
-      //    cout << "Updating by UNSAT... Total #FEC Group = " << n << endl;
-      //    cout << "Updating by SAT... Total #FEC Group = " << n << endl;
-
-      //    live.clear();
-      //    die.clear();
-      //    boolVec.clear();
-      // }
+      
    }
    cout << "\r                                   \r";
 
@@ -246,8 +225,8 @@ CirMgr::prove(SatSolver& s)
    }
    // n--;
    n = 0;
-   cout << "Updating by UNSAT... Total #FEC Group = " << n << endl;
-   cout << "Updating by SAT... Total #FEC Group = " << n << endl;
+   if(unsat) cout << "Updating by UNSAT... Total #FEC Group = " << n << endl;
+   if(sat) cout << "Updating by SAT... Total #FEC Group = " << n << endl;
 
    clearListFecGrps();
 }
@@ -262,7 +241,7 @@ CirMgr::fraig()
    solver.initialize();
    genProofModel(solver);
    prove(solver);
-   strash();
+   // strash();
    buildDfsList();
 }
 

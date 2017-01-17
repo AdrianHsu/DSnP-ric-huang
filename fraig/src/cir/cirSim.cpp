@@ -313,7 +313,7 @@ CirMgr::fecGrpsIdentify(ListFecGrps& fecGrps, ListFecGrps& tmpGrps)
 
             grp->addGate(gate, inv);
             gate->setMyFecGrp(grp);
-            if(IS_FIRST_SIM) gate->setMyFecInv(inv);
+            gate->setMyFecInv(inv);
          } else {
             createNewGroup(newFecMap, gate, inv);
          }
@@ -326,9 +326,9 @@ CirMgr::fecGrpsIdentify(ListFecGrps& fecGrps, ListFecGrps& tmpGrps)
 
    fecGrps.clear();
    sortListFecGrps(tmpGrps);
-   if(IS_FIRST_SIM) {
-      IS_FIRST_SIM = 0;
-   }
+
+   IS_FIRST_SIM = 0;
+   
 }
 void
 CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g, bool& inv)
@@ -336,7 +336,7 @@ CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g, bool& inv)
    FecGrp *fecGrp = new FecGrp(g->getSimValue());
    fecGrp->addGate(g, inv);
    g->setMyFecGrp(fecGrp);
-   if(IS_FIRST_SIM) g->setMyFecInv(inv);
+g->setMyFecInv(inv);
    FecHashKey key(g->getSimValue());
    newFecMap.insert(key, fecGrp);
 }
