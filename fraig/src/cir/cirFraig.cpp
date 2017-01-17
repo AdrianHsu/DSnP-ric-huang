@@ -119,6 +119,7 @@ CirMgr::prove(SatSolver& s)
    vector<bool> boolVec;
    bool sat = 0;
    bool unsat = 0;
+   s.assumeProperty(gateList[0]->getVar(), false);
    for(unsigned i = 0; i < fecAigList.size(); i++) {
       CirGate* g = fecAigList[i];
       if(g == 0 || g->isDead()) continue;
@@ -133,7 +134,6 @@ CirMgr::prove(SatSolver& s)
             Var newV = s.newVar();
             s.addXorCNF(newV, g->getVar(), g->isFecInv(), tmp->getVar(), tmp->isFecInv());
             s.assumeRelease();
-            s.assumeProperty(gateList[0]->getVar(), false);
             s.assumeProperty(newV, true);
             result = s.assumpSolve();
             
@@ -173,7 +173,6 @@ CirMgr::prove(SatSolver& s)
          else {
             s.assumeRelease();
             s.assumeProperty(g->getVar(), !(g->isFecInv()));
-            s.assumeProperty(gateList[0]->getVar(), false);
             result = s.assumpSolve();
             cout << "\r                                   ";
             bool inv = 0;

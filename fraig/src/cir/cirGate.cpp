@@ -243,18 +243,18 @@ CirGate::strashfoutMerge(CirGate* g)
    }
 }
 void
-CirGate::fraigMerge(CirGate* g, bool is_inv)
+CirGate::fraigMerge(CirGate* g, bool ifec)
 {
+   bool is_inv;
    for(size_t i = 0; i < getfoutSize(); i++) {
       CirGate *fout = getOutput(i);
       size_t k = 0;
       for(; k < fout->getfinSize(); k++) {
          CirGate* me = fout->getInput(k);
          if(me == this) {
-            if(is_inv)
-               is_inv = !fout->isInv(k);
-            else
-               is_inv = fout->isInv(k);
+            is_inv = fout->isInv(k);
+            if(ifec)
+               is_inv = !is_inv;
 
             g->addOutput(fout);
             fout->insertInput(g, k, is_inv);
