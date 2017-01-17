@@ -70,14 +70,20 @@ CirMgr::genProofModel(SatSolver& solver)
    for(unsigned i = 0; i < _dfsList.size(); i++) {
       CirGate* g = _dfsList[i];
       // if(g == 0) continue;
-      g->setVar(solver.newVar());
-      if(g->getType() == AIG_GATE) { // in dfs list & has its own Grp
-         fecAigList.push_back(g);
-         // Construct proof model
-         solver.addAigCNF
-         (g->getVar(),
-          g->getInput(0)->getVar(), g->isInv(0),
-          g->getInput(1)->getVar(), g->isInv(1) );
+      if(g->getType() == PO_GATE) {
+         CirGate* in = g->getInput(0);
+         if(in == 0) continue;
+         g->setVar(in->getVar());
+      } else {
+            g->setVar(solver.newVar());
+         if(g->getType() == AIG_GATE) { // in dfs list & has its own Grp
+            fecAigList.push_back(g);
+            // Construct proof model
+            solver.addAigCNF
+            (g->getVar(),
+             g->getInput(0)->getVar(), g->isInv(0),
+             g->getInput(1)->getVar(), g->isInv(1) );
+         }
       }
    }
 }
