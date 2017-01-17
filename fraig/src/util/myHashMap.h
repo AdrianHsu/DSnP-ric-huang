@@ -22,7 +22,7 @@ using namespace std;
 // To use FecHashMap ADT, you should define your own FecHashKey class.
 // It should at least overload the "()" and "==" operators.
 //
-#define MY_MAX INT_MAX
+#define MY_MAX 2147483647
 
 class FecHashKey
 {
