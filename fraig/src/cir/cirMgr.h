@@ -20,8 +20,6 @@ using namespace std;
 
 #include "cirDef.h"
 #include "cirGate.h"
-// by AH
-// #include "fecGrp.h"
 
 extern CirMgr *cirMgr;
 
@@ -66,10 +64,8 @@ public:
       delete gateList[gid];
       gateList[gid] = 0;
    }
-
    // Member functions about circuit construction
    bool readCircuit(const string&);
-
    // Member functions about circuit optimization
    void sweep();
    void optimize();
@@ -94,8 +90,6 @@ public:
    unsigned myStr2Uns(const string& str) {
      unsigned num = 0;
      size_t i = 0;
-     //int sign = 1;
-     //if (str[0] == '-')  return false;
      for (; i < str.size(); ++i) {
         if (isdigit(str[i])) {
            num *= 10;
@@ -117,7 +111,6 @@ public:
    void fecGrpsIdentify(ListFecGrps&, ListFecGrps&);
    void createNewGroup(FecMap&, CirGate*, bool&);
    void collectValidFecGrp(FecMap&, unsigned&, ListFecGrps&);
-
    static bool grpOrderSort (FecGrp* i,FecGrp* j) { 
       return (i->get1stGate()->getId() < j->get1stGate()->getId()); 
    }
@@ -133,8 +126,6 @@ public:
    void genProofModel(SatSolver&);
    void prove(SatSolver&);
    void dfsSort(GateList&, GateList&, vector<bool>& );
-
-
    // Member functions about circuit reporting
    void printSummary() const;
    void printNetlist() const;

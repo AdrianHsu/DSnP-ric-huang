@@ -122,7 +122,7 @@ class CirGate {
          std::sort (fanoutList.begin(), fanoutList.end(), orderSort);
       }
       // strash()
-      void strashfoutMerge(CirGate*);
+      void strashMerge(CirGate*);
       // file sim()
       void setSimValue(unsigned v) { simValue = v; }
       unsigned getSimValue() { return simValue; }

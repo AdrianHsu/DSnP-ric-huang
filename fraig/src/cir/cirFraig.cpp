@@ -49,11 +49,10 @@ CirMgr::strash()
       if(g->getfinSize() != 2) return; //error
 
       HashKey key(g->getInputWithInv(0), g->getInputWithInv(1));
-      // cerr << g->getInputWithInv(0) << "," << g->getInputWithInv(1) << endl;
       if (map.query(key, g)) { // collision happens!
       	CirGate *tmp = _dfsList[i]; // g is old value, and tmp is new value now
       	// replace tmp with g
-      	tmp->strashfoutMerge(g);
+      	tmp->strashMerge(g);
       	tmp->finfoutRemove();
 	      miloa[4]--; // MILO "A"
       	cout << "Strashing: " << g->getId() << " merging " << tmp->getId() << "..." << endl;
@@ -74,7 +73,6 @@ CirMgr::genProofModel(SatSolver& solver)
       g->setVar(solver.newVar());
       if(g->getType() == AIG_GATE) { // in dfs list & has its own Grp
          fecAigList.push_back(g);
-
          // Construct proof model
          solver.addAigCNF
          (g->getVar(),
@@ -117,9 +115,9 @@ CirMgr::prove(SatSolver& s)
    GateList live;
    GateList die;
    vector<bool> boolVec;
-   bool sat = 0;
-   bool unsat = 0;
+   bool sat = 0, unsat = 0;
    s.assumeProperty(gateList[0]->getVar(), false);
+
    for(unsigned i = 0; i < fecAigList.size(); i++) {
       CirGate* g = fecAigList[i];
       if(g == 0 || g->isDead()) continue;
@@ -157,14 +155,11 @@ CirMgr::prove(SatSolver& s)
                j--;
                unsat = 1;
             } else {
-
                cout << "SAT!!";
-
                for(int k = f->getSize() - 1; k >= 0; k--)
                   if(f->getGate(k) == g)
                      f->removeGate(k);
                f->removeGate(j);
-
                sat = 1;
                break;
             }
@@ -179,17 +174,14 @@ CirMgr::prove(SatSolver& s)
             inv = g->isFecInv() ^ tmp->isFecInv();
             cout << "\rProving " << g->getId() << " = "
                          << !g->isFecInv() << "..." << flush;
-            // result = !g->isFecInv();
             if(!result) {
                cout << "UNSAT!!";
-
                boolVec.push_back(inv);
                live.push_back(tmp);
                die.push_back(g);
                for(int k = f->getSize() - 1; k >= 0; k--)
                   if(f->getGate(k) == g)
                      f->removeGate(k);
-               
                j--;
                unsat = 1;
             } else {
@@ -198,13 +190,12 @@ CirMgr::prove(SatSolver& s)
                for(int k = f->getSize() - 1; k >= 0; k--)
                   if(f->getGate(k) == g)
                      f->removeGate(k);
-               // j--;
             }
             break;
          }
       }
       if(f->getSize() == 1) {
-         f->getGate(0)->clearMyFecGrp(); // invalid
+         f->getGate(0)->clearMyFecGrp();
          f->removeGate(0);
       }
       
@@ -224,7 +215,6 @@ CirMgr::prove(SatSolver& s)
       miloa[4]--; // MILO "A"
       deleteGate(tmp->getId());
    }
-   // n--;
    n = 0;
    if(unsat) cout << "Updating by UNSAT... Total #FEC Group = " << n << endl;
    if(sat) cout << "Updating by SAT... Total #FEC Group = " << n << endl;

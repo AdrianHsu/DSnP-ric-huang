@@ -56,12 +56,6 @@ class FecGrp
       }
       void setSimValue(size_t s) { simValue = s; }
       size_t getSimValue() { return simValue; }
-      // void clear() {
-      //   for(unsigned i = 0; i < _gateList.size(); i++)
-      //      getGate(i)->clearMyFecGrp();
-      //   _gateList.clear();
-      //   simValue = 0;
-      // }
 
    private:
       GateList _gateList;

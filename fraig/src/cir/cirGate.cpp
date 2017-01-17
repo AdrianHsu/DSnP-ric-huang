@@ -225,7 +225,7 @@ CirGate::optMerge(CirGate* tmp, bool& is_inv, const size_t& aout)
 }
 //strash
 void
-CirGate::strashfoutMerge(CirGate* g)
+CirGate::strashMerge(CirGate* g)
 {
    bool is_inv = 0;
    for(size_t i = 0; i < getfoutSize(); i++) {
