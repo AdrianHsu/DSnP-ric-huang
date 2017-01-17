@@ -19,7 +19,7 @@ echo "cirp -fl" >> $dofile
 #echo "usage" >> $dofile
 echo "cirstrash" >> $dofile
 #echo "usage" >> $dofile
-echo "cirsim -file pattern.$1 -out .fsim$1.log" >> $dofile
+#echo "cirsim -file pattern.$1 -out .fsim$1.log" >> $dofile
 echo "cirsim -file pattern.$1" >> $dofile
 #echo "usage" >> $dofile
 echo "cirp -fec" >> $dofile

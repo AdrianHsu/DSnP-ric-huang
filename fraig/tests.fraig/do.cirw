@@ -1,0 +1,6 @@
+cirr opt05.aag
+cirw 7
+ciropt
+cirw 7
+q -f
+

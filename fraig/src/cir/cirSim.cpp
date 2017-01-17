@@ -29,7 +29,7 @@ using namespace std;
 /*******************************/
 
 #define MY_RAND_MAX INT_MAX // 4294967295 (2^32-1), type unsigned long int
-#define MAGIC_NUMBER 3.5
+#define MAGIC_NUMBER 5.0
 /**************************************/
 /*   Static varaibles and functions   */
 /**************************************/

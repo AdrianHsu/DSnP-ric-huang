@@ -25,4 +25,4 @@ echo "cirp -po" >> $dofile
 echo "cirp -n" >> $dofile
 echo "cirp -fl" >> $dofile
 echo "q -f" >> $dofile
-../ref/fraig-mac -f $dofile
+../ref/fraig -f $dofile

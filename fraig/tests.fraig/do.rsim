@@ -1,4 +1,10 @@
-cirr sim12.aag
-cirsim -f pattern.12
+cirr sim15.aag
+cirp
+cirp -pi
+cirp -po
+cirp -n
+cirp -fl
+cirstrash
+cirsim -random
 cirp -fec
 q -f

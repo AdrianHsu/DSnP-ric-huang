@@ -1,42 +1,30 @@
-cirr sim05.aag
+cirr sim15.aag
 cirp
 cirp -pi
 cirp -po
 cirp -n
 cirp -fl
-usage
 ciropt
 cirp
-usage
 cirsw
 cirp
-usage
 cirstrash
-usage
 cirsw
 cirp
-usage
-cirsim -f pattern.05
-usage
+cirsim -f pattern.15
 cirp -fec
-usage
 cirp -n
 cirfraig
 cirp -n
-usage
 ciropt
 cirp
-usage
 cirsw
 cirp
 cirstrash
 cirp
 cirsw
 cirp
-usage
 cirp -n
 cirp -fl
 cirp -fec
-usage
-cirw -o my.aag
 q -f

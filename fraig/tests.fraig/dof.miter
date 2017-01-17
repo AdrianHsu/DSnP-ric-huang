@@ -1,4 +1,4 @@
-cirmiter my.aag sim05.aag
+cirmiter sim09.out8 sim09.aag
 cirp
 ciropt
 cirswe

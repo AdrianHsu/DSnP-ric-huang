@@ -16,13 +16,13 @@ echo "cirp -pi" >> $dofile
 echo "cirp -po" >> $dofile
 echo "cirp -n" >> $dofile
 echo "cirp -fl" >> $dofile
-echo "usage" >> $dofile
+#echo "usage" >> $dofile
 echo "cirstrash" >> $dofile
-echo "usage" >> $dofile
+#echo "usage" >> $dofile
 #echo "cirsim -random -out .rsim$1.log" >> $dofile
 echo "cirsim -random" >> $dofile
-echo "usage" >> $dofile
+#echo "usage" >> $dofile
 echo "cirp -fec" >> $dofile
-echo "usage" >> $dofile
+#echo "usage" >> $dofile
 echo "q -f" >> $dofile
 ../fraig -f $dofile

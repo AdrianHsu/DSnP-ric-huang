@@ -528,6 +528,7 @@ CirMgr::printFECPairs() const
       cout << "[" << i << "]";
       for(unsigned j = 0; j < grp->getSize(); j++) {
          CirGate* g = grp->getGate(j);
+         if(g == 0) continue;
          bool inv = grp->isInv(j) ^ grp->isInv(0);
          cout << " ";
          if(inv)
@@ -542,6 +543,7 @@ CirMgr::writeGate(ostream& outfile, CirGate* g) const
 {
    // Max variable has bug in ref program!!!
    unsigned _m0 = miloa[0];
+   if(g == 0) return;
    unsigned _m = g->getId(), _o = 1, _i = 0, _l = 0;
    //small dfs
    vector<unsigned> ins;
@@ -551,9 +553,9 @@ CirMgr::writeGate(ostream& outfile, CirGate* g) const
    g->setGlobalRef();
    writeDfsVisit(g, aigs, g->isInv(0));
    writeDfsVisit(g, aigs, g->isInv(1));
-
    for(unsigned i = 0, size = _m0 + 1; i < size; ++i) {
       CirGate* g = getGate(i);
+      if(g == 0) continue;
       if(g->getType() == PI_GATE && g->isGlobalRef()) {
          unsigned s = g->getId();
          ins.push_back(s);

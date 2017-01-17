@@ -1,0 +1,18 @@
+cirr -r sim09.aag
+ciropt
+cirstr
+ciropt
+cirstr
+ciropt
+cirstr
+cirsim -r 
+cirf
+cirsw
+ciropt
+cirstr
+cirsw
+ciropt
+cirstr
+cirp
+cirw -o sim09.out7
+q -f
