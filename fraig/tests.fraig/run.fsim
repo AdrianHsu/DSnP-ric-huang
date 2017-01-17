@@ -25,4 +25,4 @@ echo "cirsim -file pattern.$1" >> $dofile
 echo "cirp -fec" >> $dofile
 #echo "usage" >> $dofile
 echo "q -f" >> $dofile
-../ref/fraig -f $dofile
+../fraig -f $dofile

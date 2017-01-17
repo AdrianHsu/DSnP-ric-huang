@@ -36,6 +36,7 @@ using namespace std;
 static unsigned MAX_FAILS = 0;
 static unsigned CURRENT_FAILS = 0;
 static bool IS_RANDSIM = 0;
+static bool IS_FIRST_SIM = 1;
 /************************************************/
 /*   Public member functions about Simulation   */
 /************************************************/
@@ -44,6 +45,8 @@ CirMgr::randomSim()
 {
    srand(time(0));
    IS_RANDSIM = 1;
+   IS_FIRST_SIM = 1;
+
    unsigned _i = miloa[1];
    // unsigned _a = miloa[4];
    // double aig = (double) _a;
@@ -123,6 +126,7 @@ CirMgr::fileSim(ifstream& patternFile)
    if(!patternFile.is_open()) {
       return;
    }
+   IS_FIRST_SIM = 1;
    string str;
    unsigned _i = miloa[1];
    vector<string> inputs;
@@ -259,12 +263,14 @@ CirMgr::fecGrpsInit()
    bool fal = false;
    CirGate* g = getGate(0);
    fecGrp->addGate(g, fal);
-   g->setMyFecGrp(fecGrp, fal);
+   g->setMyFecGrp(fecGrp);
+   g->setMyFecInv(fal);
    for(unsigned i = 0; i < _dfsList.size(); i++) {
       g = _dfsList[i];
       if(g->getType() == AIG_GATE) {
          fecGrp->addGate(g, fal);
-         g->setMyFecGrp(fecGrp, fal);
+         g->setMyFecGrp(fecGrp);
+         g->setMyFecInv(fal);
       }
    }
    //Add this FEC group into fecGrps (list of FEC groups)
@@ -300,10 +306,14 @@ CirMgr::fecGrpsIdentify(ListFecGrps& fecGrps, ListFecGrps& tmpGrps)
          FecGrp* grp = NULL;
          FecHashKey key(gate->getSimValue());
          bool inv = 0;
-         bool isChecked = newFecMap.check(key, grp, inv);
+         bool isChecked = 0;
+         isChecked = newFecMap.check(key, grp, inv);
+         
          if(isChecked) {
+
             grp->addGate(gate, inv);
-            gate->setMyFecGrp(grp, inv);
+            gate->setMyFecGrp(grp);
+            if(IS_FIRST_SIM) gate->setMyFecInv(inv);
          } else
             createNewGroup(newFecMap, gate, inv);
       }
@@ -315,13 +325,17 @@ CirMgr::fecGrpsIdentify(ListFecGrps& fecGrps, ListFecGrps& tmpGrps)
 
    fecGrps.clear();
    sortListFecGrps(tmpGrps);
+   if(IS_FIRST_SIM) {
+      IS_FIRST_SIM = 0;
+   }
 }
 void
 CirMgr::createNewGroup(FecMap& newFecMap, CirGate* g, bool& inv)
 {
    FecGrp *fecGrp = new FecGrp(g->getSimValue());
    fecGrp->addGate(g, inv);
-   g->setMyFecGrp(fecGrp, inv);
+   g->setMyFecGrp(fecGrp);
+   if(IS_FIRST_SIM) g->setMyFecInv(inv);
    FecHashKey key(g->getSimValue());
    newFecMap.insert(key, fecGrp);
 }

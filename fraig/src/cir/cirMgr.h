@@ -132,6 +132,8 @@ public:
    // fraig by AH
    void genProofModel(GateList&, SatSolver&);
    void prove(GateList&, SatSolver&);
+   void dfsSort(GateList&, GateList&, vector<bool>& );
+
 
    // Member functions about circuit reporting
    void printSummary() const;

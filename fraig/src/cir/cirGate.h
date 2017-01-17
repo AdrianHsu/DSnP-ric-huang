@@ -169,9 +169,12 @@ class CirGate {
          return str;
       }
       void resetSimValue() { simValue = 0; }
-      void setMyFecGrp(FecGrp* grp, bool& is_inv) { 
-         fecInv = is_inv;
+      void setMyFecGrp(FecGrp* grp) { 
+         // fecInv = is_inv;
          _myFecGrp = grp;
+      }
+      void setMyFecInv(bool& is_inv) { //
+         fecInv = is_inv; 
       }
       bool isFecInv() const { return fecInv; }
       FecGrp* getGrp() { return _myFecGrp; }

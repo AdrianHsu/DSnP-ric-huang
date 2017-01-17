@@ -82,30 +82,31 @@ CirMgr::genProofModel(GateList& fecAigList, SatSolver& solver)
       }
    }
 }
-void 
-quickSort(GateList& live, GateList& die, int left, int right) {
-   int i = left, j = right;
-   unsigned mid = (left + right) / 2;
-   CirGate* pivot = die[mid];
+void
+CirMgr::dfsSort(GateList& live, GateList& die, vector<bool>& boolVec)
+{
+   GateList memlive;
+   GateList memdie;
+   vector<bool>  memboolVec;
+   for(unsigned i = 0; i < _dfsList.size(); i++) {
+      CirGate* g = _dfsList[i];
+      for(int j = die.size() - 1; j >= 0; j--) {
+         CirGate* h = die[j];
+         if(g->getId() == h->getId()) {
+            memlive.push_back( live[j] );
+            memdie.push_back( die[j] );
+            memboolVec.push_back( boolVec[j] );
 
-   /* partition */
-   while (i <= j) {
-         while (die[i]->getId() < pivot->getId())
-               i++;
-         while (die[j]->getId() > pivot->getId())
-               j--;
-         if (i <= j) {
-            swap(die[i], die[j]);
-            swap(live[i], live[j]); // accordingly
-            i++;
-            j--;
+            die.erase(die.begin() + j);
+            live.erase(live.begin() + j);
+            boolVec.erase(boolVec.begin() + j);
+            break;
          }
+      }
    }
-   /* recursion */
-   if (left < j)
-         quickSort(live, die, left, j);
-   if (i < right)
-         quickSort(live, die, i, right);
+   live = memlive;
+   die = memdie;
+   boolVec = memboolVec;
 }
 void
 CirMgr::prove(GateList& fecAigList, SatSolver& s)
@@ -114,6 +115,7 @@ CirMgr::prove(GateList& fecAigList, SatSolver& s)
    bool result = false;
    GateList live;
    GateList die;
+   vector<bool> boolVec;
 
    for(unsigned i = 0; i < fecAigList.size(); i++) {
       CirGate* g = fecAigList[i];
@@ -125,29 +127,35 @@ CirMgr::prove(GateList& fecAigList, SatSolver& s)
          CirGate* tmp = f->getGate(j);
          if(tmp == g) continue;
          Var newV = s.newVar();
-
          s.addXorCNF(newV, g->getVar(), g->isFecInv(), tmp->getVar(), tmp->isFecInv());
          s.assumeRelease();
          // s.assumeProperty(gateList[0]->getVar(), false);
          s.assumeProperty(newV, true);
          result = s.assumpSolve();
-
-         cout << "\r                                   ";
          if(tmp->getId() == 0)
+            result = false;
+         cout << "\r                                   ";
+         bool inv = 0;
+         inv = g->isFecInv() ^ tmp->isFecInv();
+         if(tmp->getId() == 0) {
             cout << "\rProving " << g->getId() << " = "
                          << !g->isFecInv() << "..." << flush;
-         else
-            cout << "\rProving (" << g->getId() << ", " << (tmp->isFecInv() ? "!" : "")
+         }
+         else {
+            cout << "\rProving (" << g->getId() << ", " << (inv ? "!" : "")
                          << tmp->getId() << ")..." << flush;
+         }
          
          if(!result) {
             cout << "UNSAT!!";
+            boolVec.push_back(inv);
             if(tmp->getId() == 0) {
                live.push_back(tmp);
                die.push_back(g);
-               tmp->setDead(); // 0 set dead
-               cerr << f->getGate(0)->getId() << endl;
-               f->removeGate(0);
+               for(int k = f->getSize() - 1; k >= 0; k--)
+                  if(f->getGate(k) == g)
+                     f->removeGate(k);
+               break;
             } else {
                live.push_back(g);
                die.push_back(tmp);
@@ -165,14 +173,17 @@ CirMgr::prove(GateList& fecAigList, SatSolver& s)
          f->removeGate(0);
       }
    }
-   quickSort(live, die, 0, live.size() - 1);
+   cout << "\r                                   \r";
+
+   dfsSort(live, die, boolVec);
    for(unsigned j = 0; j < live.size(); j++) {
       // replace tmp with g
       CirGate *g1 = live[j];
       CirGate *tmp = die[j];
+      bool inv = boolVec[j];
       cout << "Fraig: "<< g1->getId() <<" merging " 
-      << (g1->isFecInv() ^ tmp->isFecInv() ? "!" : "") << tmp->getId() << "..." << endl;
-      tmp->fraigMerge(g1, tmp->isFecInv() ^ g1->isFecInv()); 
+      << (inv ? "!" : "") << tmp->getId() << "..." << endl;
+      tmp->fraigMerge(g1, inv); 
       tmp->finfoutRemove();
       miloa[4]--; // MILO "A"
       deleteGate(tmp->getId());
@@ -187,6 +198,8 @@ void
 CirMgr::fraig()
 {
    //initCircuit()
+   if(_listFecGrps.size() == 0)
+      return;
    GateList fecAigList;
    buildDfsList(); //setGlobalRef()
    SatSolver solver;

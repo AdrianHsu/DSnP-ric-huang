@@ -20,6 +20,7 @@ ciropt
 cirp
 cirsw
 cirp
+cirp -n
 cirp -fl
 cirp -fec
 q -f

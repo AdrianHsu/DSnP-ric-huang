@@ -528,7 +528,7 @@ CirMgr::printFECPairs() const
       cout << "[" << i << "]";
       for(unsigned j = 0; j < grp->getSize(); j++) {
          CirGate* g = grp->getGate(j);
-         bool inv = grp->isInv(j);
+         bool inv = grp->isInv(j) ^ grp->isInv(0);
          cout << " ";
          if(inv)
             cout << "!";
