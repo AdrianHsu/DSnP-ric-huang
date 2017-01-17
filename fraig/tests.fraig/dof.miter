@@ -1,13 +1,13 @@
-cirmiter my.aag sim01.aag
+cirmiter my.aag sim05.aag
 cirp
 ciropt
 cirswe
 cirstr
 cirsim -r
 cirfra
-cirstr
-cirswe
 ciropt
+cirswe
+cirstr
 cirp
 q -f
 

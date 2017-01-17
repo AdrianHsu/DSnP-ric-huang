@@ -1,4 +1,4 @@
-cirr sim13.aag
+cirr sim05.aag
 cirp
 cirp -pi
 cirp -po
@@ -16,8 +16,7 @@ usage
 cirsw
 cirp
 usage
-cirsim -random -out .rsim13.log
-cirsim -random
+cirsim -f pattern.05
 usage
 cirp -fec
 usage
@@ -30,9 +29,14 @@ cirp
 usage
 cirsw
 cirp
+cirstrash
+cirp
+cirsw
+cirp
 usage
 cirp -n
 cirp -fl
 cirp -fec
 usage
+cirw -o my.aag
 q -f
