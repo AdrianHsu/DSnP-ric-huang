@@ -150,6 +150,9 @@ CirMgr::prove(SatSolver& s)
                live.push_back(g);
                die.push_back(tmp);
                tmp->setDead();
+               for(int k = f->getSize() - 1; k >= 0; k--)
+                  if(f->getGate(k) == g)
+                     f->removeGate(k);
                f->removeGate(j);
                j--;
                unsat = 1;
@@ -160,6 +163,8 @@ CirMgr::prove(SatSolver& s)
                for(int k = f->getSize() - 1; k >= 0; k--)
                   if(f->getGate(k) == g)
                      f->removeGate(k);
+               f->removeGate(j);
+
                sat = 1;
                break;
             }
@@ -173,7 +178,6 @@ CirMgr::prove(SatSolver& s)
             cout << "\r                                   ";
             bool inv = 0;
             inv = g->isFecInv() ^ tmp->isFecInv();
-
             cout << "\rProving " << g->getId() << " = "
                          << !g->isFecInv() << "..." << flush;
             // result = !g->isFecInv();
@@ -187,16 +191,14 @@ CirMgr::prove(SatSolver& s)
                   if(f->getGate(k) == g)
                      f->removeGate(k);
                
-               // f->removeGate(j);
                j--;
                unsat = 1;
-               break;
             } else {
                cout << "SAT!!";
                sat = 1;
-               // for(int k = f->getSize() - 1; k >= 0; k--)
-               //    if(f->getGate(k) == g)
-               //       f->removeGate(k);
+               for(int k = f->getSize() - 1; k >= 0; k--)
+                  if(f->getGate(k) == g)
+                     f->removeGate(k);
                // j--;
             }
             break;

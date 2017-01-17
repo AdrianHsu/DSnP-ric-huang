@@ -1,0 +1,13 @@
+cirmiter my.aag sim01.aag
+cirp
+ciropt
+cirswe
+cirstr
+cirsim -r
+cirfra
+cirstr
+cirswe
+ciropt
+cirp
+q -f
+

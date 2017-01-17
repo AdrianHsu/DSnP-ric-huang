@@ -53,7 +53,7 @@ enum CirParseError {
 /**************************************/
 static unsigned lineNo = 0;  // in printint, lineNo needs to ++
 static unsigned colNo  = 0;  // in printing, colNo needs to ++
-static char buf[1024];
+// static char buf[1024];
 static string errMsg;
 static int errInt;
 static CirGate *errGate;
@@ -516,7 +516,7 @@ CirMgr::writeAag(ostream& outfile) const
    }
    //if(getComment() != "")
       //cout << "c\n" << "AAG output by Pin-Chun (Adrian) Hsu" << endl;
-      cout << "c\n" << "AAG output by Chung-Yang (Ric) Huang" << endl;
+      outfile << "c\n" << "AAG output by Chung-Yang (Ric) Huang" << endl;
       //cout << "c\n" << getComment() << endl;
 }
 
