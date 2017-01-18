@@ -28,7 +28,7 @@ using namespace std;
 /*   Global variable and enum  */
 /*******************************/
 
-#define MY_RAND_MAX INT_MAX // 4294967295 (2^32-1), type unsigned long int
+#define MY_RAND_MAX 2147483647
 #define MAGIC_NUMBER 5.0
 /**************************************/
 /*   Static varaibles and functions   */
@@ -36,7 +36,6 @@ using namespace std;
 static unsigned MAX_FAILS = 0;
 static unsigned CURRENT_FAILS = 0;
 static bool IS_RANDSIM = 0;
-static bool IS_FIRST_SIM = 1;
 /************************************************/
 /*   Public member functions about Simulation   */
 /************************************************/
@@ -45,7 +44,6 @@ CirMgr::randomSim()
 {
    srand(time(0));
    IS_RANDSIM = 1;
-   IS_FIRST_SIM = 1;
 
    unsigned _i = miloa[1];
    // unsigned _a = miloa[4];
@@ -126,7 +124,6 @@ CirMgr::fileSim(ifstream& patternFile)
    if(!patternFile.is_open()) {
       return;
    }
-   IS_FIRST_SIM = 1;
    string str;
    unsigned _i = miloa[1];
    vector<string> inputs;
@@ -326,8 +323,6 @@ CirMgr::fecGrpsIdentify(ListFecGrps& fecGrps, ListFecGrps& tmpGrps)
 
    fecGrps.clear();
    sortListFecGrps(tmpGrps);
-
-   IS_FIRST_SIM = 0;
    
 }
 void
